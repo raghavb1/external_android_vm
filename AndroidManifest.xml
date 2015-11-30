@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2013 The MITRE Corporation, All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this work except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="org.mitre.svmp.events"  android:sharedUserId="android.uid.system" >
+    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
+
+    <!-- used to protect broadcasts from LocationManager, NotificationManager, and LauncherActivity -->
+    <permission android:name="org.mitre.svmp.permission.SVMP_BROADCAST"
+                android:label="SVMP_BROADCAST"
+                android:protectionLevel="signatureOrSystem" />
+
+    <!-- we use this so other contexts can securely communicate with our svmpd server -->
+    <uses-permission android:name="org.mitre.svmp.permission.SVMP_BROADCAST"/>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <!-- we use this to control the Sensors socket -->
+    <uses-permission android:name="android.permission.NET_ADMIN"/>
+
+    <!-- we use this to read from the Framebuffer device, /dev/graphics/fb0 -->
+    <uses-permission android:name="android.permission.GRAPHICS"/>
+
+    <!-- we use this to inject sensor and touch events -->
+    <uses-permission android:name="android.permission.INJECT_EVENTS"/>
+
+    <!-- we use this to write to Secure Settings and enable mock locations -->
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
+
+    <!-- we use these to inject Location events -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
+
+    <!-- we use this to spoof a WiFi connection -->
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS"/>
+    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
+
+    <!-- don't activate this permission unless you like bootloops -->
+    <!--<uses-permission android:name="android.permission.CONNECTIVITY_INTERNAL"/>-->
+
+    <!-- The webrtc shared library creates a trace file on the sdcard -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- The webrtc shared library requires RECORD_AUDIO permission -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <!-- we use this to read LogCat output -->
+    <uses-permission android:name="android.permission.READ_LOGS" />
+
+    <!-- we use this to set the system default timezone to match the client's -->
+    <uses-permission android:name="android.permission.SET_TIME_ZONE" />
+
+    <!-- we use this to intercept outgoing calls and forward them to the client -->
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+
+    <!-- we use these to inject configuration changes from the client -->
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <!-- we use this to change preferred activities -->
+    <uses-permission android:name="android.permission.SET_PREFERRED_APPLICATIONS" />
+
+    
+    <uses-permission android:name="android.permission.INTERNET" />
+    
+    <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
+    
+    <!-- Permission: Writing to SDCard -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- we use this permission to stop other packages (unneeded launcher) -->
+    <!--<uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />-->
+
+    <application android:icon="@drawable/color_icon"
+                 android:label="@string/app_name"
+                 android:persistent="true" >
+        <service android:name=".BackgroundService"/>
+        <receiver android:name=".BootBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <!-- this launcher is used for single app mode -->
+        <activity android:name=".LauncherActivity"
+                  android:launchMode="singleTask"
+                  android:clearTaskOnLaunch="true"
+                  android:stateNotNeeded="true"
+                  android:excludeFromRecents="true"
+                  android:screenOrientation="nosensor"
+                  android:enabled="false"
+                >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <!-- The following two intent-filters are the key to set homescreen -->
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
+

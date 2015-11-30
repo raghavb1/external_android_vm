@@ -72,12 +72,15 @@ public class AppsInstallService {
 
 		File file = new File(localPath); 
 		Boolean success = false;
+		int processResult = 0;
 		if(file.exists()){
 			try {   
 				String command = "pm install " + localPath;
 				Process proc = Runtime.getRuntime().exec(command);
-				proc.waitFor();
-				success = true;
+				processResult = proc.waitFor();
+				if(processResult == 0){
+					success = true;
+				}
 			} catch (Exception e) {
 
 			}

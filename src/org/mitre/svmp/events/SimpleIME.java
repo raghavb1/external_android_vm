@@ -1,10 +1,5 @@
 package org.mitre.svmp.events;
 
-import org.mitre.svmp.protocol.SVMPProtocol;
-import org.mitre.svmp.protocol.SVMPProtocol.IntentAction;
-import org.mitre.svmp.protocol.SVMPProtocol.Response;
-import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
-
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -31,10 +26,8 @@ implements OnKeyboardActionListener{
 	    kv.setKeyboard(keyboard);
 	    kv.setOnKeyboardActionListener(this);
 	    
-	    Response response = null;
 	    String message = "keyboardStarted";
-	    response = intentHandler.buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), message);
-	    baseHandler.sendMessage(response);
+	    intentHandler.buildResponseAndSendMessage(message);
 	    
 	    return kv;
 	}

@@ -116,5 +116,11 @@ public class IntentHandler extends BaseHandler {
 
 		return null;
 	}
+	
+	public void buildResponseAndSendMessage(String message){
+	    Response response =  buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), message);
+	    if(response != null)
+	    	sendMessage(response);
+	}
 }
 

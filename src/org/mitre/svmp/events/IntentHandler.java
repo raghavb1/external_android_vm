@@ -97,7 +97,7 @@ public class IntentHandler extends BaseHandler {
 	}
 
 	// attempt to convert intercepted intent values into a Protobuf message, return null if an error occurs
-	private Response buildIntentResponse(int intentActionValue, String data) {
+	public Response buildIntentResponse(int intentActionValue, String data) {
 		// validate that we pulled the data we need from the intercepted intent
 		if( intentActionValue > -1 && data != null ) {
 			try {

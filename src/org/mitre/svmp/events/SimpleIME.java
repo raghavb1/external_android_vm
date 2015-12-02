@@ -1,5 +1,10 @@
 package org.mitre.svmp.events;
 
+import org.mitre.svmp.protocol.SVMPProtocol;
+import org.mitre.svmp.protocol.SVMPProtocol.IntentAction;
+import org.mitre.svmp.protocol.SVMPProtocol.Response;
+import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
+
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -13,6 +18,8 @@ implements OnKeyboardActionListener{
 
 	private KeyboardView kv;
 	private Keyboard keyboard;
+	private BaseHandler baseHandler;
+	private IntentHandler intentHandler;
 
 	private boolean caps = false;
 
@@ -23,6 +30,12 @@ implements OnKeyboardActionListener{
 	    keyboard = new Keyboard(this, R.xml.qwerty);
 	    kv.setKeyboard(keyboard);
 	    kv.setOnKeyboardActionListener(this);
+	    
+	    Response response = null;
+	    String message = "keyboardStarted";
+	    response = intentHandler.buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), message);
+	    baseHandler.sendMessage(response);
+	    
 	    return kv;
 	}
 	

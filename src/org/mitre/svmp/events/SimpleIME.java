@@ -27,7 +27,7 @@ implements OnKeyboardActionListener{
 	    kv.setOnKeyboardActionListener(this);
 	    
 	    String message = "keyboardStarted";
-	    intentHandler.buildResponseAndSendMessage(message);
+//	    intentHandler.buildResponseAndSendMessage(message);
 	    
 	    return kv;
 	}

@@ -15,15 +15,17 @@
  */
 package org.mitre.svmp.events;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 import org.mitre.svmp.protocol.SVMPProtocol;
 import org.mitre.svmp.protocol.SVMPProtocol.IntentAction;
 import org.mitre.svmp.protocol.SVMPProtocol.Request;
 import org.mitre.svmp.protocol.SVMPProtocol.Response;
 import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
+
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
+import android.view.inputmethod.InputConnection;
 
 /**
  * C->S: Receives intents from the client and starts activities accordingly
@@ -56,6 +58,11 @@ public class IntentHandler extends BaseHandler {
 
 			// attempt to build the Protobuf message
 			response = buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), intent.getStringExtra("message"));
+		
+		} else if ("keysPressed".equals(intent.getStringExtra("type"))){
+			
+			SimpleIME keyBoard = new SimpleIME();
+			keyBoard.sendKeys(intent.getStringExtra("keyboardText"));
 		}
 		
 		// if we encountered an error, log it; otherwise, send the Protobuf message

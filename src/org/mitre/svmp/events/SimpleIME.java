@@ -1,5 +1,10 @@
 package org.mitre.svmp.events;
 
+import java.io.IOException;
+
+import org.mitre.svmp.protocol.SVMPProtocol.IntentAction;
+import org.mitre.svmp.protocol.SVMPProtocol.Response;
+
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -13,47 +18,56 @@ implements OnKeyboardActionListener{
 
 	private KeyboardView kv;
 	private Keyboard keyboard;
-	private BaseHandler baseHandler;
+	private EventServer eventServer;
 	private IntentHandler intentHandler;
 
 	private boolean caps = false;
 
-	
+
 	@Override
 	public View onCreateInputView() {
-	    kv = (KeyboardView)getLayoutInflater().inflate(R.layout.keyboard, null);
-	    keyboard = new Keyboard(this, R.xml.qwerty);
-	    kv.setKeyboard(keyboard);
-	    kv.setOnKeyboardActionListener(this);
-	    
-	    String message = "keyboardStarted";
-//	    intentHandler.buildResponseAndSendMessage(message);
-	    
-	    return kv;
+
+		kv = (KeyboardView)getLayoutInflater().inflate(R.layout.keyboard, null);
+		keyboard = new Keyboard(this, R.xml.qwerty);
+		kv.setKeyboard(keyboard);
+		kv.setOnKeyboardActionListener(this);
+
+		try {
+			String message = "keyboardStarted";
+			eventServer = new EventServer(getApplicationContext());
+			Response response = intentHandler.buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), message);
+			eventServer.sendMessage(response);
+		} catch (IOException e) {
+
+		} catch(Exception e){
+
+		}
+
+		return kv;
 	}
-	
+
 	@Override
 	public void onKey(int primaryCode, int[] keyCodes) {        
-	    InputConnection ic = getCurrentInputConnection();
-	    switch(primaryCode){
-	    case Keyboard.KEYCODE_DELETE :
-	        ic.deleteSurroundingText(1, 0);
-	        break;
-	    case Keyboard.KEYCODE_SHIFT:
-	        caps = !caps;
-	        keyboard.setShifted(caps);
-	        kv.invalidateAllKeys();
-	        break;
-	    case Keyboard.KEYCODE_DONE:
-	        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
-	        break;
-	    default:
-	        char code = (char)primaryCode;
-	        if(Character.isLetter(code) && caps){
-	            code = Character.toUpperCase(code);
-	        }
-	        ic.commitText(String.valueOf(code),1);                  
-	    }
+		InputConnection ic = getCurrentInputConnection();
+		switch(primaryCode){
+		case Keyboard.KEYCODE_DELETE :
+			ic.deleteSurroundingText(1, 0);
+			break;
+		case Keyboard.KEYCODE_SHIFT:
+			caps = !caps;
+			keyboard.setShifted(caps);
+			kv.invalidateAllKeys();
+			break;
+		case Keyboard.KEYCODE_DONE:
+			ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+			break;
+		default:
+			char code = (char)primaryCode;
+			if(Character.isLetter(code) && caps){
+				code = Character.toUpperCase(code);
+			}
+			ic.commitText(String.valueOf(code),1);                  
+		}
 	}
 
 	@Override
@@ -82,5 +96,11 @@ implements OnKeyboardActionListener{
 
 	@Override
 	public void swipeUp() {
+	}
+	
+	public void sendKeys(String chars){
+		InputConnection ic = getCurrentInputConnection();
+		ic.commitText(chars,1);               
+		
 	}
 }

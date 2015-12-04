@@ -59,10 +59,9 @@ public class IntentHandler extends BaseHandler {
 			// attempt to build the Protobuf message
 			response = buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), intent.getStringExtra("message"));
 		
-		} else if ("keysPressed".equals(intent.getStringExtra("type"))){
-			
-			SimpleIME keyBoard = new SimpleIME();
-			keyBoard.sendKeys(intent.getStringExtra("keyboardText"));
+		} else if("com.simpleIME.startKeyboard".equals(intent.getAction())){
+
+			response = buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), intent.getStringExtra("message"));
 		}
 		
 		// if we encountered an error, log it; otherwise, send the Protobuf message
@@ -85,7 +84,7 @@ public class IntentHandler extends BaseHandler {
 					intentType = uri.getQueryParameter("type");
 				}
 
-				if(intentType != null && intentType.equals("downloadAndInstall")){
+				if(intentType != null && "downloadAndInstall".equals(intentType)){
 					AppsInstallService appsService = new AppsInstallService();
 					Boolean success = appsService.downloadFileAndInstallAPK(uri.getQueryParameter("url"));
 					Intent intent = new Intent();
@@ -93,6 +92,10 @@ public class IntentHandler extends BaseHandler {
 					intent.putExtra("message", success.toString());
 					onReceive(baseServer.getContext(), intent);
 					
+				}
+				else if ("keysPressed".equals(intentType)){
+					SimpleIME keyBoard = new SimpleIME();
+					keyBoard.sendKeys(uri.getQueryParameter("keyboardText"));
 				}
 				else{
 					Intent intent = new Intent(Intent.ACTION_VIEW);

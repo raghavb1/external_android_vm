@@ -2,9 +2,7 @@ package org.mitre.svmp.events;
 
 import java.io.IOException;
 
-import org.mitre.svmp.protocol.SVMPProtocol.IntentAction;
-import org.mitre.svmp.protocol.SVMPProtocol.Response;
-
+import android.content.Intent;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -32,16 +30,20 @@ implements OnKeyboardActionListener{
 		kv.setKeyboard(keyboard);
 		kv.setOnKeyboardActionListener(this);
 
-		try {
+//		try {
 			String message = "keyboardStarted";
-			eventServer = new EventServer(getApplicationContext());
-			Response response = intentHandler.buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), message);
-			eventServer.sendMessage(response);
-		} catch (IOException e) {
-
-		} catch(Exception e){
-
-		}
+//			eventServer = new EventServer(getApplicationContext());
+//			Response response = intentHandler.buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), message);
+//			eventServer.sendMessage(response);
+			Intent intent = new Intent();
+			intent.setAction("com.simpleIME.startKeyboard");
+			intent.putExtra("message",message);
+			sendBroadcast(intent);
+//		} catch (IOException e) {
+//
+//		} catch(Exception e){
+//
+//		}
 
 		return kv;
 	}

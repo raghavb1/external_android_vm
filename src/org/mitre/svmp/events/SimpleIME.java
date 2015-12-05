@@ -31,14 +31,14 @@ implements OnKeyboardActionListener{
 		kv.setOnKeyboardActionListener(this);
 
 //		try {
-			String message = "keyboardStarted";
+//			String message = "keyboardStarted";
 //			eventServer = new EventServer(getApplicationContext());
 //			Response response = intentHandler.buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), message);
 //			eventServer.sendMessage(response);
-			Intent intent = new Intent();
-			intent.setAction("com.simpleIME.startKeyboard");
-			intent.putExtra("message",message);
-			sendBroadcast(intent);
+//			Intent intent = new Intent();
+//			intent.setAction("com.simpleIME.startKeyboard");
+//			intent.putExtra("message",message);
+//			sendBroadcast(intent);
 //		} catch (IOException e) {
 //
 //		} catch(Exception e){

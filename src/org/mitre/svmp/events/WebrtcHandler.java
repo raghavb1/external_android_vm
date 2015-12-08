@@ -67,6 +67,7 @@ public class WebrtcHandler {
 
     private PeerConnectionFactory factory;
     private VideoSource videoSource;
+    private VideoTrack videoTrack;
 
     private PeerConnection pc;
     private final PCObserver pcObserver = new PCObserver();
@@ -251,8 +252,7 @@ public class WebrtcHandler {
                 VideoCapturer capturer = VideoCapturer.create();
                 videoSource = factory.createVideoSource(
                         capturer, videoConstraints);
-                VideoTrack videoTrack =
-                        factory.createVideoTrack("ARDAMSv0", videoSource);
+                videoTrack = factory.createVideoTrack("ARDAMSv0", videoSource);
                 //videoTrack.addRenderer(new VideoRenderer(new VideoCallbacks(
                 //                    vsv, VideoStreamsView.Endpoint.LOCAL)));
                 lMS.addTrack(videoTrack);
@@ -612,6 +612,14 @@ public class WebrtcHandler {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    public void pauseVideoStream(){
+    	videoTrack.setEnabled(false);
+    }
+    
+    public void resumeVideoStream(){
+    	videoTrack.setEnabled(true);
     }
 }
 

@@ -170,7 +170,9 @@ public abstract class BaseServer implements Constants {
                     handleScreenInfo(msg);
                     break;
                 case TOUCHEVENT:
+                	webrtcHandler.pauseVideoStream();
                     handleTouch(msg.getTouchList());
+                    webrtcHandler.resumeVideoStream();
                     break;
                 case SENSOREVENT:
                     // use the thread pool to handle this

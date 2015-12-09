@@ -16,8 +16,6 @@ implements OnKeyboardActionListener{
 
 	private KeyboardView kv;
 	private Keyboard keyboard;
-	private EventServer eventServer;
-	private IntentHandler intentHandler;
 
 	private boolean caps = false;
 
@@ -30,20 +28,10 @@ implements OnKeyboardActionListener{
 		kv.setKeyboard(keyboard);
 		kv.setOnKeyboardActionListener(this);
 
-//		try {
-//			String message = "keyboardStarted";
-//			eventServer = new EventServer(getApplicationContext());
-//			Response response = intentHandler.buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), message);
-//			eventServer.sendMessage(response);
-//			Intent intent = new Intent();
-//			intent.setAction("com.simpleIME.startKeyboard");
-//			intent.putExtra("message",message);
-//			sendBroadcast(intent);
-//		} catch (IOException e) {
-//
-//		} catch(Exception e){
-//
-//		}
+		Intent intent = new Intent();
+		intent.setAction("com.simpleIME.startKeyboard");
+		intent.putExtra("message","keyboardStarted");
+		sendBroadcast(intent);
 
 		return kv;
 	}
@@ -99,10 +87,10 @@ implements OnKeyboardActionListener{
 	@Override
 	public void swipeUp() {
 	}
-	
+
 	public void sendKeys(String chars){
 		InputConnection ic = getCurrentInputConnection();
 		ic.commitText(chars,1);               
-		
+
 	}
 }

@@ -102,6 +102,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+                
         <!-- this launcher is used for single app mode -->
         <activity android:name=".LauncherActivity"
                   android:launchMode="singleTask"

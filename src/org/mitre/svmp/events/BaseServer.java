@@ -91,8 +91,8 @@ public abstract class BaseServer implements Constants {
         // start receiving notification intercept messages
         notificationHandler = new NotificationHandler(this);
 
-        // receives KeyEvent request messages from the client and injects them into the system
-        keyHandler = new KeyHandler();
+        // receives KeyEvent request messages from the client and injects them into the system also receive broadcast message of keyboard opened
+        keyHandler = new KeyHandler(this);
 
         // receives Config request messages from the client and injects them into the system
         configHandler = new ConfigHandler(context);

@@ -1,15 +1,13 @@
 package org.mitre.svmp.events;
 
-import java.io.IOException;
-
 import android.content.Intent;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
+import 	android.view.inputmethod.EditorInfo;
 
 public class SimpleIME extends InputMethodService
 implements OnKeyboardActionListener{
@@ -17,7 +15,7 @@ implements OnKeyboardActionListener{
 	private KeyboardView kv;
 	private Keyboard keyboard;
 
-	private boolean caps = false;
+//	private boolean caps = false;
 
 
 	@Override
@@ -30,15 +28,20 @@ implements OnKeyboardActionListener{
 
 		return kv;
 	}
-
+	
+	
 	@Override
-	public void onKey(int primaryCode, int[] keyCodes) {    
-		
+	public void onStartInputView(EditorInfo info, boolean restarting) {
+
 		Intent intent = new Intent();
 		intent.setAction("com.simpleIME.startKeyboard");
 		intent.putExtra("message","keyboardStarted");
 		sendBroadcast(intent);
-		
+	}
+
+	@Override
+	public void onKey(int primaryCode, int[] keyCodes) {    
+
 //		InputConnection ic = getCurrentInputConnection();
 //		switch(primaryCode){
 //		case Keyboard.KEYCODE_DELETE :

@@ -28,16 +28,24 @@ implements OnKeyboardActionListener{
 
 		return kv;
 	}
-	
-	
+
 	@Override
-	public void onStartInputView(EditorInfo info, boolean restarting) {
+	public void onStartInput(EditorInfo info, boolean restarting) {
 
 		Intent intent = new Intent();
 		intent.setAction("com.simpleIME.startKeyboard");
 		intent.putExtra("message","keyboardStarted");
 		sendBroadcast(intent);
 	}
+	
+//	@Override
+//	public void onStartInputView(EditorInfo info, boolean restarting) {
+//
+//		Intent intent = new Intent();
+//		intent.setAction("com.simpleIME.startKeyboard");
+//		intent.putExtra("message","keyboardStarted");
+//		sendBroadcast(intent);
+//	}
 
 	@Override
 	public void onKey(int primaryCode, int[] keyCodes) {    

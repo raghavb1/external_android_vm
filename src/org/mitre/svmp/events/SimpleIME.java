@@ -28,36 +28,37 @@ implements OnKeyboardActionListener{
 		kv.setKeyboard(keyboard);
 		kv.setOnKeyboardActionListener(this);
 
-		Intent intent = new Intent();
-		intent.setAction("com.simpleIME.startKeyboard");
-		intent.putExtra("message","keyboardStarted");
-		sendBroadcast(intent);
-
 		return kv;
 	}
 
 	@Override
-	public void onKey(int primaryCode, int[] keyCodes) {        
-		InputConnection ic = getCurrentInputConnection();
-		switch(primaryCode){
-		case Keyboard.KEYCODE_DELETE :
-			ic.deleteSurroundingText(1, 0);
-			break;
-		case Keyboard.KEYCODE_SHIFT:
-			caps = !caps;
-			keyboard.setShifted(caps);
-			kv.invalidateAllKeys();
-			break;
-		case Keyboard.KEYCODE_DONE:
-			ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
-			break;
-		default:
-			char code = (char)primaryCode;
-			if(Character.isLetter(code) && caps){
-				code = Character.toUpperCase(code);
-			}
-			ic.commitText(String.valueOf(code),1);                  
-		}
+	public void onKey(int primaryCode, int[] keyCodes) {    
+		
+		Intent intent = new Intent();
+		intent.setAction("com.simpleIME.startKeyboard");
+		intent.putExtra("message","keyboardStarted");
+		sendBroadcast(intent);
+		
+//		InputConnection ic = getCurrentInputConnection();
+//		switch(primaryCode){
+//		case Keyboard.KEYCODE_DELETE :
+//			ic.deleteSurroundingText(1, 0);
+//			break;
+//		case Keyboard.KEYCODE_SHIFT:
+//			caps = !caps;
+//			keyboard.setShifted(caps);
+//			kv.invalidateAllKeys();
+//			break;
+//		case Keyboard.KEYCODE_DONE:
+//			ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+//			break;
+//		default:
+//			char code = (char)primaryCode;
+//			if(Character.isLetter(code) && caps){
+//				code = Character.toUpperCase(code);
+//			}
+//			ic.commitText(String.valueOf(code),1);                  
+//		}
 	}
 
 	@Override

@@ -155,8 +155,8 @@ public class WebrtcHandler {
             } else if (type.equals("answer") || type.equals("offer")) {
                 SessionDescription sdp = new SessionDescription(
                         SessionDescription.Type.fromCanonicalForm(type),
-                        (String) json.get("sdp"));
-                        //RemoveAudio((String) json.get("sdp")));
+                        //(String) json.get("sdp"));
+                        RemoveAudio((String) json.get("sdp")));
                 pc.setRemoteDescription(sdpObserver, sdp);
             } else if (type.equals("bye")) {
                 Log.d(TAG, "Remote end hung up; dropping PeerConnection");

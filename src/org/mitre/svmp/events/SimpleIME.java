@@ -28,24 +28,21 @@ implements OnKeyboardActionListener{
 
 		return kv;
 	}
-
+	
+	
 	@Override
-	public void onStartInput(EditorInfo info, boolean restarting) {
+	public void onStartInputView(EditorInfo info, boolean restarting) {
+		sendBroadcastForKeyboard();
 
-		Intent intent = new Intent();
-		intent.setAction("com.simpleIME.startKeyboard");
-		intent.putExtra("message","keyboardStarted");
-		sendBroadcast(intent);
 	}
 	
-//	@Override
-//	public void onStartInputView(EditorInfo info, boolean restarting) {
-//
-//		Intent intent = new Intent();
-//		intent.setAction("com.simpleIME.startKeyboard");
-//		intent.putExtra("message","keyboardStarted");
-//		sendBroadcast(intent);
-//	}
+	@Override
+	public void updateInputViewShown (){
+//		if(onEvaluateInputViewShown()){
+			sendBroadcastForKeyboard();	
+//		}
+
+	}
 
 	@Override
 	public void onKey(int primaryCode, int[] keyCodes) {    
@@ -104,5 +101,12 @@ implements OnKeyboardActionListener{
 		InputConnection ic = getCurrentInputConnection();
 		ic.commitText(chars,1);               
 
+	}
+	
+	private void sendBroadcastForKeyboard(){
+		Intent intent = new Intent();
+		intent.setAction("com.simpleIME.startKeyboard");
+		intent.putExtra("message","keyboardStarted");
+		sendBroadcast(intent);
 	}
 }

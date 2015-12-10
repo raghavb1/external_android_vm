@@ -155,8 +155,8 @@ public class WebrtcHandler {
             } else if (type.equals("answer") || type.equals("offer")) {
                 SessionDescription sdp = new SessionDescription(
                         SessionDescription.Type.fromCanonicalForm(type),
-                        //(String) json.get("sdp"));
-                        RemoveAudio((String) json.get("sdp")));
+                        (String) json.get("sdp"));
+                        //RemoveAudio((String) json.get("sdp")));
                 pc.setRemoteDescription(sdpObserver, sdp);
             } else if (type.equals("bye")) {
                 Log.d(TAG, "Remote end hung up; dropping PeerConnection");
@@ -484,8 +484,8 @@ public class WebrtcHandler {
         public void onCreateSuccess(final SessionDescription origSdp) {
             Log.d(TAG, "Sending " + origSdp.type);
             SessionDescription sdp = new SessionDescription(
-                    //origSdp.type, preferISAC(origSdp.description));
-                    origSdp.type, RemoveAudio(origSdp.description));
+                    origSdp.type, preferISAC(origSdp.description));
+                    //origSdp.type, RemoveAudio(origSdp.description));
             JSONObject json = new JSONObject();
             jsonPut(json, "type", sdp.type.canonicalForm());
             jsonPut(json, "sdp", sdp.description);

@@ -484,8 +484,8 @@ public class WebrtcHandler {
         public void onCreateSuccess(final SessionDescription origSdp) {
             Log.d(TAG, "Sending " + origSdp.type);
             SessionDescription sdp = new SessionDescription(
-                    origSdp.type, preferISAC(origSdp.description));
-                    //origSdp.type, RemoveAudio(origSdp.description));
+                    //origSdp.type, preferISAC(origSdp.description));
+                    origSdp.type, RemoveAudio(origSdp.description));
             JSONObject json = new JSONObject();
             jsonPut(json, "type", sdp.type.canonicalForm());
             jsonPut(json, "sdp", sdp.description);

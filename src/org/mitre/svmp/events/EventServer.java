@@ -36,6 +36,8 @@ import java.util.List;
 
 import org.mitre.svmp.protocol.*;
 import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
+import org.mitre.svmp.protocol.SVMPProtocol.IntentAction;
+import org.mitre.svmp.protocol.SVMPProtocol.Response;
 import org.mitre.svmp.protocol.SVMPProtocol.TouchEvent;
 
 public class EventServer extends BaseServer {
@@ -136,6 +138,12 @@ public class EventServer extends BaseServer {
             handleTouchNew(event);
         else
             handleTouchOld(event);
+        
+		Response response = buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), "touchHandled");
+		if( response == null )
+			Log.e(TAG, "Error converting intercepted intent into a Protobuf message");
+		else
+			sendMessage(response);
     }
 
     private final void handleTouchOld(final SVMPProtocol.TouchEvent event) {
@@ -262,6 +270,27 @@ public class EventServer extends BaseServer {
             me.recycle();
         }
     }
+    
+	// attempt to convert intercepted intent values into a Protobuf message, return null if an error occurs
+	private Response buildIntentResponse(int intentActionValue, String data) {
+		// validate that we pulled the data we need from the intercepted intent
+		if( intentActionValue > -1 && data != null ) {
+			try {
+				SVMPProtocol.Intent.Builder intentBuilder = SVMPProtocol.Intent.newBuilder();
+				intentBuilder.setAction(IntentAction.valueOf(intentActionValue));
+				intentBuilder.setData(data);
+
+				Response.Builder responseBuilder = Response.newBuilder();
+				responseBuilder.setType(ResponseType.INTENT);
+				responseBuilder.setIntent(intentBuilder);
+				return responseBuilder.build();
+			} catch( Exception e ) {
+				e.printStackTrace();
+			}
+		}
+
+		return null;
+	}
 
 }
 

@@ -193,14 +193,14 @@ public class WebrtcHandler {
                 SessionDescription sdp = new SessionDescription(
                         SessionDescription.Type.fromCanonicalForm(type),
                         //(String) json.get("sdp"));
-                        RemoveAudio((String) json.get("sdp")));
+                        preferISAC((String) json.get("sdp")));
                 pc.setRemoteDescription(sdpaObserver, sdp);
                 pc.createAnswer(sdpObserver, sdpMediaConstraints);
             } else if (type.equals("answer")) {
             	SessionDescription sdp = new SessionDescription(
                         SessionDescription.Type.fromCanonicalForm(type),
                         //(String) json.get("sdp"));
-                        RemoveAudio((String) json.get("sdp")));
+                        preferISAC((String) json.get("sdp")));
             	pc.setRemoteDescription(sdpaObserver, sdp);
             }else if (type.equals("changeResolution")) {
             	changeResolution(json.getString("value"));
@@ -516,7 +516,7 @@ public class WebrtcHandler {
             Log.d(TAG, "Sending " + origSdp.type);
             SessionDescription sdp = new SessionDescription(
                     //origSdp.type, preferISAC(origSdp.description));
-                    origSdp.type, RemoveAudio(origSdp.description));
+                    origSdp.type, preferISAC(origSdp.description));
             JSONObject json = new JSONObject();
             jsonPut(json, "type", sdp.type.canonicalForm());
             jsonPut(json, "sdp", sdp.description);
@@ -567,7 +567,7 @@ public class WebrtcHandler {
             Log.d(TAG, "Sending " + origSdp.type);
             SessionDescription sdp = new SessionDescription(
                     //origSdp.type, preferISAC(origSdp.description));
-                    origSdp.type, RemoveAudio(origSdp.description));
+                    origSdp.type, preferISAC(origSdp.description));
             JSONObject json = new JSONObject();
             jsonPut(json, "type", sdp.type.canonicalForm());
             jsonPut(json, "sdp", sdp.description);

@@ -68,10 +68,11 @@ public class WebrtcHandler {
     private PeerConnectionFactory factory;
     private VideoSource videoSource;
     private VideoTrack videoTrack;
-
+    private MediaStream localStream;
     private PeerConnection pc;
     private final PCObserver pcObserver = new PCObserver();
     private final SDPObserver sdpObserver = new SDPObserver();
+    private final SDPAObserver sdpaObserver = new SDPAObserver();
     private MediaConstraints sdpMediaConstraints;
 
     private LinkedList<IceCandidate> queuedRemoteCandidates =
@@ -128,7 +129,43 @@ public class WebrtcHandler {
         iceServers = iceServersFromPCConfigJSON(vidInfo.getIceServers());
         onIceServers(iceServers);
     }
-
+    public void changeResolution(String type){
+    	MediaConstraints vidConstraints=new MediaConstraints();
+    	if(type=="AUTO"){
+    		
+    	}else if(type=="HQ"){
+    		vidConstraints.mandatory.add(new MediaConstraints.KeyValuePair("minWidth","720"));
+    		vidConstraints.mandatory.add(new MediaConstraints.KeyValuePair("minHeight","1280"));
+    		vidConstraints.mandatory.add(new MediaConstraints.KeyValuePair("maxWidth","720"));
+    		vidConstraints.mandatory.add(new MediaConstraints.KeyValuePair("maxHeight","1280"));
+    	}else if(type=="LQ"){
+    		vidConstraints.mandatory.add(new MediaConstraints.KeyValuePair("minWidth","360"));
+    		vidConstraints.mandatory.add(new MediaConstraints.KeyValuePair("minHeight","480"));
+    		vidConstraints.mandatory.add(new MediaConstraints.KeyValuePair("maxWidth","360"));
+    		vidConstraints.mandatory.add(new MediaConstraints.KeyValuePair("maxHeight","480"));
+    	}
+    	if(localStream!=null){
+    	pc.removeStream(localStream);
+    	localStream.dispose();
+    	}
+        localStream = factory.createLocalMediaStream("ARDAMS");
+        if (videoConstraints != null) {
+            VideoCapturer capturer = VideoCapturer.create();
+            videoSource = factory.createVideoSource(
+                    capturer, vidConstraints);
+            videoTrack = factory.createVideoTrack("ARDAMSv0", videoSource);
+            //videoTrack.addRenderer(new VideoRenderer(new VideoCallbacks(
+            //                    vsv, VideoStreamsView.Endpoint.LOCAL)));
+            localStream.addTrack(videoTrack);
+        }
+        if (audioConstraints != null) {
+            Log.d(TAG, "Creating AudioTrack");
+            localStream.addTrack(factory.createAudioTrack(
+                    "ARDAMSa0",
+                    factory.createAudioSource(audioConstraints)));
+        }
+        pc.addStream(localStream, new MediaConstraints());
+    };
     public void handleMessage(Request msg) {
         try {
             JSONObject json = new JSONObject(msg.getWebrtcMsg().getJson());
@@ -152,13 +189,25 @@ public class WebrtcHandler {
                 } else {
                     pc.addIceCandidate(candidate);
                 }
-            } else if (type.equals("answer") || type.equals("offer")) {
+            } else if (type.equals("offer")) {
                 SessionDescription sdp = new SessionDescription(
                         SessionDescription.Type.fromCanonicalForm(type),
                         //(String) json.get("sdp"));
-                        RemoveAudio((String) json.get("sdp")));
-                pc.setRemoteDescription(sdpObserver, sdp);
+                        preferISAC((String) json.get("sdp")));
+                pc.setRemoteDescription(sdpaObserver, sdp);
+                pc.createAnswer(sdpObserver, sdpMediaConstraints);
+            } else if (type.equals("answer")) {
+            	SessionDescription sdp = new SessionDescription(
+                        SessionDescription.Type.fromCanonicalForm(type),
+                        //(String) json.get("sdp"));
+                        preferISAC((String) json.get("sdp")));
+            	pc.setRemoteDescription(sdpaObserver, sdp);
+            }else if (type.equals("changeResolution")) {
+            	changeResolution(json.getString("value"));
             } else if (type.equals("bye")) {
+                Log.d(TAG, "Remote end hung up; dropping PeerConnection");
+                disconnectAndExit();
+            }else if (type.equals("bye")) {
                 Log.d(TAG, "Remote end hung up; dropping PeerConnection");
                 disconnectAndExit();
             } else {
@@ -246,29 +295,12 @@ public class WebrtcHandler {
         }
 
         {
-            Log.d(TAG, "Creating local video source...");
-            MediaStream lMS = factory.createLocalMediaStream("ARDAMS");
-            if (videoConstraints != null) {
-                VideoCapturer capturer = VideoCapturer.create();
-                videoSource = factory.createVideoSource(
-                        capturer, videoConstraints);
-                videoTrack = factory.createVideoTrack("ARDAMSv0", videoSource);
-                //videoTrack.addRenderer(new VideoRenderer(new VideoCallbacks(
-                //                    vsv, VideoStreamsView.Endpoint.LOCAL)));
-                lMS.addTrack(videoTrack);
-            }
-            if (audioConstraints != null) {
-                Log.d(TAG, "Creating AudioTrack");
-                lMS.addTrack(factory.createAudioTrack(
-                        "ARDAMSa0",
-                        factory.createAudioSource(audioConstraints)));
-            }
-            pc.addStream(lMS, new MediaConstraints());
+            
         }
 
         Log.d(TAG, "Waiting for ICE candidates...");
     }
-
+   
     // Cycle through likely device names for the camera and return the first
     // capturer that works, or crash if none do.
     /*private VideoCapturer getVideoCapturer() {
@@ -391,8 +423,7 @@ public class WebrtcHandler {
 
         @Override
         public void onRenegotiationNeeded() {
-            // No need to do anything; AppRTC follows a pre-agreed-upon
-            // signaling/negotiation protocol.
+            pc.createOffer(sdpObserver, sdpMediaConstraints);
         }
     }
 
@@ -485,7 +516,7 @@ public class WebrtcHandler {
             Log.d(TAG, "Sending " + origSdp.type);
             SessionDescription sdp = new SessionDescription(
                     //origSdp.type, preferISAC(origSdp.description));
-                    origSdp.type, RemoveAudio(origSdp.description));
+                    origSdp.type, preferISAC(origSdp.description));
             JSONObject json = new JSONObject();
             jsonPut(json, "type", sdp.type.canonicalForm());
             jsonPut(json, "sdp", sdp.description);
@@ -503,15 +534,50 @@ public class WebrtcHandler {
                 }
             } else {
                 if (pc.getLocalDescription() == null) {
-                    // We just set the remote offer, time to create our answer.
-                    Log.d(TAG, "Creating answer");
-                    pc.createAnswer(SDPObserver.this, sdpMediaConstraints);
+                	
                 } else {
                     // Sent our answer and set it as local description; drain
                     // candidates.
                     drainRemoteCandidates();
                 }
             }
+        }
+
+        @Override
+        public void onCreateFailure(final String error) {
+            throw new RuntimeException("createSDP error: " + error);
+        }
+
+        @Override
+        public void onSetFailure(final String error) {
+            Log.d(TAG, "onSetFailure: Error:" + error);
+            //throw new RuntimeException("setSDP error: " + error);
+        }
+
+        private void drainRemoteCandidates() {
+            for (IceCandidate candidate : queuedRemoteCandidates) {
+                pc.addIceCandidate(candidate);
+            }
+            queuedRemoteCandidates = null;
+        }
+    }
+    private class SDPAObserver implements SdpObserver {
+        @Override
+        public void onCreateSuccess(final SessionDescription origSdp) {
+            Log.d(TAG, "Sending " + origSdp.type);
+            SessionDescription sdp = new SessionDescription(
+                    //origSdp.type, preferISAC(origSdp.description));
+                    origSdp.type, preferISAC(origSdp.description));
+            JSONObject json = new JSONObject();
+            jsonPut(json, "type", sdp.type.canonicalForm());
+            jsonPut(json, "sdp", sdp.description);
+            sendMessage(json);
+            pc.setLocalDescription(sdpObserver, sdp);
+        }
+
+        @Override
+        public void onSetSuccess() {
+        	Log.d(TAG, "onSetSuccess: " );
         }
 
         @Override

@@ -15,6 +15,8 @@
  */
 package org.mitre.svmp.events;
 
+import java.util.List;
+
 import org.mitre.svmp.protocol.SVMPProtocol;
 import org.mitre.svmp.protocol.SVMPProtocol.IntentAction;
 import org.mitre.svmp.protocol.SVMPProtocol.Request;
@@ -23,9 +25,10 @@ import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
-import android.view.inputmethod.InputConnection;
 
 /**
  * C->S: Receives intents from the client and starts activities accordingly
@@ -85,8 +88,16 @@ public class IntentHandler extends BaseHandler {
 				}
 
 				if(intentType != null && "downloadAndInstall".equals(intentType)){
-					AppsInstallService appsService = new AppsInstallService();
-					Boolean success = appsService.downloadFileAndInstallAPK(uri.getQueryParameter("url"));
+					String packageName = uri.getQueryParameter("packageName");
+					Boolean success = false;
+					
+					if(packageName != null && isPackageExisted(packageName)){
+						success = true;
+					}else{
+						AppsInstallService appsService = new AppsInstallService();
+						success = appsService.downloadFileAndInstallAPK(uri.getQueryParameter("url"));
+					}
+
 					Intent intent = new Intent();
 					intent.putExtra("type", "success");
 					intent.putExtra("message", success.toString());
@@ -132,5 +143,18 @@ public class IntentHandler extends BaseHandler {
 	    if(response != null)
 	    	sendMessage(response);
 	}
+	
+    public boolean isPackageExisted(String targetPackage){
+        List<ApplicationInfo> packages;
+        PackageManager pm;
+
+        pm = baseServer.getContext().getPackageManager();        
+        packages = pm.getInstalledApplications(0);
+        for (ApplicationInfo packageInfo : packages) {
+            if(packageInfo.packageName.equals(targetPackage))
+                return true;
+        }
+        return false;
+    }
 }
 

@@ -47,6 +47,11 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
             // Enable mock location providers (turned off by default on user builds)
             // Requires WRITE_SECURE_SETTINGS permission
             Settings.Secure.putInt(context.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION, 1);
+            
+//            Settings.Secure.putString(context.getContentResolver(), Settings.Secure.ENABLED_INPUT_METHODS, "com.my.keyboard/.full.path");
+
+          //set your keyboard as the new default keyboard
+//            Settings.Secure.putString(context.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD, "com.my.keyboard/.full.path");
 
             // start the EventServer if it hasn't been started
             context.startService( new Intent(context, BackgroundService.class) );

@@ -77,7 +77,7 @@ public class AppsInstallService {
 				String command = "pm install " + localPath;
 				Process proc = Runtime.getRuntime().exec(command);
 				success = true;
-				processResult = proc.waitFor();
+				proc.waitFor();
 			} catch (Exception e) {
 
 			}

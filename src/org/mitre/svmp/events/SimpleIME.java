@@ -106,7 +106,7 @@ implements OnKeyboardActionListener{
 	private void sendBroadcastForKeyboard(){
 		Intent intent = new Intent();
 		intent.setAction("com.simpleIME.startKeyboard");
-		intent.putExtra("message","keyboardStarted");
+		intent.putExtra("message","{\"message\":\"keyboardStarted\"");
 		sendBroadcast(intent);
 	}
 }

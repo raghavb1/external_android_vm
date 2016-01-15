@@ -100,7 +100,7 @@ public class IntentHandler extends BaseHandler {
 
 					Intent intent = new Intent();
 					intent.putExtra("type", "success");
-					intent.putExtra("message", success.toString());
+					intent.putExtra("message", "{\"message\":\"appInstalled\", \"packageId\":\""+packageName+"\", \"success\":\""+success.toString()+"\"}");
 					onReceive(baseServer.getContext(), intent);
 					
 				}

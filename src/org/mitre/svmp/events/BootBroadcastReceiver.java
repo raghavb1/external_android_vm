@@ -48,7 +48,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
             // Requires WRITE_SECURE_SETTINGS permission
             Settings.Secure.putInt(context.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION, 1);
             
-//            Settings.Secure.putString(context.getContentResolver(), Settings.Secure.ENABLED_INPUT_METHODS, "com.my.keyboard/.full.path");
+            Settings.Secure.putString(context.getContentResolver(), Settings.Secure.ENABLED_INPUT_METHODS, "org.mitre.svmp.events/org.mitre.svmp.events.SimpleIME");
 
           //set your keyboard as the new default keyboard
             Settings.Secure.putString(context.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD, "org.mitre.svmp.events/org.mitre.svmp.events.SimpleIME");

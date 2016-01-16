@@ -140,11 +140,11 @@ public class EventServer extends BaseServer {
         else
             handleTouchOld(event);
         
-		Response response = buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), "touchHandled");
-		if( response == null )
-			Log.e(TAG, "Error converting intercepted intent into a Protobuf message");
-		else
-			sendMessage(response);
+//		Response response = buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), "touchHandled");
+//		if( response == null )
+//			Log.e(TAG, "Error converting intercepted intent into a Protobuf message");
+//		else
+//			sendMessage(response);
     }
 
     private final void handleTouchOld(final SVMPProtocol.TouchEvent event) {

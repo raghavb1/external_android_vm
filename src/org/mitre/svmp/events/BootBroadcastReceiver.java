@@ -51,7 +51,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
 //            Settings.Secure.putString(context.getContentResolver(), Settings.Secure.ENABLED_INPUT_METHODS, "com.my.keyboard/.full.path");
 
           //set your keyboard as the new default keyboard
-//            Settings.Secure.putString(context.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD, "com.my.keyboard/.full.path");
+            Settings.Secure.putString(context.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD, "org.mitre.svmp.events/org.mitre.svmp.events.SimpleIME");
 
             // start the EventServer if it hasn't been started
             context.startService( new Intent(context, BackgroundService.class) );

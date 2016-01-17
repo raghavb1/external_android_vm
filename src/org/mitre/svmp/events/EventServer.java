@@ -135,9 +135,9 @@ public class EventServer extends BaseServer {
     // overload to handle individual touch events
     public void handleTouch(final SVMPProtocol.TouchEvent event) {
     	Log.e(TAG, "New Touch event");
-        if (event.hasEventTime())
-            handleTouchNew(event);
-        else
+//        if (event.hasEventTime())
+//            handleTouchNew(event);
+//        else
             handleTouchOld(event);
         
 //		Response response = buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), "touchHandled");

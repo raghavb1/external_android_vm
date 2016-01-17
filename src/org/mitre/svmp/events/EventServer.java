@@ -184,7 +184,7 @@ public class EventServer extends BaseServer {
         final long now = SystemClock.uptimeMillis();
         long eventTime = event.getEventTime();
 
-        if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
+        /*if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
             Log.d(TAG, "ACTION_DOWN( " + event.getItems(0).getId() + ") at " + now + " / " + eventTime);
             lastDownTime = now;
             lastDownTimeClient = event.getDownTime();
@@ -206,6 +206,7 @@ public class EventServer extends BaseServer {
             int index = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
             Log.d(TAG, "ACTION_POINTER_DOWN(" + event.getItems(index).getId() + ") at " + now + " / " + eventTime);
         }
+        */
 	Log.e(TAG, "translate the pointer coordinates based on screen orientation");
         // translate the pointer coordinates based on screen orientation
         final int pointerSize = event.getItemsCount();

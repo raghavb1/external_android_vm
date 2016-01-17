@@ -30,11 +30,11 @@ implements OnKeyboardActionListener{
 	}
 	
 	
-//	@Override
-//	public void onStartInputView(EditorInfo info, boolean restarting) {
-//		sendBroadcastForKeyboard();
-//
-//	}
+	@Override
+	public void onStartInputView(EditorInfo info, boolean restarting) {
+		sendBroadcastForKeyboard();
+
+	}
 	
 	@Override
 	public void updateInputViewShown (){

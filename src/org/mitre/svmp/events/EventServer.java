@@ -135,9 +135,9 @@ public class EventServer extends BaseServer {
     // overload to handle individual touch events
     public void handleTouch(final SVMPProtocol.TouchEvent event) {
     	Log.e(TAG, "New Touch event");
-//        if (event.hasEventTime())
-//            handleTouchNew(event);
-//        else
+        if (event.hasEventTime())
+            handleTouchNew(event);
+        else
             handleTouchOld(event);
         
 //		Response response = buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), "touchHandled");
@@ -184,7 +184,7 @@ public class EventServer extends BaseServer {
         final long now = SystemClock.uptimeMillis();
         long eventTime = event.getEventTime();
 
-        /*if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
+        if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
             Log.d(TAG, "ACTION_DOWN( " + event.getItems(0).getId() + ") at " + now + " / " + eventTime);
             lastDownTime = now;
             lastDownTimeClient = event.getDownTime();
@@ -194,7 +194,7 @@ public class EventServer extends BaseServer {
             Log.d(TAG, "ACTION_UP( " + event.getItems(0).getId() + ") at " + now + " / " + eventTime);
             // give UP's a little bit of leeway in the timing 
             // makes them less likely to get dropped by the system and reduces touch input weirdness
-            eventTime += 75;
+            eventTime += 150;
         }
 
         if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_POINTER_UP) {
@@ -206,7 +206,7 @@ public class EventServer extends BaseServer {
             int index = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
             Log.d(TAG, "ACTION_POINTER_DOWN(" + event.getItems(index).getId() + ") at " + now + " / " + eventTime);
         }
-        */
+        
 	Log.e(TAG, "translate the pointer coordinates based on screen orientation");
         // translate the pointer coordinates based on screen orientation
         final int pointerSize = event.getItemsCount();

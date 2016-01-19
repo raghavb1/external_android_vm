@@ -135,7 +135,7 @@ public class EventServer extends BaseServer {
     // overload to handle individual touch events
     public void handleTouch(final SVMPProtocol.TouchEvent event) {
     	Log.e(TAG, "New Touch event");
-    	if(event.getAction == 50){
+    	if(event.getAction() == 50){
     		scroll();
     	}
     	else if (event.hasEventTime()){

@@ -224,8 +224,8 @@ public class EventServer extends BaseServer {
         int edgeFlags = event.hasEdgeFlags() ? event.getEdgeFlags() : 0;
 
         MotionEvent me = MotionEvent.obtain(
-                lastDownTime,                           // downTime
-                offsetEventTime(eventTime),             // eventTime
+                SystemClock.uptimeMillis(),                           // downTime lastDownTime
+                SystemClock.uptimeMillis(),             // eventTime offsetEventTime(eventTime)
                 event.getAction(),                      // action
                 pointerSize,                            // pointerCount
                 props,                                  // pointerProperties

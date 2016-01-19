@@ -337,11 +337,15 @@ public class EventServer extends BaseServer {
 	                0 ); 
 	        
 	        long eventTime = upTime;
+	        
 	        for (int i = 0; i < 10; i++) {
+	        	MotionEvent.PointerCoords[] coordsN = new MotionEvent.PointerCoords[1];
+	        	MotionEvent.PointerCoords coordN = coord;
 	        	eventTime = eventTime+10;
-	            	coord.y = coord.y - 30;
-	        	coords[0] = coord;
-	        	me.addBatch(eventTime, coords, 0);
+	        	coordN.x = 360;
+	            	coordN.y = coordN.y - 30;
+	        	coordsN[0] = coordN;
+	        	me.addBatch(eventTime, coordsN, 0);
 	        }
 	        
 	        me.setAction(2);

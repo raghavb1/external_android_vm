@@ -337,6 +337,7 @@ public class EventServer extends BaseServer {
 	                0 ); 
 	        
 	        long eventTime = upTime;
+	        MotionEvent.PointerCoords coordN = coord;
 	        
 	        for (int i = 0; i < 10; i++) {
 	        	MotionEvent.PointerCoords[] coordsN = new MotionEvent.PointerCoords[1];

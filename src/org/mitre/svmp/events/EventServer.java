@@ -230,7 +230,7 @@ public class EventServer extends BaseServer {
 
         MotionEvent me = MotionEvent.obtain(
                 SystemClock.uptimeMillis(),                           // downTime lastDownTime
-                SystemClock.uptimeMillis(),             // eventTime offsetEventTime(eventTime)
+                SystemClock.uptimeMillis()+100,             // eventTime offsetEventTime(eventTime)
                 event.getAction(),                      // action
                 pointerSize,                            // pointerCount
                 props,                                  // pointerProperties

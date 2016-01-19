@@ -305,12 +305,14 @@ public class EventServer extends BaseServer {
 	}
 	
 	private void scroll(){
+		try {
+		Log.e(TAG, "startng scroll");
 		long upTime = SystemClock.uptimeMillis();
 		
 	        MotionEvent.PointerCoords[] coords = new MotionEvent.PointerCoords[1];
 	        MotionEvent.PointerProperties[] props = new MotionEvent.PointerProperties[1];
 	        MotionEvent.PointerCoords coord = new MotionEvent.PointerCoords();
-	        
+
 	        props[0] = new MotionEvent.PointerProperties();
 	        props[0].id = 0;
 	        props[0].toolType = MotionEvent.TOOL_TYPE_FINGER;
@@ -345,6 +347,9 @@ public class EventServer extends BaseServer {
 	        me.setAction(2);
 	        
 	        injectTouch(me);
+		} catch( Exception e ) {
+			Log.e(TAG, "Error injecting MotionEvent: " + e.getMessage());
+		}
 	}
 
 

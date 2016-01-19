@@ -305,6 +305,8 @@ public class EventServer extends BaseServer {
 	}
 	
 	private void scroll(){
+		final long upTime = SystemClock.uptimeMillis();
+		
 	        MotionEvent.PointerCoords[] coords = new MotionEvent.PointerCoords[1];
 	        MotionEvent.PointerProperties[] props = new MotionEvent.PointerProperties[1];
 	        MotionEvent.PointerCoords coord = new MotionEvent.PointerCoords();
@@ -317,8 +319,8 @@ public class EventServer extends BaseServer {
 	        coords[0] = coord;
 	        
 	        MotionEvent me = MotionEvent.obtain(
-	                SystemClock.uptimeMillis(),                           // downTime lastDownTime
-	                SystemClock.uptimeMillis()+100,             // eventTime offsetEventTime(eventTime)
+	                upTime,                           // downTime lastDownTime
+	                upTime+100,             // eventTime offsetEventTime(eventTime)
 	                2,                      // action
 	                1,                            // pointerCount
 	                props,                                  // pointerProperties
@@ -335,7 +337,7 @@ public class EventServer extends BaseServer {
 	        for (int i = 0; i < 10; i++) {
 	            coord.y = coord.y - 30;
 	        	coords[0] = coord;
-	        	me.addBatch(SystemClock.uptimeMillis() - 10, coords, 0);
+	        	me.addBatch(upTime + 10, coords, 0);
 	        }
 	        
 	        me.setAction(2);

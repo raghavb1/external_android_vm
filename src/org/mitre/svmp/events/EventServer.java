@@ -305,8 +305,8 @@ public class EventServer extends BaseServer {
 	}
 	
 	private void scroll(){
-	        MotionEvent.PointerCoords[] coords = new MotionEvent.PointerCoords[pointerSize];
-	        MotionEvent.PointerProperties[] props = new MotionEvent.PointerProperties[pointerSize];
+	        MotionEvent.PointerCoords[] coords = new MotionEvent.PointerCoords[1];
+	        MotionEvent.PointerProperties[] props = new MotionEvent.PointerProperties[1];
 	        MotionEvent.PointerCoords coord = new MotionEvent.PointerCoords();
 	        
 	        props[0] = new MotionEvent.PointerProperties();

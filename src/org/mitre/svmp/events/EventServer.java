@@ -305,7 +305,7 @@ public class EventServer extends BaseServer {
 	}
 	
 	private void scroll(){
-		final long upTime = SystemClock.uptimeMillis();
+		long upTime = SystemClock.uptimeMillis();
 		
 	        MotionEvent.PointerCoords[] coords = new MotionEvent.PointerCoords[1];
 	        MotionEvent.PointerProperties[] props = new MotionEvent.PointerProperties[1];
@@ -334,10 +334,12 @@ public class EventServer extends BaseServer {
 	                InputDevice.SOURCE_TOUCHSCREEN,         // source
 	                0 ); 
 	        
+	        long eventTime = upTime;
 	        for (int i = 0; i < 10; i++) {
-	            coord.y = coord.y - 30;
+	        	eventTime = eventTime+10;
+	            	coord.y = coord.y - 30;
 	        	coords[0] = coord;
-	        	me.addBatch(upTime + 10, coords, 0);
+	        	me.addBatch(eventTime, coords, 0);
 	        }
 	        
 	        me.setAction(2);

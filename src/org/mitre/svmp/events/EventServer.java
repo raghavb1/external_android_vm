@@ -135,10 +135,15 @@ public class EventServer extends BaseServer {
     // overload to handle individual touch events
     public void handleTouch(final SVMPProtocol.TouchEvent event) {
     	Log.e(TAG, "New Touch event");
-        if (event.hasEventTime())
+    	if(event.getAction == 50){
+    		scroll();
+    	}
+    	else if (event.hasEventTime()){
             handleTouchNew(event);
-        else
+        }
+        else{
             handleTouchOld(event);
+        }
         
 //		Response response = buildIntentResponse(IntentAction.ACTION_VIEW.getNumber(), "touchHandled");
 //		if( response == null )
@@ -298,6 +303,46 @@ public class EventServer extends BaseServer {
 
 		return null;
 	}
+	
+	private void scroll(){
+	        MotionEvent.PointerCoords[] coords = new MotionEvent.PointerCoords[pointerSize];
+	        MotionEvent.PointerProperties[] props = new MotionEvent.PointerProperties[pointerSize];
+	        MotionEvent.PointerCoords coord = new MotionEvent.PointerCoords();
+	        
+	        props[0] = new MotionEvent.PointerProperties();
+	        props[0].id = 0;
+	        props[0].toolType = MotionEvent.TOOL_TYPE_FINGER;
+	        coord.x = 360;
+	        coord.y = 800;
+	        coords[0] = coord;
+	        
+	        MotionEvent me = MotionEvent.obtain(
+	                SystemClock.uptimeMillis(),                           // downTime lastDownTime
+	                SystemClock.uptimeMillis()+100,             // eventTime offsetEventTime(eventTime)
+	                2,                      // action
+	                1,                            // pointerCount
+	                props,                                  // pointerProperties
+	                coords,                                 // pointerCoords
+	                0,                                      // metaState
+	                0,                                      // buttonState
+	                1,                                      // xPrecision
+	                1,                                      // yPrecision
+	                0,                                      // deviceId
+	                0,                              // edgeFlags
+	                InputDevice.SOURCE_TOUCHSCREEN,         // source
+	                0 ); 
+	        
+	        for (int i = 0; i < 10; i++) {
+	            coord.y = coord.y - 30;
+	        	coords[0] = coord;
+	        	me.addBatch(SystemClock.uptimeMillis() - 10, coords, 0);
+	        }
+	        
+	        me.setAction(2);
+	        
+	        injectTouch(me);
+	}
+
 
 }
 

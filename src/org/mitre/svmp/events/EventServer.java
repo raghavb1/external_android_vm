@@ -341,7 +341,6 @@ public class EventServer extends BaseServer {
 	                InputDevice.SOURCE_TOUCHSCREEN,         // source
 	                0 ); 
 	        
-	        long eventTime = upTime;
 	        MotionEvent.PointerCoords coordN = coord;
 	        
 	        for (int i = 0; i < history; i++) {

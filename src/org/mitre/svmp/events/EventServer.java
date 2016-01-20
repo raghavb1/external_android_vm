@@ -136,11 +136,14 @@ public class EventServer extends BaseServer {
     public void handleTouch(final SVMPProtocol.TouchEvent event) {
     	Log.e(TAG, "New Touch event");
     	if(event.getAction() == 50){
-    		scroll(0, 0, 800);
-    		scroll(2, 10, 800);
-    		scroll(1, 0, 500);
+    		Log.e(TAG, "In action 50");
+    		long upTime = SystemClock.uptimeMillis();
+    		scroll(0, 0, 800, upTime);
+    		scroll(2, 10, 800, upTime);
+    		scroll(1, 0, 500, upTime);
     	}
     	else if (event.hasEventTime()){
+    		Log.e(TAG, "has event time");
             handleTouchNew(event);
         }
         else{
@@ -306,10 +309,10 @@ public class EventServer extends BaseServer {
 		return null;
 	}
 	
-	private void scroll(int action, int history, int yAxis){
+	private void scroll(int action, int history, int yAxis, long upTime){
 		try {
 		Log.e(TAG, "startng scroll");
-		long upTime = SystemClock.uptimeMillis();
+		
 		
 	        MotionEvent.PointerCoords[] coords = new MotionEvent.PointerCoords[1];
 	        MotionEvent.PointerProperties[] props = new MotionEvent.PointerProperties[1];

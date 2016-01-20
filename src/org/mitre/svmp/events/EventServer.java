@@ -136,9 +136,9 @@ public class EventServer extends BaseServer {
     public void handleTouch(final SVMPProtocol.TouchEvent event) {
     	Log.e(TAG, "New Touch event");
     	if(event.getAction() == 50){
-    		scroll(0, 0, 800)
+    		scroll(0, 0, 800);
     		scroll(2, 10, 800);
-    		scroll(1, 0, 500)
+    		scroll(1, 0, 500);
     	}
     	else if (event.hasEventTime()){
             handleTouchNew(event);

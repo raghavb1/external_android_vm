@@ -139,8 +139,15 @@ public class EventServer extends BaseServer {
     		Log.e(TAG, "In action 50");
     		long downTime = SystemClock.uptimeMillis();
     		scroll(0, 0, 800, downTime, downTime);
-    		scroll(2, 10, 800, downTime+150, downTime);
+    		//scroll(2, 10, 800, downTime+150, downTime);
     		scroll(1, 0, 500, downTime+300, downTime);
+    	}
+    	else if(event.getAction() == 51){
+    		Log.e(TAG, "In action 51");
+    		long downTime = SystemClock.uptimeMillis();
+    		scroll(0, 0, 500, downTime, downTime);
+    		//scroll(2, 10, 500, downTime+150, downTime);
+    		scroll(1, 0, 800, downTime+300, downTime);
     	}
     	else if (event.hasEventTime()){
             handleTouchNew(event);

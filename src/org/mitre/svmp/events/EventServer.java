@@ -306,7 +306,7 @@ public class EventServer extends BaseServer {
 		return null;
 	}
 	
-	private void scroll(int action. int history, int yAxis){
+	private void scroll(int action, int history, int yAxis){
 		try {
 		Log.e(TAG, "startng scroll");
 		long upTime = SystemClock.uptimeMillis();

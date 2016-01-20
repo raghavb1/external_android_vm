@@ -136,7 +136,9 @@ public class EventServer extends BaseServer {
     public void handleTouch(final SVMPProtocol.TouchEvent event) {
     	Log.e(TAG, "New Touch event");
     	if(event.getAction() == 50){
-    		scroll();
+    		scroll(0, 0, 800)
+    		scroll(2, 10, 800);
+    		scroll(1, 0, 500)
     	}
     	else if (event.hasEventTime()){
             handleTouchNew(event);
@@ -304,7 +306,7 @@ public class EventServer extends BaseServer {
 		return null;
 	}
 	
-	private void scroll(){
+	private void scroll(int action. int history, int yAxis){
 		try {
 		Log.e(TAG, "startng scroll");
 		long upTime = SystemClock.uptimeMillis();
@@ -317,13 +319,14 @@ public class EventServer extends BaseServer {
 	        props[0].id = 0;
 	        props[0].toolType = MotionEvent.TOOL_TYPE_FINGER;
 	        coord.x = 360;
-	        coord.y = 800;
+	        //coord.y = 800;
+	        coord.y = yAxis;
 	        coords[0] = coord;
 	        
 	        MotionEvent me = MotionEvent.obtain(
 	                upTime,                           // downTime lastDownTime
 	                upTime+100,             // eventTime offsetEventTime(eventTime)
-	                2,                      // action
+	                action,                      // action
 	                1,                            // pointerCount
 	                props,                                  // pointerProperties
 	                coords,                                 // pointerCoords
@@ -339,7 +342,7 @@ public class EventServer extends BaseServer {
 	        long eventTime = upTime;
 	        MotionEvent.PointerCoords coordN = coord;
 	        
-	        for (int i = 0; i < 10; i++) {
+	        for (int i = 0; i < history; i++) {
 	        	MotionEvent.PointerCoords[] coordsN = new MotionEvent.PointerCoords[1];
 	        	
 	        	eventTime = eventTime+10;
@@ -349,7 +352,7 @@ public class EventServer extends BaseServer {
 	        	me.addBatch(eventTime, coordsN, 0);
 	        }
 	        
-	        me.setAction(2);
+	        me.setAction(action);
 	        
 	        injectTouch(me);
 		} catch( Exception e ) {

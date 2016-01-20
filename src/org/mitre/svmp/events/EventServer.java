@@ -137,20 +137,13 @@ public class EventServer extends BaseServer {
     	Log.e(TAG, "New Touch event");
     	if(event.getAction() == 50){
     		Log.e(TAG, "In action 50");
-    		long upTime = SystemClock.uptimeMillis();
-    		scroll(0, 0, 800, upTime);
-    		scroll(2, 10, 800, upTime);
-    		scroll(1, 0, 500, upTime);
+    		long downTime = SystemClock.uptimeMillis();
+    		scroll(0, 0, 800, downTime, downTime);
+    		scroll(2, 10, 800, downTime+150, downTime);
+    		scroll(1, 0, 500, downTime+300, downTime);
     	}
     	else if (event.hasEventTime()){
-    	//	Log.e(TAG, "has event time");
-            //handleTouchNew(event);
-            
-                		Log.e(TAG, "In action 50");
-    		long upTime = SystemClock.uptimeMillis();
-    		scroll(0, 0, 800, upTime);
-    		scroll(2, 10, 800, upTime);
-    		scroll(1, 0, 500, upTime);
+            handleTouchNew(event);
         }
         else{
             handleTouchOld(event);
@@ -315,7 +308,7 @@ public class EventServer extends BaseServer {
 		return null;
 	}
 	
-	private void scroll(int action, int history, int yAxis, long upTime){
+	private void scroll(int action, int history, int yAxis, long eventTime, long downTime){
 		try {
 		Log.e(TAG, "startng scroll");
 		
@@ -333,8 +326,8 @@ public class EventServer extends BaseServer {
 	        coords[0] = coord;
 	        
 	        MotionEvent me = MotionEvent.obtain(
-	                upTime,                           // downTime lastDownTime
-	                upTime+100,             // eventTime offsetEventTime(eventTime)
+	                downTime,                           // downTime lastDownTime
+	                eventTime,             // eventTime offsetEventTime(eventTime)
 	                action,                      // action
 	                1,                            // pointerCount
 	                props,                                  // pointerProperties

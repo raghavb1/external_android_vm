@@ -138,16 +138,16 @@ public class EventServer extends BaseServer {
     	if(event.getAction() == 50){
     		Log.e(TAG, "In action 50");
     		long downTime = SystemClock.uptimeMillis();
-    		scroll(0, 0, 800, downTime, downTime);
-    		scroll(2, 10, 800, downTime+150, downTime);
-    		scroll(1, 0, 500, downTime+300, downTime);
+    		scroll(0, 0, 800, downTime, downTime, 0);
+    		scroll(2, 10, 800, downTime+100, downTime, 30);
+    		scroll(1, 0, 500, downTime+200, downTime, 0);
     	}
     	else if(event.getAction() == 51){
     		Log.e(TAG, "In action 51");
     		long downTime = SystemClock.uptimeMillis();
-    		scroll(0, 0, 500, downTime, downTime);
-    		scroll(2, 10, 500, downTime+150, downTime);
-    		scroll(1, 0, 800, downTime+300, downTime);
+    		scroll(0, 0, 500, downTime, downTime, 0);
+    		scroll(2, 10, 500, downTime+100, downTime, -30);
+    		scroll(1, 0, 800, downTime+200, downTime, 0);
     	}
     	else if (event.hasEventTime()){
             handleTouchNew(event);
@@ -315,7 +315,7 @@ public class EventServer extends BaseServer {
 		return null;
 	}
 	
-	private void scroll(int action, int history, int yAxis, long eventTime, long downTime){
+	private void scroll(int action, int history, int yAxis, long eventTime, long downTime, int scrollGap){
 		try {
 		Log.e(TAG, "startng scroll");
 		
@@ -355,7 +355,7 @@ public class EventServer extends BaseServer {
 	        	
 	        	eventTime = eventTime+10;
 	        	coordN.x = 360;
-	            	coordN.y = coordN.y - 30;
+	            	coordN.y = coordN.y - scrollGap;
 	        	coordsN[0] = coordN;
 	        	me.addBatch(eventTime, coordsN, 0);
 	        }

@@ -143,8 +143,14 @@ public class EventServer extends BaseServer {
     		scroll(1, 0, 500, upTime);
     	}
     	else if (event.hasEventTime()){
-    		Log.e(TAG, "has event time");
-            handleTouchNew(event);
+    	//	Log.e(TAG, "has event time");
+            //handleTouchNew(event);
+            
+                		Log.e(TAG, "In action 50");
+    		long upTime = SystemClock.uptimeMillis();
+    		scroll(0, 0, 800, upTime);
+    		scroll(2, 10, 800, upTime);
+    		scroll(1, 0, 500, upTime);
         }
         else{
             handleTouchOld(event);

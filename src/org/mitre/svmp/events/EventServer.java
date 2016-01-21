@@ -119,8 +119,8 @@ public class EventServer extends BaseServer {
             coords.x = X;
             coords.y = Y;
         } finally {
-            coords.pressure = 5f;
-            coords.size = 5f;
+            coords.pressure = 10f;
+            coords.size = 10f;
         }
         return coords;
     }
@@ -139,8 +139,8 @@ public class EventServer extends BaseServer {
     		Log.e(TAG, "In action 50");
     		long downTime = SystemClock.uptimeMillis();
     		scroll(0, 0, 800, downTime, downTime, 0);
-    		scroll(2, 40, 400, downTime+100, downTime, 10);
-    		scroll(1, 0, 400, downTime+200, downTime, 0);
+    		scroll(2, 40, 400, downTime+50, downTime, 10);
+    		scroll(1, 0, 400, downTime+100, downTime, 0);
     	}
     	else if(event.getAction() == 51){
     		Log.e(TAG, "In action 51");
@@ -330,8 +330,8 @@ public class EventServer extends BaseServer {
 	        coord.x = 360;
 	        //coord.y = 800;
 	        coord.y = yAxis;
-	        coord.pressure = 5f;
-            	coord.size = 5f;
+	        coord.pressure = 10f;
+            	coord.size = 10f;
 	        coords[0] = coord;
 	        
 	        MotionEvent me = MotionEvent.obtain(
@@ -358,8 +358,8 @@ public class EventServer extends BaseServer {
 	        	eventTime = eventTime+10;
 	        	coordN.x = 360;
 	            	coordN.y = coordN.y - scrollGap;
-	            	coordN.pressure = 5f;
-            		coordN.size = 5f;
+	            	coordN.pressure = 10f;
+            		coordN.size = 10f;
 	        	coordsN[0] = coordN;
 	        	me.addBatch(eventTime, coordsN, 0);
 	        }

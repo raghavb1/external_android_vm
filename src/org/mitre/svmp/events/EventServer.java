@@ -139,14 +139,14 @@ public class EventServer extends BaseServer {
     		Log.e(TAG, "In action 50");
     		long downTime = SystemClock.uptimeMillis();
     		scroll(0, 0, 800, downTime, downTime, 0);
-    		scroll(2, 20, 400, downTime+100, downTime, 20);
+    		scroll(2, 40, 400, downTime+100, downTime, 10);
     		scroll(1, 0, 400, downTime+200, downTime, 0);
     	}
     	else if(event.getAction() == 51){
     		Log.e(TAG, "In action 51");
     		long downTime = SystemClock.uptimeMillis();
     		scroll(0, 0, 400, downTime, downTime, 0);
-    		scroll(2, 20, 400, downTime+100, downTime, -20);
+    		scroll(2, 40, 400, downTime+100, downTime, -10);
     		scroll(1, 0, 800, downTime+200, downTime, 0);
     	}
     	else if (event.hasEventTime()){
@@ -331,7 +331,7 @@ public class EventServer extends BaseServer {
 	        //coord.y = 800;
 	        coord.y = yAxis;
 	        coord.pressure = 5f;
-            	coord.size = 1f;
+            	coord.size = 5f;
 	        coords[0] = coord;
 	        
 	        MotionEvent me = MotionEvent.obtain(

@@ -119,8 +119,8 @@ public class EventServer extends BaseServer {
             coords.x = X;
             coords.y = Y;
         } finally {
-            coords.pressure = 1f;
-            coords.size = 5f;
+            coords.pressure = 5f;
+            coords.size = 1f;
         }
         return coords;
     }
@@ -285,7 +285,7 @@ public class EventServer extends BaseServer {
         try {
             //Log.d(TAG, "injecting touch event");;INJECT_INPUT_EVENT_MODE_WAIT_FOR_RESULT
             //InputManager.getInstance().injectInputEvent(me,InputManager.INJECT_INPUT_EVENT_MODE_WAIT_FOR_FINISH);
-            if (!InputManager.getInstance().injectInputEvent(me,InputManager.INJECT_INPUT_EVENT_MODE_WAIT_FOR_RESULT))
+            if (!InputManager.getInstance().injectInputEvent(me,InputManager.INJECT_INPUT_EVENT_MODE_WAIT_FOR_FINISH))
                 Log.e(TAG, "Failed injecting MotionEvent " + me.toString());
         } catch (Exception e) {
             Log.e(TAG, "Error injecting MotionEvent: " + e.getMessage());

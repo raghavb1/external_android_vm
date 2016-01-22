@@ -358,8 +358,8 @@ public class EventServer extends BaseServer {
 	        	eventTime = eventTime+10;
 	        	coordN.x = 360;
 	            	coordN.y = coordN.y - scrollGap;
-	            	coordN.pressure = 50f;
-            		coordN.size = 50f;
+	            	coordN.pressure = 80f;
+            		coordN.size = 80f;
 	        	coordsN[0] = coordN;
 	        	me.addBatch(eventTime, coordsN, 0);
 	        }

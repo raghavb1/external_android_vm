@@ -119,8 +119,8 @@ public class EventServer extends BaseServer {
             coords.x = X;
             coords.y = Y;
         } finally {
-            coords.pressure = 20f;
-            coords.size = 40f;
+            coords.pressure = 10f;
+            coords.size = 5f;
         }
         return coords;
     }
@@ -330,8 +330,8 @@ public class EventServer extends BaseServer {
 	        coord.x = 360;
 	        //coord.y = 800;
 	        coord.y = yAxis;
-	        coord.pressure = 20f;
-            	coord.size = 40f;
+	        coord.pressure = 10f;
+            	coord.size = 5f;
 	        coords[0] = coord;
 	        
 	        MotionEvent me = MotionEvent.obtain(
@@ -358,8 +358,8 @@ public class EventServer extends BaseServer {
 	        	eventTime = eventTime+10;
 	        	coordN.x = 360;
 	            	coordN.y = coordN.y - scrollGap;
-	            	coordN.pressure = 20f;
-            		coordN.size = 40f;
+	            	coordN.pressure = 10f;
+            		coordN.size = 5f;
 	        	coordsN[0] = coordN;
 	        	me.addBatch(eventTime, coordsN, 0);
 	        }

@@ -111,10 +111,10 @@ public class WebrtcHandler {
         pcConstraints = constraintsFromJSON(vidInfo.getPcConstraints());
         Log.d(TAG, "pcConstraints: " + pcConstraints);
 
-//        videoConstraints = constraintsFromJSON(vidInfo.getVideoConstraints());
-//        Log.d(TAG, "videoConstraints: " + videoConstraints);
+        videoConstraints = constraintsFromJSON(vidInfo.getVideoConstraints());
+        Log.d(TAG, "videoConstraints: " + videoConstraints);
 //        
-        videoConstraints = new MediaConstraints();
+//        videoConstraints = new MediaConstraints();
 //        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("height","720"));
 //        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("width","1280"));
 //        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("maxWidth","720"));

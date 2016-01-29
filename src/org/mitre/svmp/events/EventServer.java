@@ -134,7 +134,7 @@ public class EventServer extends BaseServer {
 
     // overload to handle individual touch events
     public void handleTouch(final SVMPProtocol.TouchEvent event) {
-    	Log.e(TAG, "New Touch event");
+    	//Log.e(TAG, "New Touch event");
     	if(event.getAction() == 50){
     		Log.e(TAG, "In action 50");
     		long downTime = SystemClock.uptimeMillis();
@@ -173,7 +173,7 @@ public class EventServer extends BaseServer {
             lastDownTime = now;
         }
         
-	Log.e(TAG, "Creating motion event to inject with touch old");
+	//Log.e(TAG, "Creating motion event to inject with touch old");
         // Create the MotionEvent to inject
         final int pointerSize = event.getItemsCount();
         MotionEvent.PointerCoords[] coords = new MotionEvent.PointerCoords[pointerSize];
@@ -188,9 +188,9 @@ public class EventServer extends BaseServer {
 
         MotionEvent me = MotionEvent.obtain(lastDownTime, now, event.getAction(), pointerSize, props, coords,
                 0, 0, 1, 1, 0, 0, InputDevice.SOURCE_TOUCHSCREEN, 0);
-	Log.e(TAG, "Injecting motion event");
+	//Log.e(TAG, "Injecting motion event");
         injectTouch(me);
-        Log.e(TAG, "Motion inject complete old");
+        //Log.e(TAG, "Motion inject complete old");
     }
 
     private long lastTouch = 0;
@@ -235,7 +235,7 @@ public class EventServer extends BaseServer {
             props[i].toolType = MotionEvent.TOOL_TYPE_FINGER;
             coords[i] = translateCoords(event.getItems(i).getX(), event.getItems(i).getY());
         }
-	Log.e(TAG, "use client edgeFlags if present");
+	//Log.e(TAG, "use client edgeFlags if present");
         // use client edgeFlags if present
         int edgeFlags = event.hasEdgeFlags() ? event.getEdgeFlags() : 0;
 
@@ -255,7 +255,7 @@ public class EventServer extends BaseServer {
                 InputDevice.SOURCE_TOUCHSCREEN,         // source
                 0 );                                    // flags
 
-	Log.e(TAG, "handle any batched historical pointer movements");
+	//Log.e(TAG, "handle any batched historical pointer movements");
         // handle any batched historical pointer movements
         int historicalSize = event.getHistoricalCount();
         for (int i = 0; i < historicalSize; i++) {
@@ -272,9 +272,9 @@ public class EventServer extends BaseServer {
         }
 
         me.setAction(event.getAction());
-	Log.e(TAG, "Injecting motion event new");
+	//Log.e(TAG, "Injecting motion event new");
         injectTouch(me);
-        Log.e(TAG, "Motion inject complete new");
+        //Log.e(TAG, "Motion inject complete new");
     }
 
     private long offsetEventTime(long clientTime) {

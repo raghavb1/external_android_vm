@@ -172,6 +172,11 @@ public abstract class BaseServer implements Constants {
                 case TOUCHEVENT:
                 	//webrtcHandler.pauseVideoStream();
                     handleTouch(msg.getTouchList());
+                    try {
+                        Thread.sleep(1000);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
                     //webrtcHandler.resumeVideoStream();
                     break;
                 case SENSOREVENT:

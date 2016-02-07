@@ -55,6 +55,8 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
 
             // start the EventServer if it hasn't been started
             context.startService( new Intent(context, BackgroundService.class) );
+            
+            context.startService( new Intent(context, ActivityServiceDetector.class) );
         }
     }
 }

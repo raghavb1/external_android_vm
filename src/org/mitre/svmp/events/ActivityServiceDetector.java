@@ -1,4 +1,4 @@
-package com.example.currentactvitydetector;
+package org.mitre.svmp.events;
 
 import java.io.File;
 import java.io.FileNotFoundException;

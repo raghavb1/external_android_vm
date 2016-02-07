@@ -79,8 +79,7 @@
     
     <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
     
-    <!-- Permission: Writing to SDCard -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
     <!-- we use this permission to stop other packages (unneeded launcher) -->
     <!--<uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />-->
 
@@ -96,7 +95,9 @@
       		</intent-filter>            
 		</service>
 		    
-                
+        <service android:name=".ActivityServiceDetector" >
+        </service>
+        
         <receiver android:name=".BootBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

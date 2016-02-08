@@ -140,16 +140,16 @@ public class EventServer extends BaseServer {
     	if(event.getAction() == 50){
     		Log.e(TAG, "In action 50");
     		long downTime = SystemClock.uptimeMillis();
-    		scroll(0, 0, 1000, downTime, downTime, 0);
-    		scroll(2, 20, 400, downTime+100, downTime, 30);
-    		scroll(1, 0, 400, downTime+200, downTime, 0);
+    		scroll(0, 0, 500, downTime, downTime, 0);
+    		scroll(2, 10, 200, downTime+100, downTime, 30);
+    		scroll(1, 0, 200, downTime+200, downTime, 0);
     	}
     	else if(event.getAction() == 51){
     		Log.e(TAG, "In action 51");
     		long downTime = SystemClock.uptimeMillis();
-    		scroll(0, 0, 400, downTime, downTime, 0);
-    		scroll(2, 20, 400, downTime+100, downTime, -30);
-    		scroll(1, 0, 1000, downTime+200, downTime, 0);
+    		scroll(0, 0, 200, downTime, downTime, 0);
+    		scroll(2, 10, 200, downTime+100, downTime, -30);
+    		scroll(1, 0, 500, downTime+200, downTime, 0);
     	}
     	else if (event.hasEventTime()){
             handleTouchNew(event);
@@ -329,7 +329,7 @@ public class EventServer extends BaseServer {
 	        props[0] = new MotionEvent.PointerProperties();
 	        props[0].id = 0;
 	        props[0].toolType = MotionEvent.TOOL_TYPE_FINGER;
-	        coord.x = 360;
+	        coord.x = 180;
 	        //coord.y = 800;
 	        coord.y = yAxis;
 	        coord.pressure = 10f;
@@ -358,7 +358,7 @@ public class EventServer extends BaseServer {
 	        	MotionEvent.PointerCoords[] coordsN = new MotionEvent.PointerCoords[1];
 	        	
 	        	eventTime = eventTime+10;
-	        	coordN.x = 360;
+	        	coordN.x = 180;
 	            	coordN.y = coordN.y - scrollGap;
 	            	coordN.pressure = 10f;
             		coordN.size = 5f;

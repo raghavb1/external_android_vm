@@ -120,7 +120,7 @@ public class WebrtcHandler {
 //        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("maxWidth","720"));
 //        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("maxHeight","1280"));
 //        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("minFrameRate","30"));
-        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("maxFrameRate","24"));
+        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("maxFrameRate","12"));
 
 
         audioConstraints = new MediaConstraints(); //null;

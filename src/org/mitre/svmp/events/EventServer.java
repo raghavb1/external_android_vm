@@ -218,7 +218,7 @@ public class EventServer extends BaseServer {
             Log.d(TAG, "ACTION_UP( " + event.getItems(0).getId() + ") at " + now + " / " + eventTime);
             // give UP's a little bit of leeway in the timing 
             // makes them less likely to get dropped by the system and reduces touch input weirdness
-            eventTime += 150;
+            eventTime += 75;
         }
 
         if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_POINTER_UP) {

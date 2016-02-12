@@ -48,6 +48,7 @@ public class EventServer extends BaseServer {
     private long lastDownTime, lastDownTimeClient = -1;
     private final Point screenSize = new Point();
     private double xScaleFactor, yScaleFactor;
+    private Boolean touching;
 
     public EventServer(Context context) throws IOException {
         super(context);
@@ -119,8 +120,8 @@ public class EventServer extends BaseServer {
             coords.x = X;
             coords.y = Y;
         } finally {
-            coords.pressure = 10f;
-            coords.size = 10f;
+            coords.pressure = 1f;
+            coords.size = 5f;
         }
         return coords;
     }
@@ -128,9 +129,14 @@ public class EventServer extends BaseServer {
     @Override
     public synchronized void handleTouch(final List<TouchEvent> eventList) {
         // we can receive a batch of touch events; process each event individually
-        synchronized (eventList) {
-	        for (TouchEvent event : eventList)
-	            handleTouch(event);
+        if(!touching){
+	        synchronized (eventList) {
+	        	touching = true;
+		        for (TouchEvent event : eventList){
+		            handleTouch(event);
+		        }
+		        touching = true;
+	        }
         }
     }
 

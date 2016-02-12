@@ -135,7 +135,7 @@ public class EventServer extends BaseServer {
 		        for (TouchEvent event : eventList){
 		            handleTouch(event);
 		        }
-		        touching = true;
+		        touching = false;
 //	        }
         }
     }

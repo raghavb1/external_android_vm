@@ -130,13 +130,13 @@ public class EventServer extends BaseServer {
     public synchronized void handleTouch(final List<TouchEvent> eventList) {
         // we can receive a batch of touch events; process each event individually
         if(!touching){
-	        synchronized (eventList) {
+//	        synchronized (eventList) {
 	        	touching = true;
 		        for (TouchEvent event : eventList){
 		            handleTouch(event);
 		        }
 		        touching = true;
-	        }
+//	        }
         }
     }
 

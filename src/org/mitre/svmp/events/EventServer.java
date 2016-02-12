@@ -291,9 +291,9 @@ public class EventServer extends BaseServer {
 
     private void injectTouch(MotionEvent me) {
         try {
-            //Log.d(TAG, "injecting touch event");;INJECT_INPUT_EVENT_MODE_WAIT_FOR_RESULT
+            //Log.d(TAG, "injecting touch event");;INJECT_INPUT_EVENT_MODE_WAIT_FOR_RESULT;;INJECT_INPUT_EVENT_MODE_ASYNC
             //InputManager.getInstance().injectInputEvent(me,InputManager.INJECT_INPUT_EVENT_MODE_WAIT_FOR_FINISH);
-            if (!InputManager.getInstance().injectInputEvent(me,InputManager.INJECT_INPUT_EVENT_MODE_ASYNC))
+            if (!InputManager.getInstance().injectInputEvent(me,InputManager.INJECT_INPUT_EVENT_MODE_WAIT_FOR_FINISH))
                 Log.e(TAG, "Failed injecting MotionEvent " + me.toString());
         } catch (Exception e) {
             Log.e(TAG, "Error injecting MotionEvent: " + e.getMessage());

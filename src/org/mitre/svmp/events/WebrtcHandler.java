@@ -115,8 +115,8 @@ public class WebrtcHandler {
 //       Log.d(TAG, "videoConstraints: " + videoConstraints);
 //        
         videoConstraints = new MediaConstraints();
-//        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("height","720"));
-//        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("width","1280"));
+        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("height","320"));
+        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("width","180"));
 //        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("maxWidth","720"));
 //        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("maxHeight","1280"));
 //        videoConstraints.mandatory.add(new MediaConstraints.KeyValuePair("minFrameRate","30"));
@@ -249,7 +249,7 @@ public class WebrtcHandler {
         {
             Log.d(TAG, "Creating local video source...");
             MediaStream lMS = factory.createLocalMediaStream("ARDAMS");
-            if (videoConstraints != null) {
+            //if (videoConstraints != null) {
                 VideoCapturer capturer = VideoCapturer.create();
                 videoSource = factory.createVideoSource(
                         capturer, videoConstraints);
@@ -257,13 +257,13 @@ public class WebrtcHandler {
                 //videoTrack.addRenderer(new VideoRenderer(new VideoCallbacks(
                 //                    vsv, VideoStreamsView.Endpoint.LOCAL)));
                 lMS.addTrack(videoTrack);
-            }
-            if (audioConstraints != null) {
-                Log.d(TAG, "Creating AudioTrack");
-                lMS.addTrack(factory.createAudioTrack(
-                        "ARDAMSa0",
-                        factory.createAudioSource(audioConstraints)));
-            }
+            //}
+            // if (audioConstraints != null) {
+            //     Log.d(TAG, "Creating AudioTrack");
+            //     lMS.addTrack(factory.createAudioTrack(
+            //             "ARDAMSa0",
+            //             factory.createAudioSource(audioConstraints)));
+            // }
             pc.addStream(lMS, new MediaConstraints());
         }
 

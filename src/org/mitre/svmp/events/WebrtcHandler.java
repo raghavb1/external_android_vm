@@ -249,7 +249,7 @@ public class WebrtcHandler {
         {
             Log.d(TAG, "Creating local video source...");
             MediaStream lMS = factory.createLocalMediaStream("ARDAMS");
-            //if (videoConstraints != null) {
+            if (videoConstraints != null) {
                 VideoCapturer capturer = VideoCapturer.create();
                 videoSource = factory.createVideoSource(
                         capturer, videoConstraints);
@@ -257,13 +257,13 @@ public class WebrtcHandler {
                 //videoTrack.addRenderer(new VideoRenderer(new VideoCallbacks(
                 //                    vsv, VideoStreamsView.Endpoint.LOCAL)));
                 lMS.addTrack(videoTrack);
-            //}
-            // if (audioConstraints != null) {
-            //     Log.d(TAG, "Creating AudioTrack");
-            //     lMS.addTrack(factory.createAudioTrack(
-            //             "ARDAMSa0",
-            //             factory.createAudioSource(audioConstraints)));
-            // }
+            }
+            if (audioConstraints != null) {
+                Log.d(TAG, "Creating AudioTrack");
+                lMS.addTrack(factory.createAudioTrack(
+                        "ARDAMSa0",
+                        factory.createAudioSource(audioConstraints)));
+            }
             pc.addStream(lMS, new MediaConstraints());
         }
 
@@ -426,8 +426,8 @@ public class WebrtcHandler {
 
     private static String setBitrate(String sdpDescription) {
     	sdpDescription = sdpDescription.replace( "a=mid:audio\r\n" , "a=mid:audio\r\nb=AS:50\r\n");
-    	sdpDescription = sdpDescription.replace( "a=mid:video\r\n" , "a=mid:video\r\nb=AS:2000\r\na=framerate:24\r\n");
-    	sdpDescription = sdpDescription.replace( "a=mid:data\r\n" , "a=mid:data\r\nb=AS:1638400\r\n");
+    	sdpDescription = sdpDescription.replace( "a=mid:video\r\n" , "a=mid:video\r\nb=AS:128\r\na=framerate:60\r\n");
+    	//sdpDescription = sdpDescription.replace( "a=mid:data\r\n" , "a=mid:data\r\nb=AS:1638400\r\n");
     	return sdpDescription;
     }
     

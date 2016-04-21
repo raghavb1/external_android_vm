@@ -120,7 +120,7 @@ public class EventServer extends BaseServer {
             coords.x = X;
             coords.y = Y;
         } finally {
-            coords.pressure = 1f;
+            coords.pressure = 20f;
             coords.size = 5f;
         }
         return coords;

@@ -157,7 +157,7 @@ public class WebrtcHandler {
                 SessionDescription sdp = new SessionDescription(
                         SessionDescription.Type.fromCanonicalForm(type),
                         //(String) json.get("sdp"));
-                        (String) json.get("sdp"));
+                        setBitrate((String) json.get("sdp")));
                 pc.setRemoteDescription(sdpObserver, sdp);
             } else if (type.equals("bye")) {
                 Log.d(TAG, "Remote end hung up; dropping PeerConnection");
@@ -426,7 +426,7 @@ public class WebrtcHandler {
 
     private static String setBitrate(String sdpDescription) {
     	sdpDescription = sdpDescription.replace( "a=mid:audio\r\n" , "a=mid:audio\r\nb=AS:50\r\n");
-    	sdpDescription = sdpDescription.replace( "a=mid:video\r\n" , "a=mid:video\r\nb=AS:128\r\na=framerate:60\r\n");
+    	sdpDescription = sdpDescription.replace( "a=mid:video\r\n" , "a=mid:video\r\nb=AS:50\r\n");
     	//sdpDescription = sdpDescription.replace( "a=mid:data\r\n" , "a=mid:data\r\nb=AS:1638400\r\n");
     	return sdpDescription;
     }
@@ -493,7 +493,7 @@ public class WebrtcHandler {
             Log.d(TAG, "Sending " + origSdp.type);
             SessionDescription sdp = new SessionDescription(
                     //origSdp.type, preferISAC(origSdp.description));
-                    origSdp.type, setBitrate(origSdp.description));
+                    origSdp.type, RemoveAudio(setBitrate(origSdp.description)));
             JSONObject json = new JSONObject();
             jsonPut(json, "type", sdp.type.canonicalForm());
             jsonPut(json, "sdp", sdp.description);

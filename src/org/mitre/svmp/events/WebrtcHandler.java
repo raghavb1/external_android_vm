@@ -432,7 +432,7 @@ public class WebrtcHandler {
 
     private static String setBitrate(String sdpDescription) {
     	sdpDescription = sdpDescription.replace( "a=mid:audio\r\n" , "a=mid:audio\r\nb=AS:50\r\n");
-    	sdpDescription = sdpDescription.replace( "a=mid:video\r\n" , "a=mid:video\r\nb=AS:2000\r\n");
+    	sdpDescription = sdpDescription.replace( "a=mid:video\r\n" , "a=mid:video\r\nb=AS:3000\r\n");
     	//sdpDescription = sdpDescription.replace( "a=mid:data\r\n" , "a=mid:data\r\nb=AS:1638400\r\n");
     	return sdpDescription;
     }

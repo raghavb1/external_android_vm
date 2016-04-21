@@ -92,7 +92,7 @@ public class WebrtcHandler {
         base = baseServer;
         context = c;
         // Pass in context to allow access to Android managed Audio driver.
-        PeerConnectionFactory.initializeAndroidGlobals(context);
+        PeerConnectionFactory.initializeAndroidGlobals(context,true,true,true);
         //        "Failed to initializeAndroidGlobals");
 
         AudioManager audioManager =
@@ -249,22 +249,22 @@ public class WebrtcHandler {
         {
             Log.d(TAG, "Creating local video source...");
             MediaStream lMS = factory.createLocalMediaStream("ARDAMS");
-            if (videoConstraints != null) {
-                VideoCapturer capturer = VideoCapturer.create();
-                videoSource = factory.createVideoSource(
-                        capturer, videoConstraints);
-                videoTrack = factory.createVideoTrack("ARDAMSv0", videoSource);
-                //videoTrack.addRenderer(new VideoRenderer(new VideoCallbacks(
-                //                    vsv, VideoStreamsView.Endpoint.LOCAL)));
-                lMS.addTrack(videoTrack);
-            }
+//            if (videoConstraints != null) {
+//                VideoCapturer capturer = new VideoCapturer.NativeObserver(nativeCapturer);
+//                videoSource = factory.createVideoSource(
+//                        capturer, videoConstraints);
+//                videoTrack = factory.createVideoTrack("ARDAMSv0", videoSource);
+//                //videoTrack.addRenderer(new VideoRenderer(new VideoCallbacks(
+//                //                    vsv, VideoStreamsView.Endpoint.LOCAL)));
+//                lMS.addTrack(videoTrack);
+//            }
             if (audioConstraints != null) {
                 Log.d(TAG, "Creating AudioTrack");
                 lMS.addTrack(factory.createAudioTrack(
                         "ARDAMSa0",
                         factory.createAudioSource(audioConstraints)));
             }
-            pc.addStream(lMS, new MediaConstraints());
+            pc.addStream(lMS);
         }
 
         Log.d(TAG, "Waiting for ICE candidates...");
@@ -351,10 +351,10 @@ public class WebrtcHandler {
             sendMessage(json);
         }
 
-        @Override
-        public void onError() {
-            throw new RuntimeException("PeerConnection error!");
-        }
+//        @Override
+//        public void onError() {
+//            throw new RuntimeException("PeerConnection error!");
+//        }
 
         @Override
         public void onSignalingChange(PeerConnection.SignalingState newState) {
@@ -395,6 +395,12 @@ public class WebrtcHandler {
             // No need to do anything; AppRTC follows a pre-agreed-upon
             // signaling/negotiation protocol.
         }
+
+		@Override
+		public void onIceConnectionReceivingChange(boolean arg0) {
+			// TODO Auto-generated method stub
+			
+		}
     }
 
     private String RemoveAudio(String sdpDescription) {

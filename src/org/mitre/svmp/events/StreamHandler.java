@@ -21,7 +21,12 @@ import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
 
 import com.google.protobuf.ByteString;
 
-public class StreamHandler {
+public class StreamHandler  extends BaseHandler {
+
+	public StreamHandler(BaseServer baseServer) {
+		super(baseServer);
+		// TODO Auto-generated constructor stub
+	}
 
 	// specific to "ZTE FTV Blade", adjust to your needs
 	private static final int height = 360;
@@ -32,7 +37,8 @@ public class StreamHandler {
 	
 	public void handleShareScreenRequest(final Request message) throws Exception{
 		byte [] frameBytes = getFrame();
-		buildScreenResponse(ByteString.copyFrom(frameBytes));
+		Response response = buildScreenResponse(ByteString.copyFrom(frameBytes));
+		sendMessage(response);
 	}
 	public byte[] getFrame() throws Exception {
 

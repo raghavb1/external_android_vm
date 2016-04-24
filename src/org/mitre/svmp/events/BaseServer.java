@@ -106,7 +106,7 @@ public abstract class BaseServer implements Constants {
         // receives launcher broadcasts and sends Apps Exit messages to the client
         launcherHandler = new LauncherHandler(this);
         
-        streamhandler = new StreamHandler();
+        streamhandler = new StreamHandler(this);
 
         // We create a SingleThreadExecutor because it executes sequentially
         // this guarantees that sensor event messages will be sent in order

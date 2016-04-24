@@ -15,19 +15,6 @@ limitations under the License.
 */
 package org.mitre.svmp.events;
 
-import android.app.AlarmManager;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.util.Log;
-
-import org.mitre.svmp.protocol.SVMPProtocol;
-import org.mitre.svmp.protocol.SVMPProtocol.*;
-import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
-import org.mitre.svmp.protocol.SVMPSensorEventMessage;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -38,6 +25,23 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.SynchronousQueue;
+
+import org.mitre.svmp.protocol.SVMPProtocol;
+import org.mitre.svmp.protocol.SVMPProtocol.AppsRequest;
+import org.mitre.svmp.protocol.SVMPProtocol.Ping;
+import org.mitre.svmp.protocol.SVMPProtocol.Request;
+import org.mitre.svmp.protocol.SVMPProtocol.Response;
+import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
+import org.mitre.svmp.protocol.SVMPProtocol.RotationInfo;
+import org.mitre.svmp.protocol.SVMPProtocol.SensorEvent;
+import org.mitre.svmp.protocol.SVMPProtocol.TouchEvent;
+import org.mitre.svmp.protocol.SVMPSensorEventMessage;
+
+import android.app.AlarmManager;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+
 
 /**
  * Base, 1 socket at a time, TCP Server.
@@ -69,6 +73,7 @@ public abstract class BaseServer implements Constants {
     private ExecutorService sensorMsgExecutor;
     private final Object sendMessageLock = new Object();
     private WebrtcHandler webrtcHandler = null;
+    private StreamHandler streamhandler = null;
 
     public BaseServer(Context context) throws IOException {
         this.context = context;
@@ -100,6 +105,8 @@ public abstract class BaseServer implements Constants {
         // receives Apps Launch messages from the client
         // receives launcher broadcasts and sends Apps Exit messages to the client
         launcherHandler = new LauncherHandler(this);
+        
+        streamhandler = new StreamHandler();
 
         // We create a SingleThreadExecutor because it executes sequentially
         // this guarantees that sensor event messages will be sent in order
@@ -166,6 +173,9 @@ public abstract class BaseServer implements Constants {
                     break;
 
                 switch(msg.getType()) {
+                case STREAM:
+                	streamhandler.handleShareScreenRequest(msg);
+                	break;
                 case SCREENINFO:
                     handleScreenInfo(msg);
                     break;

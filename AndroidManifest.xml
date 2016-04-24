@@ -34,6 +34,8 @@
 
     <!-- we use this to read from the Framebuffer device, /dev/graphics/fb0 -->
     <uses-permission android:name="android.permission.GRAPHICS"/>
+    
+    <uses-permission android:name="android.permission.READ_FRAME_BUFFER"/>
 
     <!-- we use this to inject sensor and touch events -->
     <uses-permission android:name="android.permission.INJECT_EVENTS"/>

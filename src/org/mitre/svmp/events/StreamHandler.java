@@ -9,6 +9,7 @@ package org.mitre.svmp.events;
 //
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -35,20 +36,31 @@ public class StreamHandler  extends BaseHandler {
 	private static final int frames = 2;
 	// not sure what 2nd frame is, most times just black
 	
-	public void handleShareScreenRequest(final Request message) throws Exception{
+	public void handleShareScreenRequest(Request message){
 		byte [] frameBytes = getFrame();
-		Response response = buildScreenResponse(ByteString.copyFrom(frameBytes));
+		ByteString bs = ByteString.copyFrom(frameBytes);
+		Response response = buildScreenResponse(bs);
 		sendMessage(response);
 	}
-	public byte[] getFrame() throws Exception {
+	public byte[] getFrame(){
 
 		// framebuffer
 		String fb0 = "/dev/graphics/fb0";
 
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		FileInputStream fin = new FileInputStream(fb0);
-		copy(fin, bout);
-		fin.close();
+		FileInputStream fin;
+		try {
+			fin = new FileInputStream(fb0);
+			copy(fin, bout);
+			fin.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		byte b[] = bout.toByteArray();
 		
 		return b;
@@ -114,12 +126,12 @@ public class StreamHandler  extends BaseHandler {
 	public Response buildScreenResponse(ByteString byteString) {
 
 			try {
-				SVMPProtocol.WebRTCMessage.Builder rtcBuilder = SVMPProtocol.WebRTCMessage.newBuilder();
-				rtcBuilder.setJsonBytes(byteString);
+				SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();
+				rtcBuilder.setFrameBytes(byteString);
 				
 				Response.Builder responseBuilder = Response.newBuilder();
 				responseBuilder.setType(ResponseType.STREAM);
-				responseBuilder.setWebrtcMsg(rtcBuilder);
+				responseBuilder.setStream(rtcBuilder);
 				
 				return responseBuilder.build();
 			} catch( Exception e ) {

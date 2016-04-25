@@ -14,10 +14,10 @@ import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
 import com.google.protobuf.ByteString;
 
 public class StreamHandler{
-	
-	
+
+
 	private BaseServer base;
-	
+
 	public StreamHandler(BaseServer baseServer) {
 		this.base = baseServer;
 	}
@@ -28,7 +28,7 @@ public class StreamHandler{
 	private static final int pixlen = 2;
 	private static final int frames = 2;
 	// not sure what 2nd frame is, most times just black
-	
+
 	public void handleShareScreenRequest(Request message){
 		byte [] frameBytes = getFrame();
 		ByteString bs = ByteString.copyFrom(frameBytes);
@@ -37,93 +37,109 @@ public class StreamHandler{
 	}
 	public byte[] getFrame(){
 
-        
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		try {
 			Process process = Runtime.getRuntime().exec("su");
-	        OutputStreamWriter outputStream = new OutputStreamWriter(process.getOutputStream());
-	        outputStream.write("/system/bin/screencap -p\n");
-	        outputStream.flush();
-	        InputStream is = process.getInputStream();
-	        
-	        
+			OutputStreamWriter outputStream = new OutputStreamWriter(process.getOutputStream());
+			outputStream.write("/system/bin/screencap -p\n");
+			outputStream.flush();
+			InputStream is = process.getInputStream();
+			outputStream.write("exit\n");
+			outputStream.flush();
+			outputStream.close();
+			
+			System.out.println("*************input stream *********");
+			System.out.println(is);
+			int nRead;
+			byte[] data = new byte[16384];
 
-	        int nRead;
-	        byte[] data = new byte[16384];
+			while ((nRead = is.read(data, 0, data.length)) != -1) {
+				buffer.write(data, 0, nRead);
+			}
 
-	        while ((nRead = is.read(data, 0, data.length)) != -1) {
-	          buffer.write(data, 0, nRead);
-	        }
+			System.out.println("*************buffer stream size*********");
+			System.out.println(buffer.size());
+			
+			buffer.flush();
 
-	        buffer.flush();
 
-	       
 		} catch (IOException e) {
+			System.out.println("*************IO exception*********");
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			System.out.println("************Exception*********");
+			System.out.println(buffer.size());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
-		 return buffer.toByteArray();  
+		System.out.println("*************buffer stream size after over*********");
+		System.out.println(buffer.size());
+		
+		return buffer.toByteArray();  
 
-        
+
 		// framebuffer
-//		String fb0 = "/dev/graphics/fb0";
-//
-//		ByteArrayOutputStream bout = new ByteArrayOutputStream();
-//		FileInputStream fin;
-//		try {
-//			fin = new FileInputStream(fb0);
-//			copy(fin, bout);
-//			fin.close();
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			//e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			//e.printStackTrace();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			//e.printStackTrace();
-//		}
-//
-//		byte b[] = bout.toByteArray();
-//		
-//		return b;
+		//		String fb0 = "/dev/graphics/fb0";
+		//
+		//		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		//		FileInputStream fin;
+		//		try {
+		//			fin = new FileInputStream(fb0);
+		//			copy(fin, bout);
+		//			fin.close();
+		//		} catch (FileNotFoundException e) {
+		//			// TODO Auto-generated catch block
+		//			//e.printStackTrace();
+		//		} catch (IOException e) {
+		//			// TODO Auto-generated catch block
+		//			//e.printStackTrace();
+		//		} catch (Exception e) {
+		//			// TODO Auto-generated catch block
+		//			//e.printStackTrace();
+		//		}
+		//
+		//		byte b[] = bout.toByteArray();
+		//		
+		//		return b;
 
-//		if (b.length != height*width*pixlen*frames) {
-//			System.err.println("incorrect framebuffer length "+b.length+" read");
-//			System.exit(1);
-//		}
+		//		if (b.length != height*width*pixlen*frames) {
+		//			System.err.println("incorrect framebuffer length "+b.length+" read");
+		//			System.exit(1);
+		//		}
 
 
 		// allocate memory for rgb888 output
-//		byte B[] = new byte[height*width*3];
-//
-//		// rotate 180 and convert
-//		for(int i=height*width*pixlen, j=0; i>0; i-=pixlen)
-//		{
-//			// this is specific to rgb565le with pixlen=2, adjust to your needs
-//			int s = ( (b[i-1]<0) ? 256+b[i-1] : b[i-1]) * 256
-//					+ ( (b[i-2]<0) ? 256+b[i-2] : b[i-2]);
-//
-//			// "white" should be "white", fill up with 1-bits at end
-//			// (0x07,0x03,0x07) is good enough as "black"
-//			B[j++] = (byte) ( ((s >> 8) & 0xF8) | 0x07 );
-//			B[j++] = (byte) ( ((s >> 3) & 0xFC) | 0x03 );
-//			B[j++] = (byte) ( ((s << 3) & 0xFF) | 0x07 );
-//		}
-//
-//		ByteArrayInputStream bin = new ByteArrayInputStream(B);
-//
-//
-//		// Portable pixmap binary
-//		System.out.println("P6");
-//
-//		System.out.println(width+" "+height);
-//		// rgb888
-//		System.out.println("255");
-//
-//		copy(bin, System.out);
+		//		byte B[] = new byte[height*width*3];
+		//
+		//		// rotate 180 and convert
+		//		for(int i=height*width*pixlen, j=0; i>0; i-=pixlen)
+		//		{
+		//			// this is specific to rgb565le with pixlen=2, adjust to your needs
+		//			int s = ( (b[i-1]<0) ? 256+b[i-1] : b[i-1]) * 256
+		//					+ ( (b[i-2]<0) ? 256+b[i-2] : b[i-2]);
+		//
+		//			// "white" should be "white", fill up with 1-bits at end
+		//			// (0x07,0x03,0x07) is good enough as "black"
+		//			B[j++] = (byte) ( ((s >> 8) & 0xF8) | 0x07 );
+		//			B[j++] = (byte) ( ((s >> 3) & 0xFC) | 0x03 );
+		//			B[j++] = (byte) ( ((s << 3) & 0xFF) | 0x07 );
+		//		}
+		//
+		//		ByteArrayInputStream bin = new ByteArrayInputStream(B);
+		//
+		//
+		//		// Portable pixmap binary
+		//		System.out.println("P6");
+		//
+		//		System.out.println(width+" "+height);
+		//		// rgb888
+		//		System.out.println("255");
+		//
+		//		copy(bin, System.out);
 	}
 
 
@@ -147,21 +163,21 @@ public class StreamHandler{
 			}
 		}
 	} 
-	
+
 	public Response buildScreenResponse(ByteString byteString) {
 
-			try {
-				SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();
-				rtcBuilder.setFrameBytes(byteString);
-				
-				Response.Builder responseBuilder = Response.newBuilder();
-				responseBuilder.setType(ResponseType.STREAM);
-				responseBuilder.setStream(rtcBuilder);
-				
-				return responseBuilder.build();
-			} catch( Exception e ) {
-				e.printStackTrace();
-			}
+		try {
+			SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();
+			rtcBuilder.setFrameBytes(byteString);
+
+			Response.Builder responseBuilder = Response.newBuilder();
+			responseBuilder.setType(ResponseType.STREAM);
+			responseBuilder.setStream(rtcBuilder);
+
+			return responseBuilder.build();
+		} catch( Exception e ) {
+			e.printStackTrace();
+		}
 
 
 		return null;

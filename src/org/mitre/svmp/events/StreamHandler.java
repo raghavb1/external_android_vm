@@ -46,29 +46,29 @@ public class StreamHandler{
 		byte[] bytes = new byte[1];
 		try {
 			
-			Runtime rt = Runtime.getRuntime();
-			String[] commands = {"/system/bin/screencap -p\n"};
-			Process proc = rt.exec(commands);
-
-			BufferedReader stdInput = new BufferedReader(new 
-			     InputStreamReader(proc.getInputStream()));
+//			Runtime rt = Runtime.getRuntime();
+//			String[] commands = {"/system/bin/screencap -p\n"};
+//			Process proc = rt.exec(commands);
+//
+//			BufferedReader stdInput = new BufferedReader(new 
+//			     InputStreamReader(proc.getInputStream()));
 			
 			
 			
-//			Process process = Runtime.getRuntime().exec("su /system/bin/screencap -p\n");
-//			OutputStreamWriter outputStream = new OutputStreamWriter(process.getOutputStream());
-//			outputStream.flush();
-//			InputStream is = process.getInputStream();
-//			System.out.println("*************input stream *********");
-//			System.out.println(is.toString());
-//			outputStream.write("exit\n");
-//			outputStream.flush();
-//			outputStream.close();
+			Process process = Runtime.getRuntime().exec("/system/bin/screencap -p\n");
+			OutputStreamWriter outputStream = new OutputStreamWriter(process.getOutputStream());
+			outputStream.flush();
+			InputStream is = process.getInputStream();
+			System.out.println("*************input stream *********");
+			System.out.println(is.toString());
+			outputStream.write("exit\n");
+			outputStream.flush();
+			outputStream.close();
 			
-			bytes = IOUtils.toByteArray(stdInput);
+			bytes = IOUtils.toByteArray(is);
 			
 			System.out.println("*************input stream *********");
-			System.out.println(stdInput.toString());
+			System.out.println(is.toString());
 //			int nRead;
 //			byte[] data = new byte[16384];
 //

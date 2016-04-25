@@ -1,18 +1,10 @@
 package org.mitre.svmp.events;
 
-//screenshot tool for "ZTE FTV Blade"  (6/23/2013)
-//- grabs framebuffer /dev/graphics/fb0 (needs "chmod o+r")
-//- converts each of the 800x480 pixels from rgb565le to rgb888 format
-//- rotates 180Â° (frambuffer-->image)
-//- for use in "Terminal IDE" (or Linux, copy raw data to "/dev/graphics/fb0")
-//https://play.google.com/store/apps/details?id=com.spartacusrex.spartacuside
-//
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 import org.mitre.svmp.protocol.SVMPProtocol;
 import org.mitre.svmp.protocol.SVMPProtocol.Request;
@@ -45,29 +37,58 @@ public class StreamHandler{
 	}
 	public byte[] getFrame(){
 
-		// framebuffer
-		String fb0 = "/dev/graphics/fb0";
-
-		ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		FileInputStream fin;
+        
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		try {
-			fin = new FileInputStream(fb0);
-			copy(fin, bout);
-			fin.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			Process process = Runtime.getRuntime().exec("su");
+	        OutputStreamWriter outputStream = new OutputStreamWriter(process.getOutputStream());
+	        outputStream.write("/system/bin/screencap -p\n");
+	        outputStream.flush();
+	        InputStream is = process.getInputStream();
+	        
+	        
+
+	        int nRead;
+	        byte[] data = new byte[16384];
+
+	        while ((nRead = is.read(data, 0, data.length)) != -1) {
+	          buffer.write(data, 0, nRead);
+	        }
+
+	        buffer.flush();
+
+	       
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
 		}
 
-		byte b[] = bout.toByteArray();
-		
-		return b;
+		 return buffer.toByteArray();  
+
+        
+		// framebuffer
+//		String fb0 = "/dev/graphics/fb0";
+//
+//		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+//		FileInputStream fin;
+//		try {
+//			fin = new FileInputStream(fb0);
+//			copy(fin, bout);
+//			fin.close();
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			//e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			//e.printStackTrace();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			//e.printStackTrace();
+//		}
+//
+//		byte b[] = bout.toByteArray();
+//		
+//		return b;
 
 //		if (b.length != height*width*pixlen*frames) {
 //			System.err.println("incorrect framebuffer length "+b.length+" read");

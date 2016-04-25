@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.mitre.svmp.protocol.SVMPProtocol;
@@ -37,49 +38,30 @@ public class StreamHandler{
 		Response response = buildScreenResponse(bs);
 		base.sendMessage(response);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public byte[] getFrame(){
 
 
-//		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		//		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		byte[] bytes = new byte[1];
-		try {
-			
-//			Runtime rt = Runtime.getRuntime();
-//			String[] commands = {"/system/bin/screencap -p\n"};
-//			Process proc = rt.exec(commands);
-//
-//			BufferedReader stdInput = new BufferedReader(new 
-//			     InputStreamReader(proc.getInputStream()));
-			
-			
-			
-			Process process = Runtime.getRuntime().exec("/system/bin/screencap -p\n");
-			OutputStreamWriter outputStream = new OutputStreamWriter(process.getOutputStream());
-			outputStream.flush();
-			InputStream is = process.getInputStream();
-			System.out.println("*************input stream *********");
-			System.out.println(is.toString());
-			outputStream.write("exit\n");
-			outputStream.flush();
-			outputStream.close();
-			
-			bytes = IOUtils.toByteArray(is);
-			
-			System.out.println("*************input stream *********");
-			System.out.println(is.toString());
-//			int nRead;
-//			byte[] data = new byte[16384];
-//
-//			while ((nRead = is.read(data, 0, data.length)) != -1) {
-//				buffer.write(data, 0, nRead);
-//			}
-//
-//			System.out.println("*************buffer stream size*********");
-//			System.out.println(buffer.size());
-//			
-//			buffer.flush();
+
+
+		try{
+
+			ProcessBuilder pb = new ProcessBuilder("/system/bin/screencap -p");
+			Map<String, String> env = pb.environment();
+
+			Process p = pb.start();
+
+
+			BufferedReader br = new BufferedReader (new InputStreamReader(p.getInputStream()));
+
+
+
+
+			bytes = IOUtils.toByteArray(br);
+
 
 
 		} catch (IOException e) {
@@ -89,14 +71,14 @@ public class StreamHandler{
 		}
 		catch (Exception e) {
 			System.out.println("************Exception*********");
-//			System.out.println(buffer.size());
+			//			System.out.println(buffer.size());
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		System.out.println("*************buffer stream size after over*********");
 		System.out.println(bytes.length);
-		
+
 		return bytes;
 
 

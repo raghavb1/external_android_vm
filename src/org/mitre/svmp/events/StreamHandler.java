@@ -15,18 +15,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.mitre.svmp.protocol.SVMPProtocol;
-import org.mitre.svmp.protocol.SVMPProtocol.IntentAction;
 import org.mitre.svmp.protocol.SVMPProtocol.Request;
 import org.mitre.svmp.protocol.SVMPProtocol.Response;
 import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
 
 import com.google.protobuf.ByteString;
 
-public class StreamHandler  extends BaseHandler {
-
+public class StreamHandler{
+	
+	
+	private BaseServer base;
+	
 	public StreamHandler(BaseServer baseServer) {
-		super(baseServer);
-		// TODO Auto-generated constructor stub
+		this.base = baseServer;
 	}
 
 	// specific to "ZTE FTV Blade", adjust to your needs
@@ -40,7 +41,7 @@ public class StreamHandler  extends BaseHandler {
 		byte [] frameBytes = getFrame();
 		ByteString bs = ByteString.copyFrom(frameBytes);
 		Response response = buildScreenResponse(bs);
-		sendMessage(response);
+		base.sendMessage(response);
 	}
 	public byte[] getFrame(){
 

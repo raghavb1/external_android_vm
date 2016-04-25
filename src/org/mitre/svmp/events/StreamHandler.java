@@ -39,8 +39,9 @@ public class StreamHandler{
 	
 	public void handleShareScreenRequest(Request message){
 		byte [] frameBytes = getFrame();
-		ByteString bs = ByteString.copyFrom(frameBytes);
-		Response response = buildScreenResponse(bs);
+		//ByteString bs = ByteString.copyFrom(frameBytes);
+		
+		Response response = buildScreenResponse(null);
 		base.sendMessage(response);
 	}
 	public byte[] getFrame(){
@@ -130,12 +131,12 @@ public class StreamHandler{
 	public Response buildScreenResponse(ByteString byteString) {
 
 			try {
-				SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();
-				rtcBuilder.setFrameBytes(byteString);
+//				SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();
+//				rtcBuilder.setFrameBytes(byteString);
 				
 				Response.Builder responseBuilder = Response.newBuilder();
 				responseBuilder.setType(ResponseType.STREAM);
-				responseBuilder.setStream(rtcBuilder);
+//				responseBuilder.setStream(rtcBuilder);
 				
 				return responseBuilder.build();
 			} catch( Exception e ) {

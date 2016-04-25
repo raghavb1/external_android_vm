@@ -1,11 +1,11 @@
 package org.mitre.svmp.events;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
+import org.apache.commons.io.IOUtils;
 import org.mitre.svmp.protocol.SVMPProtocol;
 import org.mitre.svmp.protocol.SVMPProtocol.Request;
 import org.mitre.svmp.protocol.SVMPProtocol.Response;
@@ -38,30 +38,35 @@ public class StreamHandler{
 	public byte[] getFrame(){
 
 
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+//		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		byte[] bytes = new byte[1];
 		try {
 			Process process = Runtime.getRuntime().exec("su");
 			OutputStreamWriter outputStream = new OutputStreamWriter(process.getOutputStream());
 			outputStream.write("/system/bin/screencap -p\n");
 			outputStream.flush();
 			InputStream is = process.getInputStream();
+			System.out.println("*************input stream *********");
+			System.out.println(is.toString());
 			outputStream.write("exit\n");
 			outputStream.flush();
 			outputStream.close();
 			
-			System.out.println("*************input stream *********");
-			System.out.println(is);
-			int nRead;
-			byte[] data = new byte[16384];
-
-			while ((nRead = is.read(data, 0, data.length)) != -1) {
-				buffer.write(data, 0, nRead);
-			}
-
-			System.out.println("*************buffer stream size*********");
-			System.out.println(buffer.size());
+			bytes = IOUtils.toByteArray(is);
 			
-			buffer.flush();
+			System.out.println("*************input stream *********");
+			System.out.println(is.toString());
+//			int nRead;
+//			byte[] data = new byte[16384];
+//
+//			while ((nRead = is.read(data, 0, data.length)) != -1) {
+//				buffer.write(data, 0, nRead);
+//			}
+//
+//			System.out.println("*************buffer stream size*********");
+//			System.out.println(buffer.size());
+//			
+//			buffer.flush();
 
 
 		} catch (IOException e) {
@@ -71,15 +76,15 @@ public class StreamHandler{
 		}
 		catch (Exception e) {
 			System.out.println("************Exception*********");
-			System.out.println(buffer.size());
+//			System.out.println(buffer.size());
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		System.out.println("*************buffer stream size after over*********");
-		System.out.println(buffer.size());
+		System.out.println(bytes.length);
 		
-		return buffer.toByteArray();  
+		return bytes;
 
 
 		// framebuffer

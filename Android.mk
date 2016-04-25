@@ -9,6 +9,7 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src)
 LOCAL_STATIC_JAVA_LIBRARIES := SVMPProtocol
 #LOCAL_STATIC_JAVA_LIBRARIES += netty
 LOCAL_STATIC_JAVA_LIBRARIES += libjingle_peerconnection
+LOCAL_STATIC_JAVA_LIBRARIES += apache
 LOCAL_SHARED_LIBRARIES := libjingle_peerconnection_so
 
 # Apk must be signed with platform signature for certain permissions
@@ -25,6 +26,7 @@ include $(BUILD_PACKAGE)
 include $(CLEAR_VARS)
 #LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := netty:lib/netty-all-4.0.0.CR4-SNAPSHOT.jar
 LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := libjingle_peerconnection:lib/libjingle_peerconnection.jar
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES += apache:lib/commons-io-2.5.jar
 include $(BUILD_MULTI_PREBUILT)
 
 

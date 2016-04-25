@@ -1,7 +1,9 @@
 package org.mitre.svmp.events;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
@@ -35,27 +37,38 @@ public class StreamHandler{
 		Response response = buildScreenResponse(bs);
 		base.sendMessage(response);
 	}
+	
+	@SuppressWarnings("deprecation")
 	public byte[] getFrame(){
 
 
 //		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		byte[] bytes = new byte[1];
 		try {
-			Process process = Runtime.getRuntime().exec("su");
-			OutputStreamWriter outputStream = new OutputStreamWriter(process.getOutputStream());
-			outputStream.write("/system/bin/screencap -p\n");
-			outputStream.flush();
-			InputStream is = process.getInputStream();
-			System.out.println("*************input stream *********");
-			System.out.println(is.toString());
-			outputStream.write("exit\n");
-			outputStream.flush();
-			outputStream.close();
 			
-			bytes = IOUtils.toByteArray(is);
+			Runtime rt = Runtime.getRuntime();
+			String[] commands = {"su /system/bin/screencap -p\n"};
+			Process proc = rt.exec(commands);
+
+			BufferedReader stdInput = new BufferedReader(new 
+			     InputStreamReader(proc.getInputStream()));
+			
+			
+			
+//			Process process = Runtime.getRuntime().exec("su /system/bin/screencap -p\n");
+//			OutputStreamWriter outputStream = new OutputStreamWriter(process.getOutputStream());
+//			outputStream.flush();
+//			InputStream is = process.getInputStream();
+//			System.out.println("*************input stream *********");
+//			System.out.println(is.toString());
+//			outputStream.write("exit\n");
+//			outputStream.flush();
+//			outputStream.close();
+			
+			bytes = IOUtils.toByteArray(stdInput);
 			
 			System.out.println("*************input stream *********");
-			System.out.println(is.toString());
+			System.out.println(stdInput.toString());
 //			int nRead;
 //			byte[] data = new byte[16384];
 //

@@ -47,7 +47,7 @@ public class StreamHandler{
 		try {
 			
 			Runtime rt = Runtime.getRuntime();
-			String[] commands = {"su /system/bin/screencap -p\n"};
+			String[] commands = {"/system/bin/screencap -p\n"};
 			Process proc = rt.exec(commands);
 
 			BufferedReader stdInput = new BufferedReader(new 

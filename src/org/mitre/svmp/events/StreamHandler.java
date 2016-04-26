@@ -1,14 +1,12 @@
 package org.mitre.svmp.events;
 
-import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.mitre.svmp.protocol.SVMPProtocol;
 import org.mitre.svmp.protocol.SVMPProtocol.Request;
 import org.mitre.svmp.protocol.SVMPProtocol.Response;
@@ -43,68 +41,29 @@ public class StreamHandler{
 	public byte[] getFrame(){
 
 
-		//		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		byte[] bytes = new byte[1];
+		//		 framebuffer
+		String fb0 = "/dev/graphics/fb0";
 
-
-		try{
-
-			ProcessBuilder pb = new ProcessBuilder("/system/bin/screencap -p");
-			Map<String, String> env = pb.environment();
-
-			Process p = pb.start();
-
-
-			BufferedReader br = new BufferedReader (new InputStreamReader(p.getInputStream()));
-
-
-
-
-			bytes = IOUtils.toByteArray(br);
-
-
-
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		FileInputStream fin;
+		try {
+			fin = new FileInputStream(fb0);
+			copy(fin, bout);
+			fin.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("*************IO exception*********");
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (Exception e) {
-			System.out.println("************Exception*********");
-			//			System.out.println(buffer.size());
+			//e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
-		System.out.println("*************buffer stream size after over*********");
-		System.out.println(bytes.length);
+		byte b[] = bout.toByteArray();
 
-		return bytes;
-
-
-		// framebuffer
-		//		String fb0 = "/dev/graphics/fb0";
-		//
-		//		ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		//		FileInputStream fin;
-		//		try {
-		//			fin = new FileInputStream(fb0);
-		//			copy(fin, bout);
-		//			fin.close();
-		//		} catch (FileNotFoundException e) {
-		//			// TODO Auto-generated catch block
-		//			//e.printStackTrace();
-		//		} catch (IOException e) {
-		//			// TODO Auto-generated catch block
-		//			//e.printStackTrace();
-		//		} catch (Exception e) {
-		//			// TODO Auto-generated catch block
-		//			//e.printStackTrace();
-		//		}
-		//
-		//		byte b[] = bout.toByteArray();
-		//		
-		//		return b;
+		return b;
 
 		//		if (b.length != height*width*pixlen*frames) {
 		//			System.err.println("incorrect framebuffer length "+b.length+" read");
@@ -183,3 +142,61 @@ public class StreamHandler{
 		return null;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//
+////		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+//byte[] bytes = new byte[1];
+//
+//
+//try{
+//
+//	ProcessBuilder pb = new ProcessBuilder("/system/bin/screencap -p");
+//	Map<String, String> env = pb.environment();
+//
+//	Process p = pb.start();
+//
+//
+//	BufferedReader br = new BufferedReader (new InputStreamReader(p.getInputStream()));
+//
+//
+//
+//
+//	bytes = IOUtils.toByteArray(br);
+//
+//
+//
+//} catch (IOException e) {
+//	System.out.println("*************IO exception*********");
+//	// TODO Auto-generated catch block
+//	e.printStackTrace();
+//}
+//catch (Exception e) {
+//	System.out.println("************Exception*********");
+//	//			System.out.println(buffer.size());
+//	// TODO Auto-generated catch block
+//	e.printStackTrace();
+//}
+//
+//System.out.println("*************buffer stream size after over*********");
+//System.out.println(bytes.length);
+//
+//return bytes;
+

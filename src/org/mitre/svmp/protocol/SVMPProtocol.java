@@ -6243,26 +6243,14 @@ public final class SVMPProtocol {
     // repeated int32 frameBytes = 1;
     /**
      * <code>repeated int32 frameBytes = 1;</code>
-     *
-     * <pre>
-     *optional bytes frameBytes = 1;
-     * </pre>
      */
     java.util.List<java.lang.Integer> getFrameBytesList();
     /**
      * <code>repeated int32 frameBytes = 1;</code>
-     *
-     * <pre>
-     *optional bytes frameBytes = 1;
-     * </pre>
      */
     int getFrameBytesCount();
     /**
      * <code>repeated int32 frameBytes = 1;</code>
-     *
-     * <pre>
-     *optional bytes frameBytes = 1;
-     * </pre>
      */
     int getFrameBytes(int index);
   }
@@ -6368,10 +6356,6 @@ public final class SVMPProtocol {
     private java.util.List<java.lang.Integer> frameBytes_;
     /**
      * <code>repeated int32 frameBytes = 1;</code>
-     *
-     * <pre>
-     *optional bytes frameBytes = 1;
-     * </pre>
      */
     public java.util.List<java.lang.Integer>
         getFrameBytesList() {
@@ -6379,20 +6363,12 @@ public final class SVMPProtocol {
     }
     /**
      * <code>repeated int32 frameBytes = 1;</code>
-     *
-     * <pre>
-     *optional bytes frameBytes = 1;
-     * </pre>
      */
     public int getFrameBytesCount() {
       return frameBytes_.size();
     }
     /**
      * <code>repeated int32 frameBytes = 1;</code>
-     *
-     * <pre>
-     *optional bytes frameBytes = 1;
-     * </pre>
      */
     public int getFrameBytes(int index) {
       return frameBytes_.get(index);
@@ -6608,10 +6584,6 @@ public final class SVMPProtocol {
       }
       /**
        * <code>repeated int32 frameBytes = 1;</code>
-       *
-       * <pre>
-       *optional bytes frameBytes = 1;
-       * </pre>
        */
       public java.util.List<java.lang.Integer>
           getFrameBytesList() {
@@ -6619,30 +6591,18 @@ public final class SVMPProtocol {
       }
       /**
        * <code>repeated int32 frameBytes = 1;</code>
-       *
-       * <pre>
-       *optional bytes frameBytes = 1;
-       * </pre>
        */
       public int getFrameBytesCount() {
         return frameBytes_.size();
       }
       /**
        * <code>repeated int32 frameBytes = 1;</code>
-       *
-       * <pre>
-       *optional bytes frameBytes = 1;
-       * </pre>
        */
       public int getFrameBytes(int index) {
         return frameBytes_.get(index);
       }
       /**
        * <code>repeated int32 frameBytes = 1;</code>
-       *
-       * <pre>
-       *optional bytes frameBytes = 1;
-       * </pre>
        */
       public Builder setFrameBytes(
           int index, int value) {
@@ -6653,10 +6613,6 @@ public final class SVMPProtocol {
       }
       /**
        * <code>repeated int32 frameBytes = 1;</code>
-       *
-       * <pre>
-       *optional bytes frameBytes = 1;
-       * </pre>
        */
       public Builder addFrameBytes(int value) {
         ensureFrameBytesIsMutable();
@@ -6666,10 +6622,6 @@ public final class SVMPProtocol {
       }
       /**
        * <code>repeated int32 frameBytes = 1;</code>
-       *
-       * <pre>
-       *optional bytes frameBytes = 1;
-       * </pre>
        */
       public Builder addAllFrameBytes(
           java.lang.Iterable<? extends java.lang.Integer> values) {
@@ -6680,10 +6632,6 @@ public final class SVMPProtocol {
       }
       /**
        * <code>repeated int32 frameBytes = 1;</code>
-       *
-       * <pre>
-       *optional bytes frameBytes = 1;
-       * </pre>
        */
       public Builder clearFrameBytes() {
         frameBytes_ = java.util.Collections.emptyList();

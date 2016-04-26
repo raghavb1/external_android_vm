@@ -135,7 +135,7 @@ public class StreamHandler{
 		dStream.close();
 
 		int[] colors = new int[screenHeight * screenWidth];
-		SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();
+		SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();	
 		
 		for (int m = 0; m < colors.length; m++) {
 			int r = (piex[m * 4] & 0xFF);
@@ -143,7 +143,7 @@ public class StreamHandler{
 			int b = (piex[m * 4 + 2] & 0xFF);
 			int a = (piex[m * 4 + 3] & 0xFF);
 			colors[m] = (a << 24) + (r << 16) + (g << 8) + b;
-			rtcBuilder.setFrameBytes(m, colors[m]);
+			rtcBuilder.addFrameBytes(colors[m]);
 		}
 
 		Response.Builder responseBuilder = Response.newBuilder();

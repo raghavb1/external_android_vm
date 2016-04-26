@@ -44,8 +44,8 @@ public class StreamHandler{
 	
 	public void handleShareScreenRequest(Request message) throws IOException{
 //		int [] frameInts = getFrame();
-		byte[] frameBytes = getScreenBitmap();
-		Response response = buildScreenResponse(ByteString.copyFrom(frameBytes));
+		getScreenBitmap();
+		Response response = buildScreenResponse(ByteString.copyFrom(piex));
 		base.sendMessage(response);
 	}
 
@@ -116,7 +116,7 @@ public class StreamHandler{
 		
 		
 		PixelFormat pixelFormat = new PixelFormat();
-		PixelFormat.getPixelFormatInfo(PixelFormat.RGBA_8888, pixelFormat);
+		PixelFormat.getPixelFormatInfo(PixelFormat.RGB_565, pixelFormat);
 		int deepth = pixelFormat.bytesPerPixel;
 		piex = new byte[screenHeight * screenWidth * deepth];
 		
@@ -131,8 +131,9 @@ public class StreamHandler{
 		DataInputStream dStream = new DataInputStream(graphics);
 		dStream.readFully(piex);
 		dStream.close();
-
-
+		
+		System.out.println("***********************************");
+		System.out.println(piex.length);
 
 		return piex;
 	}

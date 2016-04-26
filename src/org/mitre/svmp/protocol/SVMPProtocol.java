@@ -390,16 +390,6 @@ public final class SVMPProtocol {
      * <code>optional .svmp.Config config = 16;</code>
      */
     org.mitre.svmp.protocol.SVMPProtocol.Config getConfig();
-
-    // optional .svmp.RTCMessage stream = 19;
-    /**
-     * <code>optional .svmp.RTCMessage stream = 19;</code>
-     */
-    boolean hasStream();
-    /**
-     * <code>optional .svmp.RTCMessage stream = 19;</code>
-     */
-    org.mitre.svmp.protocol.SVMPProtocol.RTCMessage getStream();
   }
   /**
    * Protobuf type {@code svmp.Request}
@@ -593,19 +583,6 @@ public final class SVMPProtocol {
                 config_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000400;
-              break;
-            }
-            case 154: {
-              org.mitre.svmp.protocol.SVMPProtocol.RTCMessage.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000800) == 0x00000800)) {
-                subBuilder = stream_.toBuilder();
-              }
-              stream_ = input.readMessage(org.mitre.svmp.protocol.SVMPProtocol.RTCMessage.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(stream_);
-                stream_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000800;
               break;
             }
           }
@@ -1124,22 +1101,6 @@ public final class SVMPProtocol {
       return config_;
     }
 
-    // optional .svmp.RTCMessage stream = 19;
-    public static final int STREAM_FIELD_NUMBER = 19;
-    private org.mitre.svmp.protocol.SVMPProtocol.RTCMessage stream_;
-    /**
-     * <code>optional .svmp.RTCMessage stream = 19;</code>
-     */
-    public boolean hasStream() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
-    }
-    /**
-     * <code>optional .svmp.RTCMessage stream = 19;</code>
-     */
-    public org.mitre.svmp.protocol.SVMPProtocol.RTCMessage getStream() {
-      return stream_;
-    }
-
     private void initFields() {
       type_ = org.mitre.svmp.protocol.SVMPProtocol.Request.RequestType.VIDEO_PARAMS;
       touch_ = java.util.Collections.emptyList();
@@ -1154,7 +1115,6 @@ public final class SVMPProtocol {
       apps_ = org.mitre.svmp.protocol.SVMPProtocol.AppsRequest.getDefaultInstance();
       key_ = org.mitre.svmp.protocol.SVMPProtocol.KeyEvent.getDefaultInstance();
       config_ = org.mitre.svmp.protocol.SVMPProtocol.Config.getDefaultInstance();
-      stream_ = org.mitre.svmp.protocol.SVMPProtocol.RTCMessage.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1259,9 +1219,6 @@ public final class SVMPProtocol {
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         output.writeMessage(16, config_);
       }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        output.writeMessage(19, stream_);
-      }
     }
 
     private int memoizedSerializedSize = -1;
@@ -1321,10 +1278,6 @@ public final class SVMPProtocol {
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(16, config_);
-      }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(19, stream_);
       }
       memoizedSerializedSize = size;
       return size;
@@ -1447,8 +1400,6 @@ public final class SVMPProtocol {
         bitField0_ = (bitField0_ & ~0x00000800);
         config_ = org.mitre.svmp.protocol.SVMPProtocol.Config.getDefaultInstance();
         bitField0_ = (bitField0_ & ~0x00001000);
-        stream_ = org.mitre.svmp.protocol.SVMPProtocol.RTCMessage.getDefaultInstance();
-        bitField0_ = (bitField0_ & ~0x00002000);
         return this;
       }
 
@@ -1526,10 +1477,6 @@ public final class SVMPProtocol {
           to_bitField0_ |= 0x00000400;
         }
         result.config_ = config_;
-        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
-          to_bitField0_ |= 0x00000800;
-        }
-        result.stream_ = stream_;
         result.bitField0_ = to_bitField0_;
         return result;
       }
@@ -1590,9 +1537,6 @@ public final class SVMPProtocol {
         }
         if (other.hasConfig()) {
           mergeConfig(other.getConfig());
-        }
-        if (other.hasStream()) {
-          mergeStream(other.getStream());
         }
         return this;
       }
@@ -2650,67 +2594,6 @@ public final class SVMPProtocol {
         config_ = org.mitre.svmp.protocol.SVMPProtocol.Config.getDefaultInstance();
 
         bitField0_ = (bitField0_ & ~0x00001000);
-        return this;
-      }
-
-      // optional .svmp.RTCMessage stream = 19;
-      private org.mitre.svmp.protocol.SVMPProtocol.RTCMessage stream_ = org.mitre.svmp.protocol.SVMPProtocol.RTCMessage.getDefaultInstance();
-      /**
-       * <code>optional .svmp.RTCMessage stream = 19;</code>
-       */
-      public boolean hasStream() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
-      }
-      /**
-       * <code>optional .svmp.RTCMessage stream = 19;</code>
-       */
-      public org.mitre.svmp.protocol.SVMPProtocol.RTCMessage getStream() {
-        return stream_;
-      }
-      /**
-       * <code>optional .svmp.RTCMessage stream = 19;</code>
-       */
-      public Builder setStream(org.mitre.svmp.protocol.SVMPProtocol.RTCMessage value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        stream_ = value;
-
-        bitField0_ |= 0x00002000;
-        return this;
-      }
-      /**
-       * <code>optional .svmp.RTCMessage stream = 19;</code>
-       */
-      public Builder setStream(
-          org.mitre.svmp.protocol.SVMPProtocol.RTCMessage.Builder builderForValue) {
-        stream_ = builderForValue.build();
-
-        bitField0_ |= 0x00002000;
-        return this;
-      }
-      /**
-       * <code>optional .svmp.RTCMessage stream = 19;</code>
-       */
-      public Builder mergeStream(org.mitre.svmp.protocol.SVMPProtocol.RTCMessage value) {
-        if (((bitField0_ & 0x00002000) == 0x00002000) &&
-            stream_ != org.mitre.svmp.protocol.SVMPProtocol.RTCMessage.getDefaultInstance()) {
-          stream_ =
-            org.mitre.svmp.protocol.SVMPProtocol.RTCMessage.newBuilder(stream_).mergeFrom(value).buildPartial();
-        } else {
-          stream_ = value;
-        }
-
-        bitField0_ |= 0x00002000;
-        return this;
-      }
-      /**
-       * <code>optional .svmp.RTCMessage stream = 19;</code>
-       */
-      public Builder clearStream() {
-        stream_ = org.mitre.svmp.protocol.SVMPProtocol.RTCMessage.getDefaultInstance();
-
-        bitField0_ = (bitField0_ & ~0x00002000);
         return this;
       }
 
@@ -6357,15 +6240,31 @@ public final class SVMPProtocol {
   public interface RTCMessageOrBuilder
       extends com.google.protobuf.MessageLiteOrBuilder {
 
-    // optional bytes frameBytes = 1;
+    // repeated int32 frameBytes = 1;
     /**
-     * <code>optional bytes frameBytes = 1;</code>
+     * <code>repeated int32 frameBytes = 1;</code>
+     *
+     * <pre>
+     *optional bytes frameBytes = 1;
+     * </pre>
      */
-    boolean hasFrameBytes();
+    java.util.List<java.lang.Integer> getFrameBytesList();
     /**
-     * <code>optional bytes frameBytes = 1;</code>
+     * <code>repeated int32 frameBytes = 1;</code>
+     *
+     * <pre>
+     *optional bytes frameBytes = 1;
+     * </pre>
      */
-    com.google.protobuf.ByteString getFrameBytes();
+    int getFrameBytesCount();
+    /**
+     * <code>repeated int32 frameBytes = 1;</code>
+     *
+     * <pre>
+     *optional bytes frameBytes = 1;
+     * </pre>
+     */
+    int getFrameBytes(int index);
   }
   /**
    * Protobuf type {@code svmp.RTCMessage}
@@ -6414,9 +6313,25 @@ public final class SVMPProtocol {
               }
               break;
             }
+            case 8: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                frameBytes_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              frameBytes_.add(input.readInt32());
+              break;
+            }
             case 10: {
-              bitField0_ |= 0x00000001;
-              frameBytes_ = input.readBytes();
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001) && input.getBytesUntilLimit() > 0) {
+                frameBytes_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                frameBytes_.add(input.readInt32());
+              }
+              input.popLimit(limit);
               break;
             }
           }
@@ -6427,6 +6342,9 @@ public final class SVMPProtocol {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          frameBytes_ = java.util.Collections.unmodifiableList(frameBytes_);
+        }
         makeExtensionsImmutable();
       }
     }
@@ -6445,25 +6363,43 @@ public final class SVMPProtocol {
       return PARSER;
     }
 
-    private int bitField0_;
-    // optional bytes frameBytes = 1;
+    // repeated int32 frameBytes = 1;
     public static final int FRAMEBYTES_FIELD_NUMBER = 1;
-    private com.google.protobuf.ByteString frameBytes_;
+    private java.util.List<java.lang.Integer> frameBytes_;
     /**
-     * <code>optional bytes frameBytes = 1;</code>
+     * <code>repeated int32 frameBytes = 1;</code>
+     *
+     * <pre>
+     *optional bytes frameBytes = 1;
+     * </pre>
      */
-    public boolean hasFrameBytes() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+    public java.util.List<java.lang.Integer>
+        getFrameBytesList() {
+      return frameBytes_;
     }
     /**
-     * <code>optional bytes frameBytes = 1;</code>
+     * <code>repeated int32 frameBytes = 1;</code>
+     *
+     * <pre>
+     *optional bytes frameBytes = 1;
+     * </pre>
      */
-    public com.google.protobuf.ByteString getFrameBytes() {
-      return frameBytes_;
+    public int getFrameBytesCount() {
+      return frameBytes_.size();
+    }
+    /**
+     * <code>repeated int32 frameBytes = 1;</code>
+     *
+     * <pre>
+     *optional bytes frameBytes = 1;
+     * </pre>
+     */
+    public int getFrameBytes(int index) {
+      return frameBytes_.get(index);
     }
 
     private void initFields() {
-      frameBytes_ = com.google.protobuf.ByteString.EMPTY;
+      frameBytes_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6477,8 +6413,8 @@ public final class SVMPProtocol {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, frameBytes_);
+      for (int i = 0; i < frameBytes_.size(); i++) {
+        output.writeInt32(1, frameBytes_.get(i));
       }
     }
 
@@ -6488,9 +6424,14 @@ public final class SVMPProtocol {
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, frameBytes_);
+      {
+        int dataSize = 0;
+        for (int i = 0; i < frameBytes_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(frameBytes_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getFrameBytesList().size();
       }
       memoizedSerializedSize = size;
       return size;
@@ -6587,7 +6528,7 @@ public final class SVMPProtocol {
 
       public Builder clear() {
         super.clear();
-        frameBytes_ = com.google.protobuf.ByteString.EMPTY;
+        frameBytes_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
@@ -6611,19 +6552,25 @@ public final class SVMPProtocol {
       public org.mitre.svmp.protocol.SVMPProtocol.RTCMessage buildPartial() {
         org.mitre.svmp.protocol.SVMPProtocol.RTCMessage result = new org.mitre.svmp.protocol.SVMPProtocol.RTCMessage(this);
         int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          frameBytes_ = java.util.Collections.unmodifiableList(frameBytes_);
+          bitField0_ = (bitField0_ & ~0x00000001);
         }
         result.frameBytes_ = frameBytes_;
-        result.bitField0_ = to_bitField0_;
         return result;
       }
 
       public Builder mergeFrom(org.mitre.svmp.protocol.SVMPProtocol.RTCMessage other) {
         if (other == org.mitre.svmp.protocol.SVMPProtocol.RTCMessage.getDefaultInstance()) return this;
-        if (other.hasFrameBytes()) {
-          setFrameBytes(other.getFrameBytes());
+        if (!other.frameBytes_.isEmpty()) {
+          if (frameBytes_.isEmpty()) {
+            frameBytes_ = other.frameBytes_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensureFrameBytesIsMutable();
+            frameBytes_.addAll(other.frameBytes_);
+          }
+          
         }
         return this;
       }
@@ -6651,38 +6598,96 @@ public final class SVMPProtocol {
       }
       private int bitField0_;
 
-      // optional bytes frameBytes = 1;
-      private com.google.protobuf.ByteString frameBytes_ = com.google.protobuf.ByteString.EMPTY;
-      /**
-       * <code>optional bytes frameBytes = 1;</code>
-       */
-      public boolean hasFrameBytes() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+      // repeated int32 frameBytes = 1;
+      private java.util.List<java.lang.Integer> frameBytes_ = java.util.Collections.emptyList();
+      private void ensureFrameBytesIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          frameBytes_ = new java.util.ArrayList<java.lang.Integer>(frameBytes_);
+          bitField0_ |= 0x00000001;
+         }
       }
       /**
-       * <code>optional bytes frameBytes = 1;</code>
+       * <code>repeated int32 frameBytes = 1;</code>
+       *
+       * <pre>
+       *optional bytes frameBytes = 1;
+       * </pre>
        */
-      public com.google.protobuf.ByteString getFrameBytes() {
-        return frameBytes_;
+      public java.util.List<java.lang.Integer>
+          getFrameBytesList() {
+        return java.util.Collections.unmodifiableList(frameBytes_);
       }
       /**
-       * <code>optional bytes frameBytes = 1;</code>
+       * <code>repeated int32 frameBytes = 1;</code>
+       *
+       * <pre>
+       *optional bytes frameBytes = 1;
+       * </pre>
        */
-      public Builder setFrameBytes(com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        frameBytes_ = value;
+      public int getFrameBytesCount() {
+        return frameBytes_.size();
+      }
+      /**
+       * <code>repeated int32 frameBytes = 1;</code>
+       *
+       * <pre>
+       *optional bytes frameBytes = 1;
+       * </pre>
+       */
+      public int getFrameBytes(int index) {
+        return frameBytes_.get(index);
+      }
+      /**
+       * <code>repeated int32 frameBytes = 1;</code>
+       *
+       * <pre>
+       *optional bytes frameBytes = 1;
+       * </pre>
+       */
+      public Builder setFrameBytes(
+          int index, int value) {
+        ensureFrameBytesIsMutable();
+        frameBytes_.set(index, value);
         
         return this;
       }
       /**
-       * <code>optional bytes frameBytes = 1;</code>
+       * <code>repeated int32 frameBytes = 1;</code>
+       *
+       * <pre>
+       *optional bytes frameBytes = 1;
+       * </pre>
+       */
+      public Builder addFrameBytes(int value) {
+        ensureFrameBytesIsMutable();
+        frameBytes_.add(value);
+        
+        return this;
+      }
+      /**
+       * <code>repeated int32 frameBytes = 1;</code>
+       *
+       * <pre>
+       *optional bytes frameBytes = 1;
+       * </pre>
+       */
+      public Builder addAllFrameBytes(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensureFrameBytesIsMutable();
+        super.addAll(values, frameBytes_);
+        
+        return this;
+      }
+      /**
+       * <code>repeated int32 frameBytes = 1;</code>
+       *
+       * <pre>
+       *optional bytes frameBytes = 1;
+       * </pre>
        */
       public Builder clearFrameBytes() {
+        frameBytes_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000001);
-        frameBytes_ = getDefaultInstance().getFrameBytes();
         
         return this;
       }

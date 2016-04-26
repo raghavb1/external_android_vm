@@ -5,10 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.mitre.svmp.protocol.SVMPProtocol;
 import org.mitre.svmp.protocol.SVMPProtocol.Request;
 import org.mitre.svmp.protocol.SVMPProtocol.Response;
@@ -47,7 +44,8 @@ public class StreamHandler{
 	
 	public void handleShareScreenRequest(Request message) throws IOException{
 //		int [] frameInts = getFrame();
-		Response response = getScreenBitmap();
+		byte[] frameBytes = getScreenBitmap();
+		Response response = buildScreenResponse(ByteString.copyFrom(frameBytes));
 		base.sendMessage(response);
 	}
 
@@ -85,28 +83,28 @@ public class StreamHandler{
 //		}
 //	} 
 
-//	public Response buildScreenResponse(int[] frameInts) {
-//
-//		try {
-//			SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();
-//			rtcBuilder.setFrameBytes(index, value)
-//
-//			Response.Builder responseBuilder = Response.newBuilder();
-//			responseBuilder.setType(ResponseType.STREAM);
-//			responseBuilder.setStream(rtcBuilder);
-//
-//			return responseBuilder.build();
-//		} catch( Exception e ) {
-//			e.printStackTrace();
-//		}
-//
-//
-//		return null;
-//	}
+	public Response buildScreenResponse(ByteString frameBytes) {
+
+		try {
+			SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();
+			rtcBuilder.setFrameBytes(frameBytes);
+
+			Response.Builder responseBuilder = Response.newBuilder();
+			responseBuilder.setType(ResponseType.STREAM);
+			responseBuilder.setStream(rtcBuilder);
+
+			return responseBuilder.build();
+		} catch( Exception e ) {
+			e.printStackTrace();
+		}
+
+
+		return null;
+	}
 
 
 	
-	public synchronized static Response getScreenBitmap() throws IOException {
+	public synchronized static byte[] getScreenBitmap() throws IOException {
 		
 		fbFile = new File(FB0FILE1);
 		if (!fbFile.exists()) {
@@ -134,23 +132,9 @@ public class StreamHandler{
 		dStream.readFully(piex);
 		dStream.close();
 
-		int[] colors = new int[screenHeight * screenWidth];
-		SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();	
-		
-		for (int m = 0; m < colors.length; m++) {
-			int r = (piex[m * 4] & 0xFF);
-			int g = (piex[m * 4 + 1] & 0xFF);
-			int b = (piex[m * 4 + 2] & 0xFF);
-			int a = (piex[m * 4 + 3] & 0xFF);
-			colors[m] = (a << 24) + (r << 16) + (g << 8) + b;
-			rtcBuilder.addFrameBytes(colors[m]);
-		}
 
-		Response.Builder responseBuilder = Response.newBuilder();
-		responseBuilder.setType(ResponseType.STREAM);
-		responseBuilder.setStream(rtcBuilder);
 
-		return responseBuilder.build();
+		return piex;
 	}
 	
 }

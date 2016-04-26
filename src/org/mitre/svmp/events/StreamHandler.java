@@ -62,8 +62,10 @@ public class StreamHandler{
 		}
 
 		byte b[] = bout.toByteArray();
+		System.out.println("******raw frame size********");
+		System.out.println(b.length);
 
-		return b;
+		//		return b;
 
 		//		if (b.length != height*width*pixlen*frames) {
 		//			System.err.println("incorrect framebuffer length "+b.length+" read");
@@ -72,21 +74,26 @@ public class StreamHandler{
 
 
 		// allocate memory for rgb888 output
-		//		byte B[] = new byte[height*width*3];
-		//
-		//		// rotate 180 and convert
-		//		for(int i=height*width*pixlen, j=0; i>0; i-=pixlen)
-		//		{
-		//			// this is specific to rgb565le with pixlen=2, adjust to your needs
-		//			int s = ( (b[i-1]<0) ? 256+b[i-1] : b[i-1]) * 256
-		//					+ ( (b[i-2]<0) ? 256+b[i-2] : b[i-2]);
-		//
-		//			// "white" should be "white", fill up with 1-bits at end
-		//			// (0x07,0x03,0x07) is good enough as "black"
-		//			B[j++] = (byte) ( ((s >> 8) & 0xF8) | 0x07 );
-		//			B[j++] = (byte) ( ((s >> 3) & 0xFC) | 0x03 );
-		//			B[j++] = (byte) ( ((s << 3) & 0xFF) | 0x07 );
-		//		}
+		byte B[] = new byte[height*width*3];
+
+		// rotate 180 and convert
+		for(int i=height*width*pixlen, j=0; i>0; i-=pixlen)
+		{
+			// this is specific to rgb565le with pixlen=2, adjust to your needs
+			int s = ( (b[i-1]<0) ? 256+b[i-1] : b[i-1]) * 256
+					+ ( (b[i-2]<0) ? 256+b[i-2] : b[i-2]);
+
+			// "white" should be "white", fill up with 1-bits at end
+			// (0x07,0x03,0x07) is good enough as "black"
+			B[j++] = (byte) ( ((s >> 8) & 0xF8) | 0x07 );
+			B[j++] = (byte) ( ((s >> 3) & 0xFC) | 0x03 );
+			B[j++] = (byte) ( ((s << 3) & 0xFF) | 0x07 );
+		}
+
+		System.out.println("******raw frame size********");
+		System.out.println(B.length);
+		
+		return B;
 		//
 		//		ByteArrayInputStream bin = new ByteArrayInputStream(B);
 		//

@@ -7,7 +7,6 @@ import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.zip.Deflater;
-import java.util.zip.GZIPOutputStream;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.mitre.svmp.protocol.SVMPProtocol;
@@ -39,32 +38,32 @@ public class StreamHandler{
 
 	public void handleShareScreenRequest(Request message) throws IOException{
 		//		int [] frameInts = getFrame();
-		for(int i=0;i <30; i++){
+		for(int i=0;i <200; i++){
 			System.out.println(" ******************** time before bitmap create ********************");
 			System.out.println(System.currentTimeMillis());
-			
+
 			byte[] piex = getScreenBitmap();
-			
+
 			System.out.println(" ******************** time before create response and after bitmap create ********************");
 			System.out.println(System.currentTimeMillis());
-			
+
 			byte [] compressed = compress(piex);
-			
+
 			System.out.println(" ******************** time after compress ********************");
 			System.out.println(System.currentTimeMillis());
-			
+
 			Response response = buildScreenResponse(ByteString.copyFrom(compressed));
-			
+
 			System.out.println("  ********************time after create response ********************");
 			System.out.println(System.currentTimeMillis());
-			
+
 			base.sendMessage(response);
-			
+
 			System.out.println("time after send response ********************");
 			System.out.println(System.currentTimeMillis());
 		}
 	}
-	
+
 	public void setSendFrames(boolean value){
 		this.sendFrames = value;
 	}
@@ -93,7 +92,7 @@ public class StreamHandler{
 
 	public synchronized static byte[] getScreenBitmap() throws IOException {
 
-		
+
 		RandomAccessFile raf = new RandomAccessFile(fbFile, "r");
 		fc = raf.getChannel();
 
@@ -103,23 +102,29 @@ public class StreamHandler{
 		mem.get(piex);
 		fc.close();
 		raf.close();
-		
+
 		return piex;
 
 	}
-	
-    public static byte[] compress(byte[] content){
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        try{
-            GZIPOutputStream gzipOutputStream = new GZIPOutputStream(byteArrayOutputStream);
-            gzipOutputStream.write(content);
-            gzipOutputStream.close();
-        } catch(IOException e){
-            throw new RuntimeException(e);
-        }
-        System.out.printf("Compressiono %f\n", (1.0f * content.length/byteArrayOutputStream.size()));
-        return byteArrayOutputStream.toByteArray();
-    }
+
+	public static byte[] compress(byte[] data) throws IOException {  
+		Deflater deflater = new Deflater();  
+		deflater.setInput(data);
+		deflater.setLevel(Deflater.BEST_SPEED);
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);   
+		deflater.finish();
+		byte[] buffer = new byte[1024];   
+		while (!deflater.finished()) {  
+			int count = deflater.deflate(buffer); // returns the generated code... index  
+			outputStream.write(buffer, 0, count);   
+		}  
+		outputStream.close();
+		deflater.end();
+		byte[] output = outputStream.toByteArray();  
+		System.out.println("Original: " + data.length);  
+		System.out.println("Compressed: " + output.length);  
+		return output;  
+	} 
 
 }
 

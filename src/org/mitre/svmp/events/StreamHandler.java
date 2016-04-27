@@ -112,13 +112,13 @@ public class StreamHandler{
 		   deflater.setInput(data);  
 		   ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);   
 		   deflater.finish();
-		   deflater.end();
 		   byte[] buffer = new byte[1024];   
 		   while (!deflater.finished()) {  
 		    int count = deflater.deflate(buffer); // returns the generated code... index  
 		    outputStream.write(buffer, 0, count);   
 		   }  
-		   outputStream.close();  
+		   outputStream.close();
+		   deflater.end();
 		   byte[] output = outputStream.toByteArray();  
 		   System.out.println("Original: " + data.length);  
 		   System.out.println("Compressed: " + output.length);  

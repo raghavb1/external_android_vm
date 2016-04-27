@@ -7,6 +7,7 @@ import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.zip.Deflater;
+import java.util.zip.GZIPOutputStream;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.mitre.svmp.protocol.SVMPProtocol;
@@ -107,25 +108,18 @@ public class StreamHandler{
 
 	}
 	
-	  public static byte[] compress(byte[] data) throws IOException {  
-		   Deflater deflater = new Deflater();
-		   deflater.setLevel(Deflater.BEST_SPEED);
-		   deflater.setInput(data);
-
-		   ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);   
-		   deflater.finish();
-		   byte[] buffer = new byte[1024];   
-		   while (!deflater.finished()) {  
-		    int count = deflater.deflate(buffer); // returns the generated code... index  
-		    outputStream.write(buffer, 0, count);   
-		   }  
-		   outputStream.close();
-		   deflater.end();
-		   byte[] output = outputStream.toByteArray();  
-		   System.out.println("Original: " + data.length);  
-		   System.out.println("Compressed: " + output.length);  
-		   return output;  
-		  } 
+    public static byte[] compress(byte[] content){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try{
+            GZIPOutputStream gzipOutputStream = new GZIPOutputStream(byteArrayOutputStream);
+            gzipOutputStream.write(content);
+            gzipOutputStream.close();
+        } catch(IOException e){
+            throw new RuntimeException(e);
+        }
+        System.out.printf("Compressiono %f\n", (1.0f * content.length/byteArrayOutputStream.size()));
+        return byteArrayOutputStream.toByteArray();
+    }
 
 }
 

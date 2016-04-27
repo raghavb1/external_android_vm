@@ -108,9 +108,9 @@ public class StreamHandler{
 	}
 
 	public static byte[] compress(byte[] data) throws IOException {  
-		Deflater deflater = new Deflater();  
-		deflater.setInput(data);
+		Deflater deflater = new Deflater();
 		deflater.setLevel(Deflater.BEST_SPEED);
+		deflater.setInput(data);
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);   
 		deflater.finish();
 		byte[] buffer = new byte[1024];   

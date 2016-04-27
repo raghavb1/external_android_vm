@@ -30,13 +30,13 @@ LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := apache:lib/commons-io-2.5.jar
 include $(BUILD_MULTI_PREBUILT)
 
 
-include $(CLEAR_VARS)
+#include $(CLEAR_VARS)
 #LOCAL_MODULE := libjingle_peerconnection_so.so
 #LOCAL_MODULE_TAGS := optional
 #LOCAL_SRC_FILES := lib/libjingle_peerconnection_so.so
 #LOCAL_MODULE_CLASS := SHARED_LIBRARIES
 #LOCAL_MODULE_PATH := $(TARGET_OUT)/lib
-include $(BUILD_PREBUILT) 
+#include $(BUILD_PREBUILT) 
 
 ################################################################
 include $(CLEAR_VARS)

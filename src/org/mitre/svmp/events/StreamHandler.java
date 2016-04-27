@@ -38,7 +38,7 @@ public class StreamHandler{
 
 	public void handleShareScreenRequest(Request message) throws IOException{
 		//		int [] frameInts = getFrame();
-		while(sendFrames){
+		for(int i=0;i <30; i++){
 			System.out.println(" ******************** time before bitmap create ********************");
 			System.out.println(System.currentTimeMillis());
 			
@@ -109,7 +109,8 @@ public class StreamHandler{
 	
 	  public static byte[] compress(byte[] data) throws IOException {  
 		   Deflater deflater = new Deflater();  
-		   deflater.setInput(data);  
+		   deflater.setInput(data);
+		   deflater.setLevel(Deflater.BEST_SPEED);
 		   ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);   
 		   deflater.finish();
 		   byte[] buffer = new byte[1024];   

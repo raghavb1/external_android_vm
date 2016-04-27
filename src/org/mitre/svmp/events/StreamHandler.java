@@ -34,16 +34,20 @@ public class StreamHandler{
 	static int screenWidth = 360;
 	static int screenHeight = 640;
 	static byte[] piex;
-	
-	
-	
+
+	static FileChannel fc;
+	private static int bufferSize=screenHeight * screenWidth * 2;
+	public boolean sendFrames = true;
+
 	public void handleShareScreenRequest(Request message) throws IOException{
-//		int [] frameInts = getFrame();
-		getScreenBitmap();
-		Response response = buildScreenResponse(ByteString.copyFrom(piex));
-		System.out.println("********************");
-		System.out.println(System.currentTimeMillis());
-		base.sendMessage(response);
+		//		int [] frameInts = getFrame();
+		while(sendFrames){
+			getScreenBitmap();
+			Response response = buildScreenResponse(ByteString.copyFrom(piex));
+			System.out.println("********************");
+			System.out.println(System.currentTimeMillis());
+			base.sendMessage(response);
+		}
 	}
 
 
@@ -67,53 +71,55 @@ public class StreamHandler{
 	}
 
 
-	
+
 	public synchronized static void getScreenBitmap() throws IOException {
-		
+
 		System.out.println("********************");
 		System.out.println(System.currentTimeMillis());
-		FileChannel fc = new RandomAccessFile(fbFile, "r").getChannel();
-		int bufferSize=screenHeight * screenWidth * 2;
+
+		if(fc!=null){
+			fc = new RandomAccessFile(fbFile, "r").getChannel();
+		}
 
 		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, 0, bufferSize);
 		piex = new byte[bufferSize];
 		mem.get(piex);
-		fc.close();
-		
+		//fc.close();
+
 		System.out.println("********************");
 		System.out.println(piex.length);
-		
+
 		System.out.println("********************");
 		System.out.println(System.currentTimeMillis());
-//		
-//		
-//		
-//		
-//		
-//		System.out.println("********************");
-//		System.out.println(System.currentTimeMillis());
-//		
-//		PixelFormat pixelFormat = new PixelFormat();
-//		PixelFormat.getPixelFormatInfo(PixelFormat.RGB_565, pixelFormat);
-//		int deepth = pixelFormat.bytesPerPixel;
-//		piex = new byte[screenHeight * screenWidth * deepth];
-//		
-//		System.out.println("********************");
-//		System.out.println(System.currentTimeMillis());
-//		try {
-//			graphics = new FileInputStream(fbFile);
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println("********************");
-//		System.out.println(System.currentTimeMillis());
-//		DataInputStream dStream = new DataInputStream(graphics);
-//		dStream.readFully(piex);
-//		dStream.close();
-//		
-//		System.out.println("********************");
-//		System.out.println(System.currentTimeMillis());
+		//		
+		//		
+		//		
+		//		
+		//		
+		//		System.out.println("********************");
+		//		System.out.println(System.currentTimeMillis());
+		//		
+		//		PixelFormat pixelFormat = new PixelFormat();
+		//		PixelFormat.getPixelFormatInfo(PixelFormat.RGB_565, pixelFormat);
+		//		int deepth = pixelFormat.bytesPerPixel;
+		//		piex = new byte[screenHeight * screenWidth * deepth];
+		//		
+		//		System.out.println("********************");
+		//		System.out.println(System.currentTimeMillis());
+		//		try {
+		//			graphics = new FileInputStream(fbFile);
+		//		} catch (FileNotFoundException e) {
+		//			e.printStackTrace();
+		//		}
+		//		System.out.println("********************");
+		//		System.out.println(System.currentTimeMillis());
+		//		DataInputStream dStream = new DataInputStream(graphics);
+		//		dStream.readFully(piex);
+		//		dStream.close();
+		//		
+		//		System.out.println("********************");
+		//		System.out.println(System.currentTimeMillis());
 	}
-	
+
 }
 

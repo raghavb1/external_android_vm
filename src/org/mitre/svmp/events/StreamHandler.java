@@ -77,7 +77,7 @@ public class StreamHandler{
 		System.out.println("********************");
 		System.out.println(System.currentTimeMillis());
 
-		if(fc!=null){
+		if(fc==null){
 			fc = new RandomAccessFile(fbFile, "r").getChannel();
 		}
 

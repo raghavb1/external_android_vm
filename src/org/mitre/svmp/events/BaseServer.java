@@ -72,7 +72,7 @@ public abstract class BaseServer implements Constants {
     private LauncherHandler launcherHandler;
     private ExecutorService sensorMsgExecutor;
     private final Object sendMessageLock = new Object();
-    private WebrtcHandler webrtcHandler = null;
+
     private StreamHandler streamhandler = null;
 
     public BaseServer(Context context) throws IOException {
@@ -196,13 +196,13 @@ public abstract class BaseServer implements Constants {
                     locationHandler.handleMessage(msg);
                     break;
                 case VIDEO_PARAMS:
-                    initWebRTC(msg);
-                    webrtcHandler.sendMessage(Response.newBuilder()
+                    //initWebRTC(msg);
+                    sendMessage(Response.newBuilder()
                         .setType(ResponseType.VMREADY).build());
                     break;
                 case WEBRTC:
                 	streamhandler.sendFrames = false;
-                    webrtcHandler.handleMessage(msg);
+                    //webrtcHandler.handleMessage(msg);
                     break;
                 case ROTATION_INFO:
                     handleRotationInfo(msg);
@@ -230,9 +230,9 @@ public abstract class BaseServer implements Constants {
             Log.e(TAG, "Error on socket: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            if (webrtcHandler != null) {
-                webrtcHandler.disconnectAndExit();
-            }
+//            if (webrtcHandler != null) {
+//                webrtcHandler.disconnectAndExit();
+//            }
  
             try {
                 proxyIn.close();
@@ -249,17 +249,17 @@ public abstract class BaseServer implements Constants {
         }
     }
 
-    private void initWebRTC(SVMPProtocol.Request msg) {
-        // only ever create one WebRTC handler
-        if (webrtcHandler == null) {
-            Log.d(TAG, "Creating new WebRTC Handler.");
-            // the video parameters won't change from one session to the next
-            webrtcHandler = new WebrtcHandler(BaseServer.this, msg.getVideoInfo(), context);
-        } else {
-            Log.d(TAG, "Reusing existing WebRTC Handler.");
-        }
-    }
- 
+//    private void initWebRTC(SVMPProtocol.Request msg) {
+//        // only ever create one WebRTC handler
+//        if (webrtcHandler == null) {
+//            Log.d(TAG, "Creating new WebRTC Handler.");
+//            // the video parameters won't change from one session to the next
+//            webrtcHandler = new WebrtcHandler(BaseServer.this, msg.getVideoInfo(), context);
+//        } else {
+//            Log.d(TAG, "Reusing existing WebRTC Handler.");
+//        }
+//    }
+// 
     protected void sendMessage(Response message) {
         // use synchronized statement to ensure only one message gets sent at a time
         synchronized(sendMessageLock) {

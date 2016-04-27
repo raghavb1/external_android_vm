@@ -41,29 +41,29 @@ public class StreamHandler{
 		while(sendFrames){
 			System.out.println(" ******************** time before bitmap create ********************");
 			System.out.println(System.currentTimeMillis());
-
+			
 			byte[] piex = getScreenBitmap();
-
+			
 			System.out.println(" ******************** time before create response and after bitmap create ********************");
 			System.out.println(System.currentTimeMillis());
-
+			
 			byte [] compressed = compress(piex);
-
+			
 			System.out.println(" ******************** time after compress ********************");
 			System.out.println(System.currentTimeMillis());
-
+			
 			Response response = buildScreenResponse(ByteString.copyFrom(compressed));
-
+			
 			System.out.println("  ********************time after create response ********************");
 			System.out.println(System.currentTimeMillis());
-
+			
 			base.sendMessage(response);
-
+			
 			System.out.println("time after send response ********************");
 			System.out.println(System.currentTimeMillis());
 		}
 	}
-
+	
 	public void setSendFrames(boolean value){
 		this.sendFrames = value;
 	}
@@ -90,10 +90,9 @@ public class StreamHandler{
 
 
 
-	@SuppressWarnings("resource")
 	public synchronized static byte[] getScreenBitmap() throws IOException {
 
-
+		
 		RandomAccessFile raf = new RandomAccessFile(fbFile, "r");
 		fc = raf.getChannel();
 
@@ -103,27 +102,28 @@ public class StreamHandler{
 		mem.get(piex);
 		fc.close();
 		raf.close();
-
+		
 		return piex;
 
 	}
-
-	public static byte[] compress(byte[] data) throws IOException {  
-		Deflater deflater = new Deflater();  
-		deflater.setInput(data);  
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);   
-		deflater.finish();  
-		byte[] buffer = new byte[1024];   
-		while (!deflater.finished()) {  
-			int count = deflater.deflate(buffer); // returns the generated code... index  
-			outputStream.write(buffer, 0, count);   
-		}  
-		outputStream.close();  
-		byte[] output = outputStream.toByteArray();  
-		System.out.println("Original: " + data.length / 1024 + " Kb");  
-		System.out.println("Compressed: " + output.length / 1024 + " Kb");  
-		return output;  
-	} 
+	
+	  public static byte[] compress(byte[] data) throws IOException {  
+		   Deflater deflater = new Deflater();  
+		   deflater.setInput(data);  
+		   ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);   
+		   deflater.finish();
+		   deflater.end();
+		   byte[] buffer = new byte[1024];   
+		   while (!deflater.finished()) {  
+		    int count = deflater.deflate(buffer); // returns the generated code... index  
+		    outputStream.write(buffer, 0, count);   
+		   }  
+		   outputStream.close();  
+		   byte[] output = outputStream.toByteArray();  
+		   System.out.println("Original: " + data.length);  
+		   System.out.println("Compressed: " + output.length);  
+		   return output;  
+		  } 
 
 }
 

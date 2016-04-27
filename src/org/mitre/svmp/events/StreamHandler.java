@@ -49,6 +49,10 @@ public class StreamHandler{
 			base.sendMessage(response);
 		}
 	}
+	
+	public void setSendFrames(boolean value){
+		this.sendFrames = value;
+	}
 
 
 	public Response buildScreenResponse(ByteString frameBytes) {
@@ -72,19 +76,21 @@ public class StreamHandler{
 
 
 
+	@SuppressWarnings("resource")
 	public synchronized static void getScreenBitmap() throws IOException {
 
 		System.out.println("********************");
 		System.out.println(System.currentTimeMillis());
+		
+		RandomAccessFile raf = new RandomAccessFile(fbFile, "r");
+		fc = raf.getChannel();
 
-		if(fc==null){
-			fc = new RandomAccessFile(fbFile, "r").getChannel();
-		}
 
 		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, 0, bufferSize);
 		piex = new byte[bufferSize];
 		mem.get(piex);
-		//fc.close();
+		fc.close();
+		raf.close();
 
 		System.out.println("********************");
 		System.out.println(piex.length);

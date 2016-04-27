@@ -174,6 +174,7 @@ public abstract class BaseServer implements Constants {
 
                 switch(msg.getType()) {
                 case STREAM:
+                	streamhandler.sendFrames = true;
                 	streamhandler.handleShareScreenRequest(msg);
                 	break;
                 case SCREENINFO:
@@ -200,6 +201,7 @@ public abstract class BaseServer implements Constants {
                         .setType(ResponseType.VMREADY).build());
                     break;
                 case WEBRTC:
+                	streamhandler.sendFrames = false;
                     webrtcHandler.handleMessage(msg);
                     break;
                 case ROTATION_INFO:

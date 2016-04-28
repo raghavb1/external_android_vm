@@ -27,12 +27,9 @@ public class StreamHandler{
 
 	final static String FB0FILE1 = "/dev/graphics/fb0";
 
-	static File fbFile = new File(FB0FILE1);
-	static FileInputStream graphics = null;
 	static int screenWidth = 360;
 	static int screenHeight = 640;
 
-	static FileChannel fc;
 	private static int bufferSize=screenHeight * screenWidth * 2;
 	public boolean sendFrames = true;
 
@@ -90,11 +87,11 @@ public class StreamHandler{
 
 
 
-	public synchronized static byte[] getScreenBitmap() throws IOException {
-
-
+	public static byte[] getScreenBitmap() throws IOException {
+		
+		File fbFile  = new File(FB0FILE1);
 		RandomAccessFile raf = new RandomAccessFile(fbFile, "r");
-		fc = raf.getChannel();
+		FileChannel fc = raf.getChannel();
 
 
 		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, 0, bufferSize);

@@ -260,7 +260,7 @@ public abstract class BaseServer implements Constants {
 //        }
 //    }
 // 
-    protected void sendMessage(Response message) {
+    protected synchronized void sendMessage(Response message) {
         // use synchronized statement to ensure only one message gets sent at a time
 //        synchronized(sendMessageLock) {
             try {

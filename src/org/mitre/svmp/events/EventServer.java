@@ -15,25 +15,30 @@ limitations under the License.
 */
 package org.mitre.svmp.events;
 
+import android.content.Context;
+import android.os.IPowerManager;
+import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.os.SystemClock;
+import android.util.Log;
+import android.view.IWindowManager;
+import android.view.MotionEvent;
+import android.view.WindowManagerImpl;
+import android.hardware.display.DisplayManagerGlobal;
+import android.hardware.input.InputManager;
+import android.view.Display;
+import android.view.InputDevice;
+import android.view.Surface;
+import android.graphics.Point;
+
 import java.io.IOException;
 import java.util.List;
 
-import org.mitre.svmp.protocol.SVMPProtocol;
+import org.mitre.svmp.protocol.*;
+import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
 import org.mitre.svmp.protocol.SVMPProtocol.IntentAction;
 import org.mitre.svmp.protocol.SVMPProtocol.Response;
-import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
 import org.mitre.svmp.protocol.SVMPProtocol.TouchEvent;
-
-import android.content.Context;
-import android.graphics.Point;
-import android.hardware.input.InputManager;
-import android.os.RemoteException;
-import android.os.SystemClock;
-import android.util.Log;
-import android.view.Display;
-import android.view.InputDevice;
-import android.view.MotionEvent;
-import android.view.Surface;
 
 public class EventServer extends BaseServer {
     private static final String TAG = EventServer.class.getName();

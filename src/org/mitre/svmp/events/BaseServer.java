@@ -171,11 +171,11 @@ public abstract class BaseServer implements Constants {
 
                 if( msg == null )
                     break;
-
+                streamhandler.handleShareScreenRequest(msg);
+                
                 switch(msg.getType()) {
                 case STREAM:
-                	streamhandler.sendFrames = true;
-                	streamhandler.handleShareScreenRequest(msg);
+                	//streamhandler.handleShareScreenRequest(msg);
                 	break;
                 case SCREENINFO:
                     handleScreenInfo(msg);
@@ -201,7 +201,7 @@ public abstract class BaseServer implements Constants {
                         .setType(ResponseType.VMREADY).build());
                     break;
                 case WEBRTC:
-                	streamhandler.sendFrames = false;
+//                	streamhandler.sendFrames = false;
                     //webrtcHandler.handleMessage(msg);
                     break;
                 case ROTATION_INFO:
@@ -225,6 +225,7 @@ public abstract class BaseServer implements Constants {
                 default:
                     break;
                 }
+                
             }
         } catch (Exception e) {
             Log.e(TAG, "Error on socket: " + e.getMessage());

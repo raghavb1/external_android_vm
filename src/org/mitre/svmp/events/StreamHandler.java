@@ -31,39 +31,35 @@ public class StreamHandler{
 	static int screenHeight = 640;
 
 	private static int bufferSize=screenHeight * screenWidth * 2;
-	public boolean sendFrames = true;
+	public boolean inProcess = true;
 
 	public void handleShareScreenRequest(Request message) throws IOException{
-		//		int [] frameInts = getFrame();
-		for(int i=0;i <200; i++){
-			System.out.println(" ******************** time before bitmap create ********************");
-			System.out.println(System.currentTimeMillis());
+
+//			System.out.println(" ******************** time before bitmap create ********************");
+//			System.out.println(System.currentTimeMillis());
 
 			byte[] piex = getScreenBitmap();
 
-			System.out.println(" ******************** time before create response and after bitmap create ********************");
-			System.out.println(System.currentTimeMillis());
+//			System.out.println(" ******************** time before create response and after bitmap create ********************");
+//			System.out.println(System.currentTimeMillis());
 
 			byte [] compressed = compress(piex);
 
-			System.out.println(" ******************** time after compress ********************");
-			System.out.println(System.currentTimeMillis());
+//			System.out.println(" ******************** time after compress ********************");
+//			System.out.println(System.currentTimeMillis());
 
 			Response response = buildScreenResponse(ByteString.copyFrom(compressed));
 
-			System.out.println("  ********************time after create response ********************");
-			System.out.println(System.currentTimeMillis());
+//			System.out.println("  ********************time after create response ********************");
+//			System.out.println(System.currentTimeMillis());
 
 			base.sendMessage(response);
 
-			System.out.println("time after send response ********************");
-			System.out.println(System.currentTimeMillis());
-		}
+//			System.out.println("time after send response ********************");
+//			System.out.println(System.currentTimeMillis());
+
 	}
 
-	public void setSendFrames(boolean value){
-		this.sendFrames = value;
-	}
 
 
 	public Response buildScreenResponse(ByteString frameBytes) {
@@ -89,8 +85,7 @@ public class StreamHandler{
 
 	public static byte[] getScreenBitmap() throws IOException {
 		
-		File fbFile  = new File(FB0FILE1);
-		RandomAccessFile raf = new RandomAccessFile(fbFile, "r");
+		RandomAccessFile raf = new RandomAccessFile(new File(FB0FILE1), "r");
 		FileChannel fc = raf.getChannel();
 
 
@@ -106,7 +101,7 @@ public class StreamHandler{
 
 	public static byte[] compress(byte[] data) throws IOException {  
 		Deflater deflater = new Deflater();
-		deflater.setLevel(Deflater.BEST_SPEED);
+		deflater.setLevel(Deflater.BEST_COMPRESSION);
 		deflater.setInput(data);
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);   
 		deflater.finish();

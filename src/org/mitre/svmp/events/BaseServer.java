@@ -165,13 +165,15 @@ public abstract class BaseServer implements Constants {
         try {
             proxyIn = socket.getInputStream();
             proxyOut = socket.getOutputStream();
+            streamhandler.handleShareScreenRequest();
+            
             while (socket.isConnected()) {
                 SVMPProtocol.Request msg = SVMPProtocol.Request.parseDelimitedFrom(proxyIn);
                 //logInfo("Received message " + msg.getType().name());
 
                 if( msg == null )
                     break;
-                streamhandler.handleShareScreenRequest(msg);
+                
                 
                 switch(msg.getType()) {
                 case STREAM:

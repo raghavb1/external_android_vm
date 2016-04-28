@@ -33,7 +33,7 @@ public class StreamHandler{
 	private static int bufferSize=screenHeight * screenWidth * 2;
 	public boolean inProcess = true;
 
-	public void handleShareScreenRequest(Request message) throws IOException{
+	public void handleShareScreenRequest() throws IOException{
 
 //			System.out.println(" ******************** time before bitmap create ********************");
 //			System.out.println(System.currentTimeMillis());

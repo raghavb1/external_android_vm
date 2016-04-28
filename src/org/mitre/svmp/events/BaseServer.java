@@ -262,13 +262,13 @@ public abstract class BaseServer implements Constants {
 // 
     protected void sendMessage(Response message) {
         // use synchronized statement to ensure only one message gets sent at a time
-        synchronized(sendMessageLock) {
+//        synchronized(sendMessageLock) {
             try {
                 message.writeDelimitedTo(proxyOut);
             } catch (IOException e) {
                 Log.e(TAG, "Error sending message to client: " + e.getMessage());
             }
-        }
+//        }
     }
 
     protected Context getContext() {

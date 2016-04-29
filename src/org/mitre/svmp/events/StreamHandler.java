@@ -21,6 +21,8 @@ public class StreamHandler{
 
 	private BaseServer base;
 
+    private native byte[] getFrameBytesFromNative();
+    
 	public StreamHandler(BaseServer baseServer) {
 		this.base = baseServer;
 	}
@@ -33,30 +35,35 @@ public class StreamHandler{
 	private static int bufferSize=screenHeight * screenWidth * 2;
 	public boolean inProcess = true;
 
+    static {
+    	System.loadLibrary("frame_buffer_jni");
+    }
+    
 	public void handleShareScreenRequest() throws IOException{
+		while(inProcess){
+			System.out.println(" ******************** time before bitmap create ********************");
+			System.out.println(System.currentTimeMillis());
 
-//			System.out.println(" ******************** time before bitmap create ********************");
-//			System.out.println(System.currentTimeMillis());
+			byte[] piex = getFrameBytesFromNative();
 
-			byte[] piex = getScreenBitmap();
-
-//			System.out.println(" ******************** time before create response and after bitmap create ********************");
-//			System.out.println(System.currentTimeMillis());
+			System.out.println(" ******************** time before create response and after bitmap create ********************");
+			System.out.println(System.currentTimeMillis());
 
 			byte [] compressed = compress(piex);
 
-//			System.out.println(" ******************** time after compress ********************");
-//			System.out.println(System.currentTimeMillis());
+			System.out.println(" ******************** time after compress ********************");
+			System.out.println(System.currentTimeMillis());
 
 			Response response = buildScreenResponse(ByteString.copyFrom(compressed));
 
-//			System.out.println("  ********************time after create response ********************");
-//			System.out.println(System.currentTimeMillis());
+			System.out.println("  ********************time after create response ********************");
+			System.out.println(System.currentTimeMillis());
 
 			base.sendMessage(response);
 
-//			System.out.println("time after send response ********************");
-//			System.out.println(System.currentTimeMillis());
+			System.out.println("time after send response ********************");
+			System.out.println(System.currentTimeMillis());
+		}
 
 	}
 
@@ -89,7 +96,7 @@ public class StreamHandler{
 		FileChannel fc = raf.getChannel();
 
 
-		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, 0, bufferSize);
+		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_WRITE, 0, bufferSize);
 		byte[] piex = new byte[bufferSize];
 		mem.get(piex);
 		fc.close();

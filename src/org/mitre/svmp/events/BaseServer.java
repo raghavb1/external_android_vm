@@ -62,6 +62,8 @@ public abstract class BaseServer implements Constants {
     private native int SockClientWrite(int fd,SVMPSensorEventMessage event);
     private native int SockClientClose(int fd); 
     private int sockfd;
+    
+
 
     private Context context;
     private LocationHandler locationHandler;
@@ -165,19 +167,17 @@ public abstract class BaseServer implements Constants {
         try {
             proxyIn = socket.getInputStream();
             proxyOut = socket.getOutputStream();
-            streamhandler.handleShareScreenRequest();
-            
             while (socket.isConnected()) {
                 SVMPProtocol.Request msg = SVMPProtocol.Request.parseDelimitedFrom(proxyIn);
                 //logInfo("Received message " + msg.getType().name());
 
                 if( msg == null )
                     break;
-                
-                
+
                 switch(msg.getType()) {
                 case STREAM:
-                	//streamhandler.handleShareScreenRequest(msg);
+                	streamhandler.inProcess = true;
+                	streamhandler.handleShareScreenRequest();
                 	break;
                 case SCREENINFO:
                     handleScreenInfo(msg);
@@ -203,7 +203,7 @@ public abstract class BaseServer implements Constants {
                         .setType(ResponseType.VMREADY).build());
                     break;
                 case WEBRTC:
-//                	streamhandler.sendFrames = false;
+                	//streamhandler.sendFrames = false;
                     //webrtcHandler.handleMessage(msg);
                     break;
                 case ROTATION_INFO:
@@ -227,7 +227,6 @@ public abstract class BaseServer implements Constants {
                 default:
                     break;
                 }
-                
             }
         } catch (Exception e) {
             Log.e(TAG, "Error on socket: " + e.getMessage());
@@ -236,7 +235,7 @@ public abstract class BaseServer implements Constants {
 //            if (webrtcHandler != null) {
 //                webrtcHandler.disconnectAndExit();
 //            }
- 
+        	streamhandler.inProcess = false;
             try {
                 proxyIn.close();
                 proxyOut.close();

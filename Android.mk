@@ -41,8 +41,8 @@ include $(BUILD_MULTI_PREBUILT)
 ################################################################
 include $(CLEAR_VARS)
 LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE := libremote_events_jni
-LOCAL_SRC_FILES:= jni/org_mitre_svmp_events_BaseServer.c
+LOCAL_MODULE := libframe_buffer_jni
+LOCAL_SRC_FILES:= jni/capturescr.c
 LOCAL_MODULE_PATH := $(TARGET_OUT)/lib
 LOCAL_SHARED_LIBRARIES := liblog
 include $(BUILD_SHARED_LIBRARY)
@@ -50,8 +50,10 @@ include $(BUILD_SHARED_LIBRARY)
 ################################################################
 include $(CLEAR_VARS)
 LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE := libframe_buffer_jni
-LOCAL_SRC_FILES:= jni/capturescr.c
+LOCAL_MODULE := libremote_events_jni
+LOCAL_SRC_FILES:= jni/org_mitre_svmp_events_BaseServer.c
 LOCAL_MODULE_PATH := $(TARGET_OUT)/lib
 LOCAL_SHARED_LIBRARIES := liblog
 include $(BUILD_SHARED_LIBRARY)
+
+

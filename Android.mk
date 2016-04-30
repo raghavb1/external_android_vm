@@ -31,9 +31,9 @@ include $(BUILD_MULTI_PREBUILT)
 
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := libframe_buffer_jni.so
+LOCAL_MODULE := libframe_buffer_jni
 LOCAL_SRC_FILES := libs/x86/libframe_buffer_jni.so
-include $(BUILD_PREBUILT) 
+include $(PREBUILT_SHARED_LIBRARY)
 
 ################################################################
 include $(CLEAR_VARS)

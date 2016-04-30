@@ -10,7 +10,7 @@ LOCAL_STATIC_JAVA_LIBRARIES := SVMPProtocol
 #LOCAL_STATIC_JAVA_LIBRARIES += netty
 #LOCAL_STATIC_JAVA_LIBRARIES += libjingle_peerconnection
 LOCAL_STATIC_JAVA_LIBRARIES += apache
-#LOCAL_SHARED_LIBRARIES := libjingle_peerconnection_so
+LOCAL_SHARED_LIBRARIES := libframe_buffer_jni
 
 # Apk must be signed with platform signature for certain permissions
 LOCAL_CERTIFICATE := platform
@@ -30,13 +30,10 @@ LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := apache:lib/commons-io-2.5.jar
 include $(BUILD_MULTI_PREBUILT)
 
 
-#include $(CLEAR_VARS)
-#LOCAL_MODULE := libjingle_peerconnection_so.so
-#LOCAL_MODULE_TAGS := optional
-#LOCAL_SRC_FILES := lib/libjingle_peerconnection_so.so
-#LOCAL_MODULE_CLASS := SHARED_LIBRARIES
-#LOCAL_MODULE_PATH := $(TARGET_OUT)/lib
-#include $(BUILD_PREBUILT) 
+include $(CLEAR_VARS)
+LOCAL_MODULE := libframe_buffer_jni.so
+LOCAL_SRC_FILES := libs/x86/libframe_buffer_jni.so
+include $(BUILD_PREBUILT) 
 
 ################################################################
 include $(CLEAR_VARS)
@@ -46,6 +43,14 @@ LOCAL_SRC_FILES:= jni/org_mitre_svmp_events_BaseServer.c
 LOCAL_MODULE_PATH := $(TARGET_OUT)/lib
 LOCAL_SHARED_LIBRARIES := liblog
 include $(BUILD_SHARED_LIBRARY)
+
+
+################################################################
+#include $(CLEAR_VARS)
+#LOCAL_MODULE := libframe_buffer_jni
+#LOCAL_SRC_FILES:= jni/org_mitre_svmp_events_BaseServer.c
+#include $(BUILD_SHARED_LIBRARY)
+
 
 ################################################################
 #include $(CLEAR_VARS)

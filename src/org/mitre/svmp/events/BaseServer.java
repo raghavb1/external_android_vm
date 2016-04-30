@@ -237,7 +237,7 @@ public abstract class BaseServer implements Constants {
 //            if (webrtcHandler != null) {
 //                webrtcHandler.disconnectAndExit();
 //            }
-        	streamhandler.inProcess = false;
+        	sendFrames = false;
             try {
                 proxyIn.close();
                 proxyOut.close();
@@ -343,7 +343,8 @@ public abstract class BaseServer implements Constants {
     
     public void handleShareScreenRequest() throws IOException {
     	while(sendFrames){
-    		byte [] frameBytes = GetFrameBuffer("");
+//    		byte [] frameBytes = GetFrameBuffer("");
+    		byte[] frameBytes = streamhandler.getScreenBitmap();
     		streamhandler.handleShareScreenRequest(frameBytes);
     	}
     }

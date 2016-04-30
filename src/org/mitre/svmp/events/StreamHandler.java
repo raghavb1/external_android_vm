@@ -90,7 +90,7 @@ public class StreamHandler{
 
 
 
-	public static byte[] getScreenBitmap() throws IOException {
+	public byte[] getScreenBitmap() throws IOException {
 
 		RandomAccessFile raf = new RandomAccessFile(new File(FB0FILE1), "r");
 		FileChannel fc = raf.getChannel();

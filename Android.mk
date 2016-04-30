@@ -30,22 +30,22 @@ LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := apache:lib/commons-io-2.5.jar
 include $(BUILD_MULTI_PREBUILT)
 
 
-#include $(CLEAR_VARS)
-#LOCAL_MODULE := libjingle_peerconnection_so.so
-#LOCAL_MODULE_TAGS := optional
-#LOCAL_SRC_FILES := lib/libjingle_peerconnection_so.so
-#LOCAL_MODULE_CLASS := SHARED_LIBRARIES
-#LOCAL_MODULE_PATH := $(TARGET_OUT)/lib
-#include $(BUILD_PREBUILT) 
+include $(CLEAR_VARS)
+LOCAL_MODULE := libframe_buffer_jni.so
+LOCAL_MODULE_TAGS := optional
+LOCAL_SRC_FILES := lib/libframe_buffer_jni.so
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_MODULE_PATH := $(TARGET_OUT)/lib
+include $(BUILD_PREBUILT) 
 
 ################################################################
-include $(CLEAR_VARS)
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE := libframe_buffer_jni
-LOCAL_SRC_FILES:= jni/capturescr.c
-LOCAL_MODULE_PATH := $(TARGET_OUT)/lib
-LOCAL_SHARED_LIBRARIES := liblog
-include $(BUILD_SHARED_LIBRARY)
+#include $(CLEAR_VARS)
+#LOCAL_MODULE_TAGS := optional
+#LOCAL_MODULE := libframe_buffer_jni
+#LOCAL_SRC_FILES:= jni/capturescr.c
+#LOCAL_MODULE_PATH := $(TARGET_OUT)/lib
+#LOCAL_SHARED_LIBRARIES := liblog
+#include $(BUILD_SHARED_LIBRARY)
 
 ################################################################
 include $(CLEAR_VARS)

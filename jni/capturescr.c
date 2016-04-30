@@ -51,7 +51,7 @@ static int get_framebuffer(GGLSurface *fb)
 	int fd;
 	void *bits;
 
-	fd = open("/dev/graphics/fb0", O_RDWR);
+	fd = open("/dev/graphics/fb0", O_RDONLY);
 	if(fd < 0) {
 		perror("cannot open fb0");
 		return -1;

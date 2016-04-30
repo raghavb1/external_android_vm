@@ -29,7 +29,7 @@ include $(BUILD_MULTI_PREBUILT)
 
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := libframe_buffer_jni.so
+LOCAL_MODULE := libframe_buffer_jni
 LOCAL_MODULE_TAGS := optional
 LOCAL_SRC_FILES := lib/libframe_buffer_jni.so
 LOCAL_MODULE_CLASS := SHARED_LIBRARIES

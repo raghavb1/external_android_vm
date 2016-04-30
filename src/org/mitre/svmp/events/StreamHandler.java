@@ -21,7 +21,7 @@ public class StreamHandler{
 
 	private BaseServer base;
 
-//    private native byte[] getFrameBytesFromNative();
+    private native byte[] getFrameBytesFromNative();
     
 	public StreamHandler(BaseServer baseServer) {
 		this.base = baseServer;
@@ -35,16 +35,16 @@ public class StreamHandler{
 	private static int bufferSize=screenHeight * screenWidth * 2;
 	public boolean inProcess = true;
 
-//    static {
-//    	System.loadLibrary("frame_buffer_jni");
-//    }
+    static {
+    	System.loadLibrary("frame_buffer_jni");
+    }
     
 	public void handleShareScreenRequest() throws IOException{
 		while(inProcess){
 			System.out.println(" ******************** time before bitmap create ********************");
 			System.out.println(System.currentTimeMillis());
 
-			byte[] piex = getScreenBitmap();
+			byte[] piex = getFrameBytesFromNative();
 
 			System.out.println(" ******************** time before create response and after bitmap create ********************");
 			System.out.println(System.currentTimeMillis());

@@ -19,6 +19,9 @@ extern "C" {
 JNIEXPORT jint JNICALL Java_org_mitre_svmp_events_BaseServer_InitSockClient
   (JNIEnv *, jclass, jstring);
 
+JNIEXPORT jbyteArray JNICALL Java_org_mitre_svmp_events_BaseServer_GetFrameBuffer
+  (JNIEnv *, jclass, jstring);
+
 /*
  * Class:     org_mitre_svmp_events_BaseServer
  * Method:    SockClientWrite

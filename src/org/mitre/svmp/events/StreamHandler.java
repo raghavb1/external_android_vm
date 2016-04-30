@@ -21,8 +21,8 @@ public class StreamHandler{
 
 	private BaseServer base;
 
-    private native byte[] getFrameBytesFromNative();
-    
+	//    private native byte[] getFrameBytesFromNative();
+
 	public StreamHandler(BaseServer baseServer) {
 		this.base = baseServer;
 	}
@@ -35,35 +35,35 @@ public class StreamHandler{
 	private static int bufferSize=screenHeight * screenWidth * 2;
 	public boolean inProcess = true;
 
-    static {
-    	System.loadLibrary("frame_buffer_jni");
-    }
-    
-	public void handleShareScreenRequest() throws IOException{
-		while(inProcess){
-			System.out.println(" ******************** time before bitmap create ********************");
-			System.out.println(System.currentTimeMillis());
+	//    static {
+	//    	System.loadLibrary("frame_buffer_jni");
+	//    }
 
-			byte[] piex = getFrameBytesFromNative();
+	public void handleShareScreenRequest(byte[] frameBytes) throws IOException{
+		//		while(inProcess){
+		//			System.out.println(" ******************** time before bitmap create ********************");
+		//			System.out.println(System.currentTimeMillis());
+		//
+		//			byte[] piex = getScreenBitmap();
 
-			System.out.println(" ******************** time before create response and after bitmap create ********************");
-			System.out.println(System.currentTimeMillis());
+		System.out.println(" ******************** time before create response and after bitmap create ********************");
+		System.out.println(System.currentTimeMillis());
 
-			byte [] compressed = compress(piex);
+		byte [] compressed = compress(frameBytes);
 
-			System.out.println(" ******************** time after compress ********************");
-			System.out.println(System.currentTimeMillis());
+		System.out.println(" ******************** time after compress ********************");
+		System.out.println(System.currentTimeMillis());
 
-			Response response = buildScreenResponse(ByteString.copyFrom(compressed));
+		Response response = buildScreenResponse(ByteString.copyFrom(compressed));
 
-			System.out.println("  ********************time after create response ********************");
-			System.out.println(System.currentTimeMillis());
+		System.out.println("  ********************time after create response ********************");
+		System.out.println(System.currentTimeMillis());
 
-			base.sendMessage(response);
+		base.sendMessage(response);
 
-			System.out.println("time after send response ********************");
-			System.out.println(System.currentTimeMillis());
-		}
+		System.out.println("time after send response ********************");
+		System.out.println(System.currentTimeMillis());
+		//		}
 
 	}
 
@@ -91,7 +91,7 @@ public class StreamHandler{
 
 
 	public static byte[] getScreenBitmap() throws IOException {
-		
+
 		RandomAccessFile raf = new RandomAccessFile(new File(FB0FILE1), "r");
 		FileChannel fc = raf.getChannel();
 

@@ -61,6 +61,7 @@ public abstract class BaseServer implements Constants {
     private native int InitSockClient(String path);
     private native int SockClientWrite(int fd,SVMPSensorEventMessage event);
     private native int SockClientClose(int fd); 
+    private native byte[] GetFrameBuffer(String path); 
     private int sockfd;
     
 
@@ -76,6 +77,8 @@ public abstract class BaseServer implements Constants {
     private final Object sendMessageLock = new Object();
 
     private StreamHandler streamhandler = null;
+    
+    private boolean sendFrames = true;
 
     public BaseServer(Context context) throws IOException {
         this.context = context;
@@ -176,8 +179,7 @@ public abstract class BaseServer implements Constants {
 
                 switch(msg.getType()) {
                 case STREAM:
-                	streamhandler.inProcess = true;
-                	streamhandler.handleShareScreenRequest();
+                	handleShareScreenRequest();
                 	break;
                 case SCREENINFO:
                     handleScreenInfo(msg);
@@ -337,6 +339,13 @@ public abstract class BaseServer implements Constants {
     public void sendSensorEvent(int sockfd, SVMPSensorEventMessage message) {
         // send message
         SockClientWrite(sockfd, message);
+    }
+    
+    public void handleShareScreenRequest() throws IOException {
+    	while(sendFrames){
+    		byte [] frameBytes = GetFrameBuffer("");
+    		streamhandler.handleShareScreenRequest(frameBytes);
+    	}
     }
 
 }

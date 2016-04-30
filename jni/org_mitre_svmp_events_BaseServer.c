@@ -28,6 +28,30 @@
 #include <utils/Log.h>
 #include "org_mitre_svmp_events_BaseServer.h"
 
+#include <jni.h>
+
+#include <fcntl.h>
+
+#include <sys/ioctl.h>
+#include <sys/mman.h>
+#include <sys/types.h>
+#include <time.h>
+
+#include <linux/fb.h>
+#include <linux/kd.h>
+
+#include "pixelflinger.h"
+
+char cprght[255]="";
+//surface pointer
+static GGLSurface gr_framebuffer[2];
+//handler
+static int gr_fb_fd = -1;
+//v screen info
+static struct fb_var_screeninfo vi;
+//f screen info
+struct fb_fix_screeninfo fi;
+
 struct svmp_sensor_event_t {  
         int type;             
         int accuracy;         
@@ -35,6 +59,53 @@ struct svmp_sensor_event_t {
         float value[3];       
 };
 
+static int get_framebuffer(GGLSurface *fb)
+{
+	int fd;
+	void *bits;
+
+	fd = open("/dev/graphics/fb0", O_RDONLY);
+	if(fd < 0) {
+		perror("cannot open fb0");
+		return -1;
+	}
+
+	if(ioctl(fd, FBIOGET_FSCREENINFO, &fi) < 0) {
+		perror("failed to get fb0 info");
+		return -1;
+	}
+
+	if(ioctl(fd, FBIOGET_VSCREENINFO, &vi) < 0) {
+		perror("failed to get fb0 info");
+		return -1;
+	}
+
+	//dumpinfo(&fi, &vi);
+
+	bits = mmap(0, fi.smem_len, PROT_READ, MAP_SHARED, fd, 0);
+	if(bits == MAP_FAILED) {
+		perror("failed to mmap framebuffer");
+		return -1;
+	}
+
+	fb->version = sizeof(*fb);
+	fb->width = vi.xres;
+	fb->height = vi.yres;
+	fb->stride = fi.line_length / (vi.bits_per_pixel >> 3);
+	fb->data = bits;
+	fb->format = GGL_PIXEL_FORMAT_RGB_565;
+
+	fb++;
+
+	fb->version = sizeof(*fb);
+	fb->width = vi.xres;
+	fb->height = vi.yres;
+	fb->stride = fi.line_length / (vi.bits_per_pixel >> 3);
+	fb->data = (void*) (((unsigned) bits) + vi.yres * vi.xres * 2);
+	fb->format = GGL_PIXEL_FORMAT_RGB_565;
+
+	return fd;
+}
 /*
  *
  *12/05/2012
@@ -48,7 +119,7 @@ jint Java_org_mitre_svmp_events_BaseServer_InitSockClient( JNIEnv* env, jobject 
 	struct sockaddr_un addr;
 	struct sockaddr_un  cli_addr, serv_addr;
 	const char *path=(*env)->GetStringUTFChars( env, jpath , NULL );
-	
+
 	bzero((char *) &serv_addr, sizeof(serv_addr));
 	serv_addr.sun_family = AF_UNIX;
  	// pass the path in as an argument
@@ -67,6 +138,25 @@ jint Java_org_mitre_svmp_events_BaseServer_InitSockClient( JNIEnv* env, jobject 
 	ALOGD("clifd is %d\n",clifd);
 
 	return clifd;
+}
+
+jbyteArray Java_org_mitre_svmp_events_BaseServer_GetFrameBuffer( JNIEnv* env, jobject thiz,jstring jpath)
+{
+	gr_fb_fd = get_framebuffer(gr_framebuffer);
+	if (gr_fb_fd <= 0) exit(1);
+
+	int w = vi.xres, h = vi.yres, depth = vi.bits_per_pixel;
+
+	//convert pixel data
+	uint8_t *rgb24 = (uint8_t *) gr_framebuffer[0].data;
+
+	jbyteArray result = NULL;
+	result = (*env)->NewByteArray(env, w * h * depth);
+	(*env)->SetByteArrayRegion(env, result, 0, w * h * depth, (jbyte *)rgb24);
+
+	return result;
+
+
 }
 /*
  * Class:     org_mitre_svmp_events_BaseServer

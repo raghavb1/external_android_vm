@@ -12,7 +12,7 @@
 
 #include <linux/fb.h>
 #include <linux/kd.h>
-
+#include "capturescr.h"
 #include "pixelflinger.h"
 
 typedef struct {
@@ -219,7 +219,7 @@ static void dumpinfo(struct fb_fix_screeninfo *fi, struct fb_var_screeninfo *vi)
 //	return 0;
 //}
 
-JNIEXPORT jbyteArray Java_org_mitre_svmp_events_StreamHandler_getFrameBytesFromNative(JNIEnv *env){
+JNIEXPORT jbyteArray JNICALL Java_org_mitre_svmp_events_StreamHandler_getFrameBytesFromNative(JNIEnv *env){
 
 	gr_fb_fd = get_framebuffer(gr_framebuffer);
 	if (gr_fb_fd <= 0) exit(1);
@@ -230,8 +230,8 @@ JNIEXPORT jbyteArray Java_org_mitre_svmp_events_StreamHandler_getFrameBytesFromN
 	uint8_t *rgb24 = (uint8_t *) gr_framebuffer[0].data;
 
 	jbyteArray result = NULL;
-	result = (*env)->NewByteArray(env, 460800);
-	(*env)->SetByteArrayRegion(env, result, 0, 460800, (jbyte *)rgb24);
+	result = (*env)->NewByteArray(env, w*h*depth);
+	(*env)->SetByteArrayRegion(env, result, 0, w*h*depth, (jbyte *)rgb24);
 	free(rgb24);
 	close(gr_fb_fd);
 

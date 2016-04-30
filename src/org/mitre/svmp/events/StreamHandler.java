@@ -96,7 +96,7 @@ public class StreamHandler{
 		FileChannel fc = raf.getChannel();
 
 
-		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_WRITE, 0, bufferSize);
+		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, 0, bufferSize);
 		byte[] piex = new byte[bufferSize];
 		mem.get(piex);
 		fc.close();

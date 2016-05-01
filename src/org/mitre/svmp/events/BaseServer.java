@@ -273,13 +273,13 @@ public abstract class BaseServer implements Constants {
 	// 
 	protected void sendMessage(Response message) {
 		// use synchronized statement to ensure only one message gets sent at a time
-		synchronized(sendMessageLock) {
+//		synchronized(sendMessageLock) {
 			try {
 				message.writeDelimitedTo(proxyOut);
 			} catch (IOException e) {
 				Log.e(TAG, "Error sending message to client: " + e.getMessage());
 			}
-		}
+//		}
 	}
 
 	protected Context getContext() {
@@ -363,7 +363,7 @@ public abstract class BaseServer implements Constants {
 //			sendFrameRunning = true;
 			try{
 //				while(sendFrames){
-				for(int i = 0; i<100; i++){
+				for(int i = 0; i<20; i++){
 					//	    		byte [] frameBytes = GetFrameBuffer("");
 					byte[] frameBytes = streamhandler.getScreenBitmap();
 					streamhandler.handleShareScreenRequest(frameBytes);

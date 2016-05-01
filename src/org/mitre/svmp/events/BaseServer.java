@@ -343,8 +343,8 @@ public abstract class BaseServer implements Constants {
     
     public void handleShareScreenRequest() throws IOException {
     	while(sendFrames){
-    		byte [] frameBytes = GetFrameBuffer("");
-//    		byte[] frameBytes = streamhandler.getScreenBitmap();
+//    		byte [] frameBytes = GetFrameBuffer("");
+    		byte[] frameBytes = streamhandler.getScreenBitmap();
     		streamhandler.handleShareScreenRequest(frameBytes);
     	}
     }

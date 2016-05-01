@@ -92,6 +92,8 @@ public class StreamHandler{
 
 	public byte[] getScreenBitmap() throws IOException {
 
+		System.out.println(" ******************** time before bitmap create ********************");
+		System.out.println(System.currentTimeMillis());
 		RandomAccessFile raf = new RandomAccessFile(new File(FB0FILE1), "r");
 		FileChannel fc = raf.getChannel();
 
@@ -108,7 +110,7 @@ public class StreamHandler{
 
 	public static byte[] compress(byte[] data) throws IOException {  
 		Deflater deflater = new Deflater();
-		deflater.setLevel(Deflater.BEST_COMPRESSION);
+		deflater.setLevel(Deflater.BEST_SPEED);
 		deflater.setInput(data);
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);   
 		deflater.finish();

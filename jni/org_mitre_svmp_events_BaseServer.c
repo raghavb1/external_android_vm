@@ -146,13 +146,14 @@ jbyteArray Java_org_mitre_svmp_events_BaseServer_GetFrameBuffer( JNIEnv* env, jo
 	if (gr_fb_fd <= 0) exit(1);
 
 	int w = vi.xres, h = vi.yres, depth = vi.bits_per_pixel;
+	int frameSize = 360*640*2;
 
 	//convert pixel data
 	uint8_t *rgb24 = (uint8_t *) gr_framebuffer[0].data;
 
 	jbyteArray result = NULL;
-	result = (*env)->NewByteArray(env, w * h * depth);
-	(*env)->SetByteArrayRegion(env, result, 0, w * h * depth, (jbyte *)rgb24);
+	result = (*env)->NewByteArray(env, frameSize);
+	(*env)->SetByteArrayRegion(env, result, 0, frameSize, (jbyte *)rgb24);
 
 	return result;
 

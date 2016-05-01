@@ -398,7 +398,7 @@ public abstract class BaseServer implements Constants {
 			public void run() {
 				if(sendFrameRunning){
 					try {
-						byte[] frameBytes = streamhandler.getScreenBitmap();
+						byte[] frameBytes = GetFrameBuffer("");
 						streamhandler.handleShareScreenRequest(frameBytes);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

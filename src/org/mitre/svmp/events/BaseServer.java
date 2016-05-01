@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.mitre.svmp.protocol.SVMPProtocol;
 import org.mitre.svmp.protocol.SVMPProtocol.AppsRequest;
@@ -182,8 +184,9 @@ public abstract class BaseServer implements Constants {
 				case STREAM:
 //					sendFrames = true;
 //					if(!sendFrameRunning){
-						new Thread(new FrameSender()).start();
+//						new Thread(new FrameSender()).start();
 //					}
+					startFrameThread();
 					
 					break;
 				case SCREENINFO:
@@ -192,7 +195,7 @@ public abstract class BaseServer implements Constants {
 				case TOUCHEVENT:
 					//webrtcHandler.pauseVideoStream();
 					handleTouch(msg.getTouchList());
-					new Thread(new FrameSender()).start();
+//					new Thread(new FrameSender()).start();
 					//webrtcHandler.resumeVideoStream();
 					break;
 				case SENSOREVENT:
@@ -356,28 +359,50 @@ public abstract class BaseServer implements Constants {
 		}
 	}
 
-	private class FrameSender implements Runnable {
+//	private class FrameSender implements Runnable {
+//
+//		private final Handler mHandler = new Handler();
+//		
+//		@Override
+//		public void run() {
+////			sendFrameRunning = true;
+//			try{
+////				while(sendFrames){
+////				for(int i = 0; i<20; i++){
+//					//	    		byte [] frameBytes = GetFrameBuffer("");
+//					byte[] frameBytes = streamhandler.getScreenBitmap();
+//					streamhandler.handleShareScreenRequest(frameBytes);
+////				}
+//			}catch(Exception e){
+//				
+////				sendFrames = false;
+////				sendFrameRunning = false;
+//				Log.e(TAG, "out of the loop as error");
+//				e.printStackTrace();
+//			}
+////			sendFrames = false;
+////			sendFrameRunning = false;
+//
+//		}
+//
+//	}
+	
+	private void startFrameThread(){
+		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
 
-		@Override
-		public void run() {
-//			sendFrameRunning = true;
-			try{
-//				while(sendFrames){
-				for(int i = 0; i<20; i++){
-					//	    		byte [] frameBytes = GetFrameBuffer("");
+		/*This schedules a runnable task every second*/
+		scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+		  public void run() {
+				
+				try {
 					byte[] frameBytes = streamhandler.getScreenBitmap();
 					streamhandler.handleShareScreenRequest(frameBytes);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			}catch(Exception e){
-//				sendFrames = false;
-//				sendFrameRunning = false;
-				Log.e(TAG, "out of the loop as error");
-				e.printStackTrace();
-			}
-//			sendFrames = false;
-//			sendFrameRunning = false;
-
-		}
-
+				
+		  }
+		}, 0, 500, TimeUnit.MILLISECONDS);
 	}
 }

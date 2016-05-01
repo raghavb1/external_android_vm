@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.mitre.svmp.events;
 
 import java.io.IOException;
@@ -51,302 +51,321 @@ import android.util.Log;
  * logins. Only one live connection at a time is allowed.
  */
 public abstract class BaseServer implements Constants {
-    private ServerSocket proxySocket;
-    private BlockingQueue<Socket> clientSocketQueue;
-    private OutputStream proxyOut = null;
-    private InputStream proxyIn = null;
-    private int proxyPort;
-    private static final String TAG = BaseServer.class.getName();
-    
-    private native int InitSockClient(String path);
-    private native int SockClientWrite(int fd,SVMPSensorEventMessage event);
-    private native int SockClientClose(int fd); 
-    private native byte[] GetFrameBuffer(String path); 
-    private int sockfd;
-    
+	private ServerSocket proxySocket;
+	private BlockingQueue<Socket> clientSocketQueue;
+	private OutputStream proxyOut = null;
+	private InputStream proxyIn = null;
+	private int proxyPort;
+	private static final String TAG = BaseServer.class.getName();
+
+	private native int InitSockClient(String path);
+	private native int SockClientWrite(int fd,SVMPSensorEventMessage event);
+	private native int SockClientClose(int fd); 
+	private native byte[] GetFrameBuffer(String path); 
+	private int sockfd;
 
 
-    private Context context;
-    private LocationHandler locationHandler;
-    private IntentHandler intentHandler;
-    private NotificationHandler notificationHandler;
-    private KeyHandler keyHandler;
-    private ConfigHandler configHandler;
-    private LauncherHandler launcherHandler;
-    private ExecutorService sensorMsgExecutor;
-    private final Object sendMessageLock = new Object();
 
-    private StreamHandler streamhandler = null;
-    
-    private boolean sendFrames = true;
+	private Context context;
+	private LocationHandler locationHandler;
+	private IntentHandler intentHandler;
+	private NotificationHandler notificationHandler;
+	private KeyHandler keyHandler;
+	private ConfigHandler configHandler;
+	private LauncherHandler launcherHandler;
+	private ExecutorService sensorMsgExecutor;
+	private final Object sendMessageLock = new Object();
 
-    public BaseServer(Context context) throws IOException {
-        this.context = context;
-        sockfd = InitSockClient("/dev/socket/svmp_sensors");
-        Log.d(TAG, "InitSockClient returned " + sockfd);
-        this.proxyPort = PROXY_PORT;
-    }
-    
-    static {
-    	System.loadLibrary("remote_events_jni");
-    }
+	private StreamHandler streamhandler = null;
 
-    public void start() throws IOException {
-        // start receiving location broadcast messages
-        locationHandler = new LocationHandler(this);
+	private boolean sendFrames = true;
 
-        // start receiving intent intercept messages
-        intentHandler = new IntentHandler(this);
+	public BaseServer(Context context) throws IOException {
+		this.context = context;
+		sockfd = InitSockClient("/dev/socket/svmp_sensors");
+		Log.d(TAG, "InitSockClient returned " + sockfd);
+		this.proxyPort = PROXY_PORT;
+	}
 
-        // start receiving notification intercept messages
-        notificationHandler = new NotificationHandler(this);
+	static {
+		System.loadLibrary("remote_events_jni");
+	}
 
-        // receives KeyEvent request messages from the client and injects them into the system also receive broadcast message of keyboard opened
-        keyHandler = new KeyHandler(this);
+	public void start() throws IOException {
+		// start receiving location broadcast messages
+		locationHandler = new LocationHandler(this);
 
-        // receives Config request messages from the client and injects them into the system
-        configHandler = new ConfigHandler(context);
+		// start receiving intent intercept messages
+		intentHandler = new IntentHandler(this);
 
-        // receives Apps Launch messages from the client
-        // receives launcher broadcasts and sends Apps Exit messages to the client
-        launcherHandler = new LauncherHandler(this);
-        
-        streamhandler = new StreamHandler(this);
+		// start receiving notification intercept messages
+		notificationHandler = new NotificationHandler(this);
 
-        // We create a SingleThreadExecutor because it executes sequentially
-        // this guarantees that sensor event messages will be sent in order
-        sensorMsgExecutor = Executors.newSingleThreadExecutor();
+		// receives KeyEvent request messages from the client and injects them into the system also receive broadcast message of keyboard opened
+		keyHandler = new KeyHandler(this);
 
-        this.proxySocket = new ServerSocket(proxyPort);
-        Log.d(TAG, "Event server listening on proxyPort " + proxyPort);
+		// receives Config request messages from the client and injects them into the system
+		configHandler = new ConfigHandler(context);
 
-        clientSocketQueue = new SynchronousQueue<Socket>();
-        new Thread(new SocketAcceptor()).start();
-        this.run();
-    }
+		// receives Apps Launch messages from the client
+		// receives launcher broadcasts and sends Apps Exit messages to the client
+		launcherHandler = new LauncherHandler(this);
 
-    private class SocketAcceptor implements Runnable {
-        public void run() {
-            InputStream oldClientIn = null;
-            OutputStream oldClientOut = null;
+		streamhandler = new StreamHandler(this);
 
-            while (true) {
-                try {
-                    Socket socket = proxySocket.accept();
-                    Log.i(TAG, "New client socket connection received.");
+		// We create a SingleThreadExecutor because it executes sequentially
+		// this guarantees that sensor event messages will be sent in order
+		sensorMsgExecutor = Executors.newSingleThreadExecutor();
 
-                    // If there's already an existing connection, kill it.
-                    if (proxyIn != null) {
-                        Log.i(TAG, "Previous client session still active, disconnecting it.");
-                        // close the streams to break anything blocked reading them
-                        if (proxyIn != null)  proxyIn.close();
-                        if (proxyOut != null) proxyOut.close();
-                    }
+		this.proxySocket = new ServerSocket(proxyPort);
+		Log.d(TAG, "Event server listening on proxyPort " + proxyPort);
 
-                    proxyOut = null;
-                    proxyIn = null;
-                    clientSocketQueue.put(socket);
-                } catch (IOException e) {
-                    Log.e(TAG, "Problem accepting socket: " + e.getMessage());
-                } catch (InterruptedException e) {
-                    Log.e(TAG, "Interrupted while handing off client socket. " + e.getMessage());
-                }
-            }
-        }
-    }
+		clientSocketQueue = new SynchronousQueue<Socket>();
+		new Thread(new SocketAcceptor()).start();
+		this.run();
+	}
 
-    protected void run() {
-        while (true) {
-            try {
-                clientHandler(clientSocketQueue.take());
-            } catch (InterruptedException e) {
-                Log.e(TAG, "Interrupted while waiting for client socket. " + e.getMessage());
-            }
-        }
-    }
+	private class SocketAcceptor implements Runnable {
+		public void run() {
+			InputStream oldClientIn = null;
+			OutputStream oldClientOut = null;
 
-    private void clientHandler(Socket socket) {
-        Log.d(TAG, "Client connection handler starting.");
-        try {
-            proxyIn = socket.getInputStream();
-            proxyOut = socket.getOutputStream();
-            while (socket.isConnected()) {
-                SVMPProtocol.Request msg = SVMPProtocol.Request.parseDelimitedFrom(proxyIn);
-                //logInfo("Received message " + msg.getType().name());
+			while (true) {
+				try {
+					Socket socket = proxySocket.accept();
+					Log.i(TAG, "New client socket connection received.");
 
-                if( msg == null )
-                    break;
+					// If there's already an existing connection, kill it.
+					if (proxyIn != null) {
+						Log.i(TAG, "Previous client session still active, disconnecting it.");
+						// close the streams to break anything blocked reading them
+						if (proxyIn != null)  proxyIn.close();
+						if (proxyOut != null) proxyOut.close();
+					}
 
-                switch(msg.getType()) {
-                case STREAM:
-                	handleShareScreenRequest();
-                	break;
-                case SCREENINFO:
-                    handleScreenInfo(msg);
-                    break;
-                case TOUCHEVENT:
-                	//webrtcHandler.pauseVideoStream();
-                    handleTouch(msg.getTouchList());
-                    //webrtcHandler.resumeVideoStream();
-                    break;
-                case SENSOREVENT:
-                    // use the thread pool to handle this
-                    handleSensor(msg.getSensorList());
-                    break;
-                case INTENT:
-                    intentHandler.handleMessage(msg);
-                    break;
-                case LOCATION:
-                    locationHandler.handleMessage(msg);
-                    break;
-                case VIDEO_PARAMS:
-                    //initWebRTC(msg);
-                    sendMessage(Response.newBuilder()
-                        .setType(ResponseType.VMREADY).build());
-                    break;
-                case WEBRTC:
-                	//streamhandler.sendFrames = false;
-                    //webrtcHandler.handleMessage(msg);
-                    break;
-                case ROTATION_INFO:
-                    handleRotationInfo(msg);
-                    break;
-                case PING:
-                    handlePing(msg);
-                    break;
-                case TIMEZONE:
-                    handleTimezone(msg);
-                    break;
-                case APPS:
-                    handleApps(msg);
-                    break;
-                case KEYEVENT:
-                    keyHandler.handleKeyEvent(msg.getKey());
-                    break;
-                case CONFIG:
-                    configHandler.handleConfig(msg.getConfig());
-                    break;
-                default:
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Error on socket: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-//            if (webrtcHandler != null) {
-//                webrtcHandler.disconnectAndExit();
-//            }
-        	sendFrames = false;
-            try {
-                proxyIn.close();
-                proxyOut.close();
-                socket.close();
-            } catch (Exception e) {
-                // Don't care
-            } finally {
-                proxyIn = null;
-                proxyOut = null;
-                socket = null;
-            }
-            Log.d(TAG, "Client connection handler finished.");
-        }
-    }
+					proxyOut = null;
+					proxyIn = null;
+					clientSocketQueue.put(socket);
+				} catch (IOException e) {
+					Log.e(TAG, "Problem accepting socket: " + e.getMessage());
+				} catch (InterruptedException e) {
+					Log.e(TAG, "Interrupted while handing off client socket. " + e.getMessage());
+				}
+			}
+		}
+	}
 
-//    private void initWebRTC(SVMPProtocol.Request msg) {
-//        // only ever create one WebRTC handler
-//        if (webrtcHandler == null) {
-//            Log.d(TAG, "Creating new WebRTC Handler.");
-//            // the video parameters won't change from one session to the next
-//            webrtcHandler = new WebrtcHandler(BaseServer.this, msg.getVideoInfo(), context);
-//        } else {
-//            Log.d(TAG, "Reusing existing WebRTC Handler.");
-//        }
-//    }
-// 
-    protected synchronized void sendMessage(Response message) {
-        // use synchronized statement to ensure only one message gets sent at a time
-//        synchronized(sendMessageLock) {
-            try {
-                message.writeDelimitedTo(proxyOut);
-            } catch (IOException e) {
-                Log.e(TAG, "Error sending message to client: " + e.getMessage());
-            }
-//        }
-    }
+	protected void run() {
+		while (true) {
+			try {
+				clientHandler(clientSocketQueue.take());
+			} catch (InterruptedException e) {
+				Log.e(TAG, "Interrupted while waiting for client socket. " + e.getMessage());
+			}
+		}
+	}
 
-    protected Context getContext() {
-        return context;
-    }
+	private void clientHandler(Socket socket) {
+		Log.d(TAG, "Client connection handler starting.");
+		try {
+			proxyIn = socket.getInputStream();
+			proxyOut = socket.getOutputStream();
+			while (socket.isConnected()) {
+				SVMPProtocol.Request msg = SVMPProtocol.Request.parseDelimitedFrom(proxyIn);
+				//logInfo("Received message " + msg.getType().name());
 
-    public abstract void handleScreenInfo(final Request message) throws IOException;
-    public abstract void handleTouch(final List<TouchEvent> event);
+				if( msg == null )
+					break;
 
-    private void handleSensor(final List<SensorEvent> eventList) {
-        // we can receive a batch of sensor events; process each event individually
-        for (SensorEvent event : eventList)
-            // this SensorEvent was sent from the client, let's pass it on to the Sensor Message Unix socket
-            sensorMsgExecutor.execute(new SensorMessageRunnable(this, sockfd, event));
-    }
+				switch(msg.getType()) {
+				case STREAM:
+					new Thread(new FrameSender()).start();
+					break;
+				case SCREENINFO:
+					handleScreenInfo(msg);
+					break;
+				case TOUCHEVENT:
+					//webrtcHandler.pauseVideoStream();
+					handleTouch(msg.getTouchList());
+					//webrtcHandler.resumeVideoStream();
+					break;
+				case SENSOREVENT:
+					// use the thread pool to handle this
+					handleSensor(msg.getSensorList());
+					break;
+				case INTENT:
+					intentHandler.handleMessage(msg);
+					break;
+				case LOCATION:
+					locationHandler.handleMessage(msg);
+					break;
+				case VIDEO_PARAMS:
+					//initWebRTC(msg);
+					sendMessage(Response.newBuilder()
+							.setType(ResponseType.VMREADY).build());
+					break;
+				case WEBRTC:
+					//streamhandler.sendFrames = false;
+					//webrtcHandler.handleMessage(msg);
+					break;
+				case ROTATION_INFO:
+					handleRotationInfo(msg);
+					break;
+				case PING:
+					handlePing(msg);
+					break;
+				case TIMEZONE:
+					handleTimezone(msg);
+					break;
+				case APPS:
+					handleApps(msg);
+					break;
+				case KEYEVENT:
+					keyHandler.handleKeyEvent(msg.getKey());
+					break;
+				case CONFIG:
+					configHandler.handleConfig(msg.getConfig());
+					break;
+				default:
+					break;
+				}
+			}
+		} catch (Exception e) {
+			Log.e(TAG, "Error on socket: " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			//            if (webrtcHandler != null) {
+			//                webrtcHandler.disconnectAndExit();
+			//            }
+			sendFrames = false;
+			try {
+				proxyIn.close();
+				proxyOut.close();
+				socket.close();
+			} catch (Exception e) {
+				// Don't care
+			} finally {
+				proxyIn = null;
+				proxyOut = null;
+				socket = null;
+			}
+			Log.d(TAG, "Client connection handler finished.");
+		}
+	}
 
-    public void handleRotationInfo(final Request request) {
-        RotationInfo rotationInfo = request.getRotationInfo();
-        int rotation = rotationInfo.getRotation(); // get rotation value from protobuf
-        Intent intent = new Intent(ROTATION_CHANGED_ACTION); // set action
-        intent.putExtra("rotation", rotation); // add rotation value to intent
-        context.sendBroadcast(intent); // send broadcast
-        // the receiver is protected by requiring the sender to have the SVMP_BROADCAST permission
-    }
+	//    private void initWebRTC(SVMPProtocol.Request msg) {
+	//        // only ever create one WebRTC handler
+	//        if (webrtcHandler == null) {
+	//            Log.d(TAG, "Creating new WebRTC Handler.");
+	//            // the video parameters won't change from one session to the next
+	//            webrtcHandler = new WebrtcHandler(BaseServer.this, msg.getVideoInfo(), context);
+	//        } else {
+	//            Log.d(TAG, "Reusing existing WebRTC Handler.");
+	//        }
+	//    }
+	// 
+	protected void sendMessage(Response message) {
+		// use synchronized statement to ensure only one message gets sent at a time
+		synchronized(sendMessageLock) {
+			try {
+				message.writeDelimitedTo(proxyOut);
+			} catch (IOException e) {
+				Log.e(TAG, "Error sending message to client: " + e.getMessage());
+			}
+		}
+	}
 
-    // when we receive a Ping message from the client, pack it back up in a Response wrapper and return it
-    public void handlePing(final Request request) throws IOException {
-        if (request.hasPingRequest() ) {
-            // get the ping message that was sent from the client
-            Ping ping = request.getPingRequest();
+	protected Context getContext() {
+		return context;
+	}
 
-            // pack the ping message in a Response wrapper
-            Response.Builder builder = Response.newBuilder();
-            builder.setType(ResponseType.PING);
-            builder.setPingResponse(ping);
-            Response response = builder.build();
+	public abstract void handleScreenInfo(final Request message) throws IOException;
+	public abstract void handleTouch(final List<TouchEvent> event);
 
-            sendMessage(response);
-        }
-    }
+	private void handleSensor(final List<SensorEvent> eventList) {
+		// we can receive a batch of sensor events; process each event individually
+		for (SensorEvent event : eventList)
+			// this SensorEvent was sent from the client, let's pass it on to the Sensor Message Unix socket
+			sensorMsgExecutor.execute(new SensorMessageRunnable(this, sockfd, event));
+	}
 
-    // set the system default timezone based on the client's timezone
-    public void handleTimezone(final Request request) {
-      if (request.hasTimezoneId()) {
-        
-        // Reference: packages/apps/Settings/src/com/android/settings/ZonePicker.java
-        // Update the system timezone value
-        final AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarm.setTimeZone(request.getTimezoneId());
-      }
-    }
+	public void handleRotationInfo(final Request request) {
+		RotationInfo rotationInfo = request.getRotationInfo();
+		int rotation = rotationInfo.getRotation(); // get rotation value from protobuf
+		Intent intent = new Intent(ROTATION_CHANGED_ACTION); // set action
+		intent.putExtra("rotation", rotation); // add rotation value to intent
+		context.sendBroadcast(intent); // send broadcast
+		// the receiver is protected by requiring the sender to have the SVMP_BROADCAST permission
+	}
 
-    private void handleApps(final Request request) {
-        AppsRequest appsRequest = request.getApps();
-        if (appsRequest.getType() == AppsRequest.AppsRequestType.REFRESH) {
-            // the client is asking for a refreshed list of available apps, handle the request
-            new AppsRefreshHandler(this, appsRequest).start();
-        } else if (appsRequest.getType() == AppsRequest.AppsRequestType.LAUNCH) {
-            launcherHandler.handleMessage(appsRequest);
-        }
-    }
+	// when we receive a Ping message from the client, pack it back up in a Response wrapper and return it
+	public void handlePing(final Request request) throws IOException {
+		if (request.hasPingRequest() ) {
+			// get the ping message that was sent from the client
+			Ping ping = request.getPingRequest();
 
-    // called from the SensorMessageRunnable
-    public void sendSensorEvent(int sockfd, SVMPSensorEventMessage message) {
-        // send message
-        SockClientWrite(sockfd, message);
-    }
-    
-    public void handleShareScreenRequest() throws IOException {
-    	while(sendFrames){
-//    		byte [] frameBytes = GetFrameBuffer("");
-    		byte[] frameBytes = streamhandler.getScreenBitmap();
-    		streamhandler.handleShareScreenRequest(frameBytes);
-    	}
-    }
+			// pack the ping message in a Response wrapper
+			Response.Builder builder = Response.newBuilder();
+			builder.setType(ResponseType.PING);
+			builder.setPingResponse(ping);
+			Response response = builder.build();
 
+			sendMessage(response);
+		}
+	}
+
+	// set the system default timezone based on the client's timezone
+	public void handleTimezone(final Request request) {
+		if (request.hasTimezoneId()) {
+
+			// Reference: packages/apps/Settings/src/com/android/settings/ZonePicker.java
+			// Update the system timezone value
+			final AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+			alarm.setTimeZone(request.getTimezoneId());
+		}
+	}
+
+	private void handleApps(final Request request) {
+		AppsRequest appsRequest = request.getApps();
+		if (appsRequest.getType() == AppsRequest.AppsRequestType.REFRESH) {
+			// the client is asking for a refreshed list of available apps, handle the request
+			new AppsRefreshHandler(this, appsRequest).start();
+		} else if (appsRequest.getType() == AppsRequest.AppsRequestType.LAUNCH) {
+			launcherHandler.handleMessage(appsRequest);
+		}
+	}
+
+	// called from the SensorMessageRunnable
+	public void sendSensorEvent(int sockfd, SVMPSensorEventMessage message) {
+		// send message
+		SockClientWrite(sockfd, message);
+	}
+
+	public void handleShareScreenRequest() throws IOException {
+		while(sendFrames){
+			//    		byte [] frameBytes = GetFrameBuffer("");
+			byte[] frameBytes = streamhandler.getScreenBitmap();
+			streamhandler.handleShareScreenRequest(frameBytes);
+		}
+	}
+
+	private class FrameSender implements Runnable {
+
+		@Override
+		public void run() {
+			try{
+				while(sendFrames){
+					//	    		byte [] frameBytes = GetFrameBuffer("");
+					byte[] frameBytes = streamhandler.getScreenBitmap();
+					streamhandler.handleShareScreenRequest(frameBytes);
+				}
+			}catch(Exception e){
+				sendFrames = false;
+				Log.e(TAG, "out of the loop as error");
+				e.printStackTrace();
+			}
+
+		}
+
+	}
 }

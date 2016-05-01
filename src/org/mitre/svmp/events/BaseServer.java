@@ -79,6 +79,7 @@ public abstract class BaseServer implements Constants {
 	private StreamHandler streamhandler = null;
 
 	private boolean sendFrames = true;
+	private boolean sendFrameRunning = false;
 
 	public BaseServer(Context context) throws IOException {
 		this.context = context;
@@ -179,7 +180,11 @@ public abstract class BaseServer implements Constants {
 
 				switch(msg.getType()) {
 				case STREAM:
-					new Thread(new FrameSender()).start();
+					sendFrames = true;
+					if(!sendFrameRunning){
+						new Thread(new FrameSender()).start();
+					}
+					
 					break;
 				case SCREENINFO:
 					handleScreenInfo(msg);
@@ -353,6 +358,7 @@ public abstract class BaseServer implements Constants {
 
 		@Override
 		public void run() {
+			sendFrameRunning = true;
 			try{
 				while(sendFrames){
 					//	    		byte [] frameBytes = GetFrameBuffer("");
@@ -361,6 +367,7 @@ public abstract class BaseServer implements Constants {
 				}
 			}catch(Exception e){
 				sendFrames = false;
+				sendFrameRunning = false;
 				Log.e(TAG, "out of the loop as error");
 				e.printStackTrace();
 			}

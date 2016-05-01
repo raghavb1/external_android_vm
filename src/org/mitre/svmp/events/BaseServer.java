@@ -249,7 +249,7 @@ public abstract class BaseServer implements Constants {
 			//                webrtcHandler.disconnectAndExit();
 			//            }
 			//			sendFrames = false;
-						sendFrameRunning = false;
+//						sendFrameRunning = false;
 			try {
 				proxyIn.close();
 				proxyOut.close();
@@ -353,13 +353,13 @@ public abstract class BaseServer implements Constants {
 		SockClientWrite(sockfd, message);
 	}
 
-	public void handleShareScreenRequest() throws IOException {
-		while(sendFrames){
-			//    		byte [] frameBytes = GetFrameBuffer("");
-			byte[] frameBytes = streamhandler.getScreenBitmap();
-			streamhandler.handleShareScreenRequest(frameBytes);
-		}
-	}
+//	public void handleShareScreenRequest() throws IOException {
+//		while(sendFrames){
+//			//    		byte [] frameBytes = GetFrameBuffer("");
+//			byte[] frameBytes = streamhandler.getScreenBitmap();
+//			streamhandler.handleShareScreenRequest(frameBytes);
+//		}
+//	}
 
 	//	private class FrameSender implements Runnable {
 	//

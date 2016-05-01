@@ -180,10 +180,10 @@ public abstract class BaseServer implements Constants {
 
 				switch(msg.getType()) {
 				case STREAM:
-					sendFrames = true;
-					if(!sendFrameRunning){
+//					sendFrames = true;
+//					if(!sendFrameRunning){
 						new Thread(new FrameSender()).start();
-					}
+//					}
 					
 					break;
 				case SCREENINFO:
@@ -192,6 +192,7 @@ public abstract class BaseServer implements Constants {
 				case TOUCHEVENT:
 					//webrtcHandler.pauseVideoStream();
 					handleTouch(msg.getTouchList());
+					new Thread(new FrameSender()).start();
 					//webrtcHandler.resumeVideoStream();
 					break;
 				case SENSOREVENT:
@@ -242,7 +243,8 @@ public abstract class BaseServer implements Constants {
 			//            if (webrtcHandler != null) {
 			//                webrtcHandler.disconnectAndExit();
 			//            }
-			sendFrames = false;
+//			sendFrames = false;
+//			sendFrameRunning = false;
 			try {
 				proxyIn.close();
 				proxyOut.close();
@@ -358,19 +360,22 @@ public abstract class BaseServer implements Constants {
 
 		@Override
 		public void run() {
-			sendFrameRunning = true;
+//			sendFrameRunning = true;
 			try{
-				while(sendFrames){
+//				while(sendFrames){
+				for(int i = 0; i<100; i++){
 					//	    		byte [] frameBytes = GetFrameBuffer("");
 					byte[] frameBytes = streamhandler.getScreenBitmap();
 					streamhandler.handleShareScreenRequest(frameBytes);
 				}
 			}catch(Exception e){
-				sendFrames = false;
-				sendFrameRunning = false;
+//				sendFrames = false;
+//				sendFrameRunning = false;
 				Log.e(TAG, "out of the loop as error");
 				e.printStackTrace();
 			}
+//			sendFrames = false;
+//			sendFrameRunning = false;
 
 		}
 

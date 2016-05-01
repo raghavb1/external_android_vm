@@ -182,14 +182,14 @@ public abstract class BaseServer implements Constants {
 
 				switch(msg.getType()) {
 				case STREAM:
-//					sendFrames = true;
-//					if(!sendFrameRunning){
-//						new Thread(new FrameSender()).start();
-//					}
+					//					sendFrames = true;
+					//					if(!sendFrameRunning){
+					//						new Thread(new FrameSender()).start();
+					//					}
 					if(!sendFrameRunning){
 						startFrameThread();
 					}
-					
+
 					break;
 				case SCREENINFO:
 					handleScreenInfo(msg);
@@ -197,7 +197,7 @@ public abstract class BaseServer implements Constants {
 				case TOUCHEVENT:
 					//webrtcHandler.pauseVideoStream();
 					handleTouch(msg.getTouchList());
-//					new Thread(new FrameSender()).start();
+					//					new Thread(new FrameSender()).start();
 					//webrtcHandler.resumeVideoStream();
 					break;
 				case SENSOREVENT:
@@ -248,8 +248,8 @@ public abstract class BaseServer implements Constants {
 			//            if (webrtcHandler != null) {
 			//                webrtcHandler.disconnectAndExit();
 			//            }
-//			sendFrames = false;
-//			sendFrameRunning = false;
+			//			sendFrames = false;
+						sendFrameRunning = false;
 			try {
 				proxyIn.close();
 				proxyOut.close();
@@ -361,51 +361,52 @@ public abstract class BaseServer implements Constants {
 		}
 	}
 
-//	private class FrameSender implements Runnable {
-//
-//		private final Handler mHandler = new Handler();
-//		
-//		@Override
-//		public void run() {
-////			sendFrameRunning = true;
-//			try{
-////				while(sendFrames){
-////				for(int i = 0; i<20; i++){
-//					//	    		byte [] frameBytes = GetFrameBuffer("");
-//					byte[] frameBytes = streamhandler.getScreenBitmap();
-//					streamhandler.handleShareScreenRequest(frameBytes);
-////				}
-//			}catch(Exception e){
-//				
-////				sendFrames = false;
-////				sendFrameRunning = false;
-//				Log.e(TAG, "out of the loop as error");
-//				e.printStackTrace();
-//			}
-////			sendFrames = false;
-////			sendFrameRunning = false;
-//
-//		}
-//
-//	}
-	
+	//	private class FrameSender implements Runnable {
+	//
+	//		private final Handler mHandler = new Handler();
+	//		
+	//		@Override
+	//		public void run() {
+	////			sendFrameRunning = true;
+	//			try{
+	////				while(sendFrames){
+	////				for(int i = 0; i<20; i++){
+	//					//	    		byte [] frameBytes = GetFrameBuffer("");
+	//					byte[] frameBytes = streamhandler.getScreenBitmap();
+	//					streamhandler.handleShareScreenRequest(frameBytes);
+	////				}
+	//			}catch(Exception e){
+	//				
+	////				sendFrames = false;
+	////				sendFrameRunning = false;
+	//				Log.e(TAG, "out of the loop as error");
+	//				e.printStackTrace();
+	//			}
+	////			sendFrames = false;
+	////			sendFrameRunning = false;
+	//
+	//		}
+	//
+	//	}
+
 	private void startFrameThread(){
 		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
 		sendFrameRunning = true;
 		/*This schedules a runnable task every second*/
 		scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
 
-		  public void run() {
-				
-				try {
-					byte[] frameBytes = streamhandler.getScreenBitmap();
-					streamhandler.handleShareScreenRequest(frameBytes);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			public void run() {
+				if(sendFrameRunning){
+					try {
+						byte[] frameBytes = streamhandler.getScreenBitmap();
+						streamhandler.handleShareScreenRequest(frameBytes);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-				
-		  }
+
+			}
 		}, 0, 500, TimeUnit.MILLISECONDS);
 	}
 }

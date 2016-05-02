@@ -46,23 +46,23 @@ public class StreamHandler{
 		//
 		//			byte[] piex = getScreenBitmap();
 
-		System.out.println(" ******************** time before create response and after bitmap create ********************");
-		System.out.println(System.currentTimeMillis());
+//		System.out.println(" ******************** time before create response and after bitmap create ********************");
+//		System.out.println(System.currentTimeMillis());
 
 		byte [] compressed = compress(frameBytes);
 
-		System.out.println(" ******************** time after compress ********************");
-		System.out.println(System.currentTimeMillis());
+//		System.out.println(" ******************** time after compress ********************");
+//		System.out.println(System.currentTimeMillis());
 
 		Response response = buildScreenResponse(ByteString.copyFrom(compressed));
 
-		System.out.println("  ********************time after create response ********************");
-		System.out.println(System.currentTimeMillis());
+//		System.out.println("  ********************time after create response ********************");
+//		System.out.println(System.currentTimeMillis());
 
 		base.sendMessage(response);
 
-		System.out.println("time after send response ********************");
-		System.out.println(System.currentTimeMillis());
+//		System.out.println("time after send response ********************");
+//		System.out.println(System.currentTimeMillis());
 		//		}
 
 	}
@@ -92,8 +92,8 @@ public class StreamHandler{
 
 	public byte[] getScreenBitmap() throws IOException {
 
-		System.out.println(" ******************** time before bitmap create ********************");
-		System.out.println(System.currentTimeMillis());
+//		System.out.println(" ******************** time before bitmap create ********************");
+//		System.out.println(System.currentTimeMillis());
 		RandomAccessFile raf = new RandomAccessFile(new File(FB0FILE1), "r");
 		FileChannel fc = raf.getChannel();
 
@@ -122,8 +122,8 @@ public class StreamHandler{
 		outputStream.close();
 		deflater.end();
 		byte[] output = outputStream.toByteArray();  
-		System.out.println("Original: " + data.length);  
-		System.out.println("Compressed: " + output.length);  
+//		System.out.println("Original: " + data.length);  
+//		System.out.println("Compressed: " + output.length);  
 		return output;  
 	} 
 

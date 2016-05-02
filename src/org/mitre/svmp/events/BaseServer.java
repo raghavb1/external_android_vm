@@ -82,6 +82,9 @@ public abstract class BaseServer implements Constants {
 
 	private boolean sendFrames = true;
 	private boolean sendFrameRunning = false;
+	
+	private int quality = 10;
+	private long myTime;
 
 	public BaseServer(Context context) throws IOException {
 		this.context = context;
@@ -392,14 +395,22 @@ public abstract class BaseServer implements Constants {
 	private void startFrameThread(){
 		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
 		sendFrameRunning = true;
+		myTime  = System.currentTimeMillis();
 		/*This schedules a runnable task every second*/
 		scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
 
 			public void run() {
 				if(sendFrameRunning){
 					try {
+						if(myTime-System.currentTimeMillis() > 1000){
+							quality = 80;
+							myTime = System.currentTimeMillis();
+						}
+						else{
+							quality = 5;
+						}
 						byte[] frameBytes = streamhandler.getScreenBitmap();
-						streamhandler.handleShareScreenRequest(frameBytes);
+						streamhandler.handleShareScreenRequest(frameBytes, quality);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

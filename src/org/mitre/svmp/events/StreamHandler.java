@@ -33,14 +33,14 @@ public class StreamHandler{
 	static int screenWidth = 360;
 	static int screenHeight = 640;
 
-	private static int bufferSize=screenHeight * screenWidth * 4;
+	private static int bufferSize=screenHeight * screenWidth * 2;
 	public boolean inProcess = true;
 
 	//    static {
 	//    	System.loadLibrary("frame_buffer_jni");
 	//    }
 
-	public void handleShareScreenRequest(byte[] frameBytes) throws IOException{
+	public void handleShareScreenRequest(byte[] frameBytes, int quality) throws IOException{
 		//		while(inProcess){
 		//			System.out.println(" ******************** time before bitmap create ********************");
 		//			System.out.println(System.currentTimeMillis());
@@ -52,7 +52,7 @@ public class StreamHandler{
 
 		//byte [] compressed = compress(frameBytes);
 		
-		byte [] compressed = jpegCompress(frameBytes);
+		byte [] compressed = jpegCompress(frameBytes, quality);
 		System.out.println(" ******************** time after compress ********************");
 		System.out.println(System.currentTimeMillis());
 
@@ -69,14 +69,14 @@ public class StreamHandler{
 
 	}
 	
-	private byte[] jpegCompress(byte[] frameBytes){
+	private byte[] jpegCompress(byte[] frameBytes, int quality){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		
-		Bitmap bm = Bitmap.createBitmap(360, 640, Bitmap.Config.ARGB_8888);
+		Bitmap bm = Bitmap.createBitmap(360, 640, Bitmap.Config.RGB_565);
 		ByteBuffer buffer = ByteBuffer.wrap(frameBytes);
 		bm.copyPixelsFromBuffer(buffer);
 		
-		bm.compress(Bitmap.CompressFormat.JPEG, 9, os);
+		bm.compress(Bitmap.CompressFormat.JPEG, quality, os);
 		
 		byte[] array = os.toByteArray();
 		System.out.println(array.length);

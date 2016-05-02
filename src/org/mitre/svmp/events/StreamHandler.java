@@ -3,6 +3,7 @@ package org.mitre.svmp.events;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.zip.Deflater;
@@ -15,7 +16,6 @@ import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
 import com.google.protobuf.ByteString;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 public class StreamHandler{
 
@@ -71,7 +71,11 @@ public class StreamHandler{
 	
 	private byte[] jpegCompress(byte[] frameBytes){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		Bitmap bm = BitmapFactory.decodeByteArray(frameBytes, 0, frameBytes.length);
+		
+		Bitmap bm = Bitmap.createBitmap(360, 640, Bitmap.Config.RGB_565);
+		ByteBuffer buffer = ByteBuffer.wrap(frameBytes);
+		bm.copyPixelsFromBuffer(buffer);
+		
 		bm.compress(Bitmap.CompressFormat.JPEG, 10, os);
 		
 		byte[] array = os.toByteArray();

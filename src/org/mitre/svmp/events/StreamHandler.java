@@ -72,7 +72,7 @@ public class StreamHandler{
 	private byte[] jpegCompress(byte[] frameBytes){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		
-		Bitmap bm = Bitmap.createBitmap(360, 640, Bitmap.Config.RGB_565);
+		Bitmap bm = Bitmap.createBitmap(360, 640, Bitmap.Config.ARGB_8888);
 		ByteBuffer buffer = ByteBuffer.wrap(frameBytes);
 		bm.copyPixelsFromBuffer(buffer);
 		

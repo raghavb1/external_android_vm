@@ -407,6 +407,6 @@ public abstract class BaseServer implements Constants {
 				}
 
 			}
-		}, 0, 500, TimeUnit.MILLISECONDS);
+		}, 0, 100, TimeUnit.MILLISECONDS);
 	}
 }

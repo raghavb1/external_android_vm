@@ -76,7 +76,7 @@ public class StreamHandler{
 		ByteBuffer buffer = ByteBuffer.wrap(frameBytes);
 		bm.copyPixelsFromBuffer(buffer);
 		
-		bm.compress(Bitmap.CompressFormat.JPEG, 10, os);
+		bm.compress(Bitmap.CompressFormat.JPEG, 9, os);
 		
 		byte[] array = os.toByteArray();
 		System.out.println(array.length);

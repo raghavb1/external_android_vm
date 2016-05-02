@@ -33,7 +33,7 @@ public class StreamHandler{
 	static int screenWidth = 360;
 	static int screenHeight = 640;
 
-	private static int bufferSize=screenHeight * screenWidth * 2;
+	private static int bufferSize=screenHeight * screenWidth * 4;
 	public boolean inProcess = true;
 
 	//    static {

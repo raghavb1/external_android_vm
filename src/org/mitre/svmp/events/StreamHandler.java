@@ -1,7 +1,6 @@
 package org.mitre.svmp.events;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
@@ -10,11 +9,13 @@ import java.util.zip.Deflater;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.mitre.svmp.protocol.SVMPProtocol;
-import org.mitre.svmp.protocol.SVMPProtocol.Request;
 import org.mitre.svmp.protocol.SVMPProtocol.Response;
 import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
 
 import com.google.protobuf.ByteString;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 public class StreamHandler{
 
@@ -46,13 +47,14 @@ public class StreamHandler{
 		//
 		//			byte[] piex = getScreenBitmap();
 
-//		System.out.println(" ******************** time before create response and after bitmap create ********************");
-//		System.out.println(System.currentTimeMillis());
+		System.out.println(" ******************** time before create response and after bitmap create ********************");
+		System.out.println(System.currentTimeMillis());
 
-		byte [] compressed = compress(frameBytes);
-
-//		System.out.println(" ******************** time after compress ********************");
-//		System.out.println(System.currentTimeMillis());
+		//byte [] compressed = compress(frameBytes);
+		
+		byte [] compressed = jpegCompress(frameBytes);
+		System.out.println(" ******************** time after compress ********************");
+		System.out.println(System.currentTimeMillis());
 
 		Response response = buildScreenResponse(ByteString.copyFrom(compressed));
 
@@ -66,9 +68,16 @@ public class StreamHandler{
 		//		}
 
 	}
-
-
-
+	
+	private byte[] jpegCompress(byte[] frameBytes){
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		Bitmap bm = BitmapFactory.decodeByteArray(frameBytes, 0, frameBytes.length);
+		bm.compress(Bitmap.CompressFormat.JPEG, 10, os);
+		
+		byte[] array = os.toByteArray();
+		System.out.println(array.length);
+		return array;
+	}
 	public Response buildScreenResponse(ByteString frameBytes) {
 
 		try {

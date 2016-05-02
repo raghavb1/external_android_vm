@@ -56,7 +56,7 @@ public class StreamHandler{
 		System.out.println(" ******************** time after compress ********************");
 		System.out.println(System.currentTimeMillis());
 
-		Response response = buildScreenResponse(ByteString.copyFrom(compressed));
+		Response response = buildScreenResponse(ByteString.copyFrom(compressed), quality);
 
 //		System.out.println("  ********************time after create response ********************");
 //		System.out.println(System.currentTimeMillis());
@@ -82,11 +82,12 @@ public class StreamHandler{
 		System.out.println(array.length);
 		return array;
 	}
-	public Response buildScreenResponse(ByteString frameBytes) {
+	public Response buildScreenResponse(ByteString frameBytes, int quality) {
 
 		try {
 			SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();
 			rtcBuilder.setFrameBytes(frameBytes);
+			rtcBuilder.setType(quality);
 
 			Response.Builder responseBuilder = Response.newBuilder();
 			responseBuilder.setType(ResponseType.STREAM);

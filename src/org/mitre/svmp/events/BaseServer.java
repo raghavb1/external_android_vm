@@ -402,7 +402,7 @@ public abstract class BaseServer implements Constants {
 			public void run() {
 				if(sendFrameRunning){
 					try {
-						if(myTime-System.currentTimeMillis() > 1000){
+						if(System.currentTimeMillis() - myTime > 1000){
 							quality = 80;
 							myTime = System.currentTimeMillis();
 						}

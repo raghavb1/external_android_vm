@@ -6249,6 +6249,16 @@ public final class SVMPProtocol {
      * <code>optional bytes frameBytes = 1;</code>
      */
     com.google.protobuf.ByteString getFrameBytes();
+
+    // optional int32 type = 2;
+    /**
+     * <code>optional int32 type = 2;</code>
+     */
+    boolean hasType();
+    /**
+     * <code>optional int32 type = 2;</code>
+     */
+    int getType();
   }
   /**
    * Protobuf type {@code svmp.RTCMessage}
@@ -6302,6 +6312,11 @@ public final class SVMPProtocol {
               frameBytes_ = input.readBytes();
               break;
             }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              type_ = input.readInt32();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -6345,8 +6360,25 @@ public final class SVMPProtocol {
       return frameBytes_;
     }
 
+    // optional int32 type = 2;
+    public static final int TYPE_FIELD_NUMBER = 2;
+    private int type_;
+    /**
+     * <code>optional int32 type = 2;</code>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional int32 type = 2;</code>
+     */
+    public int getType() {
+      return type_;
+    }
+
     private void initFields() {
       frameBytes_ = com.google.protobuf.ByteString.EMPTY;
+      type_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6363,6 +6395,9 @@ public final class SVMPProtocol {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeBytes(1, frameBytes_);
       }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(2, type_);
+      }
     }
 
     private int memoizedSerializedSize = -1;
@@ -6374,6 +6409,10 @@ public final class SVMPProtocol {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(1, frameBytes_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, type_);
       }
       memoizedSerializedSize = size;
       return size;
@@ -6472,6 +6511,8 @@ public final class SVMPProtocol {
         super.clear();
         frameBytes_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000001);
+        type_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
@@ -6499,6 +6540,10 @@ public final class SVMPProtocol {
           to_bitField0_ |= 0x00000001;
         }
         result.frameBytes_ = frameBytes_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.type_ = type_;
         result.bitField0_ = to_bitField0_;
         return result;
       }
@@ -6507,6 +6552,9 @@ public final class SVMPProtocol {
         if (other == org.mitre.svmp.protocol.SVMPProtocol.RTCMessage.getDefaultInstance()) return this;
         if (other.hasFrameBytes()) {
           setFrameBytes(other.getFrameBytes());
+        }
+        if (other.hasType()) {
+          setType(other.getType());
         }
         return this;
       }
@@ -6566,6 +6614,39 @@ public final class SVMPProtocol {
       public Builder clearFrameBytes() {
         bitField0_ = (bitField0_ & ~0x00000001);
         frameBytes_ = getDefaultInstance().getFrameBytes();
+        
+        return this;
+      }
+
+      // optional int32 type = 2;
+      private int type_ ;
+      /**
+       * <code>optional int32 type = 2;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional int32 type = 2;</code>
+       */
+      public int getType() {
+        return type_;
+      }
+      /**
+       * <code>optional int32 type = 2;</code>
+       */
+      public Builder setType(int value) {
+        bitField0_ |= 0x00000002;
+        type_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional int32 type = 2;</code>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        type_ = 0;
         
         return this;
       }

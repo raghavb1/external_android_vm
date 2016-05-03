@@ -84,9 +84,7 @@ public abstract class BaseServer implements Constants {
 
 	private boolean sendFrames = true;
 	private boolean sendFrameRunning = false;
-	
-	private int quality = 10;
-	private long myTime;
+
 
 	public BaseServer(Context context) throws IOException {
 		this.context = context;
@@ -358,45 +356,10 @@ public abstract class BaseServer implements Constants {
 		SockClientWrite(sockfd, message);
 	}
 
-//	public void handleShareScreenRequest() throws IOException {
-//		while(sendFrames){
-//			//    		byte [] frameBytes = GetFrameBuffer("");
-//			byte[] frameBytes = streamhandler.getScreenBitmap();
-//			streamhandler.handleShareScreenRequest(frameBytes);
-//		}
-//	}
-
-	//	private class FrameSender implements Runnable {
-	//
-	//		private final Handler mHandler = new Handler();
-	//		
-	//		@Override
-	//		public void run() {
-	////			sendFrameRunning = true;
-	//			try{
-	////				while(sendFrames){
-	////				for(int i = 0; i<20; i++){
-	//					//	    		byte [] frameBytes = GetFrameBuffer("");
-	//					byte[] frameBytes = streamhandler.getScreenBitmap();
-	//					streamhandler.handleShareScreenRequest(frameBytes);
-	////				}
-	//			}catch(Exception e){
-	//				
-	////				sendFrames = false;
-	////				sendFrameRunning = false;
-	//				Log.e(TAG, "out of the loop as error");
-	//				e.printStackTrace();
-	//			}
-	////			sendFrames = false;
-	////			sendFrameRunning = false;
-	//
-	//		}
-	//
-	//	}
 
 	private void startFrameThread(){
 		sendFrameRunning = true;
-		startFrameThread(45,0,Bitmap.CompressFormat.JPEG);
+		startFrameThread(50,10,Bitmap.CompressFormat.JPEG);
 		startFrameThread(1000,80,Bitmap.CompressFormat.JPEG);
 	}
 	

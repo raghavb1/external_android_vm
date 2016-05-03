@@ -65,14 +65,15 @@ public class StreamHandler{
 		//
 		//			byte[] piex = getScreenBitmap();
 
-//		System.out.println(" ******************** time before create response and after bitmap create ********************");
-//		System.out.println(System.currentTimeMillis());
+		System.out.println(" ******************** time before create response and after bitmap create ********************");
+		System.out.println(System.currentTimeMillis());
 
 		//byte [] compressed = compress(frameBytes);
 		
 		byte [] compressed = dynamicCompress(frameBytes, quality, format);
-//		System.out.println(" ******************** time after compress ********************");
-//		System.out.println(System.currentTimeMillis());
+		compressed = compress(compressed);
+		System.out.println(" ******************** time after compress ********************");
+		System.out.println(System.currentTimeMillis());
 
 		Response response = buildScreenResponse(ByteString.copyFrom(compressed), quality);
 
@@ -154,8 +155,8 @@ public class StreamHandler{
 		outputStream.close();
 		deflater.end();
 		byte[] output = outputStream.toByteArray();  
-//		System.out.println("Original: " + data.length);  
-//		System.out.println("Compressed: " + output.length);  
+		System.out.println("Original: " + data.length);  
+		System.out.println("Compressed: " + output.length);  
 		return output;  
 	} 
 

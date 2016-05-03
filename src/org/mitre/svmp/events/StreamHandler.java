@@ -55,7 +55,9 @@ public class StreamHandler{
 		Display display = DisplayManagerGlobal.getInstance().getRealDisplay(Display.DEFAULT_DISPLAY);
 		Point screenSize = new Point();
         display.getRealSize(screenSize);
+        return screenSize;
 	}
+	
 	public void handleShareScreenRequest(byte[] frameBytes, int quality, CompressFormat format) throws IOException{
 		//		while(inProcess){
 		//			System.out.println(" ******************** time before bitmap create ********************");

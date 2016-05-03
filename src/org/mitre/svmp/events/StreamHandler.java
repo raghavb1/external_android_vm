@@ -54,10 +54,10 @@ public class StreamHandler{
 		IWindowManager windowManager = IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
 		Display display = DisplayManagerGlobal.getInstance().getRealDisplay(Display.DEFAULT_DISPLAY);
 		Point screenSize = new Point();
-        display.getRealSize(screenSize);
-        return screenSize;
+		display.getRealSize(screenSize);
+		return screenSize;
 	}
-	
+
 	public void handleShareScreenRequest(byte[] frameBytes, int quality, CompressFormat format) throws IOException{
 		//		while(inProcess){
 		//			System.out.println(" ******************** time before bitmap create ********************");
@@ -65,38 +65,43 @@ public class StreamHandler{
 		//
 		//			byte[] piex = getScreenBitmap();
 
-//		System.out.println(" ******************** time before create response and after bitmap create ********************");
-//		System.out.println(System.currentTimeMillis());
+		//		System.out.println(" ******************** time before create response and after bitmap create ********************");
+		//		System.out.println(System.currentTimeMillis());
 
 		//byte [] compressed = compress(frameBytes);
-		
+
 		byte [] compressed = dynamicCompress(frameBytes, quality, format);
-//		compressed = compress(compressed);
-//		System.out.println(" ******************** time after compress ********************");
-//		System.out.println(System.currentTimeMillis());
+		//		compressed = compress(compressed);
+		//		System.out.println(" ******************** time after compress ********************");
+		//		System.out.println(System.currentTimeMillis());
 
 		Response response = buildScreenResponse(ByteString.copyFrom(compressed), quality);
 
-//		System.out.println("  ********************time after create response ********************");
-//		System.out.println(System.currentTimeMillis());
+		//		System.out.println("  ********************time after create response ********************");
+		//		System.out.println(System.currentTimeMillis());
 
 		base.sendMessage(response);
 
-//		System.out.println("time after send response ********************");
-//		System.out.println(System.currentTimeMillis());
+		//		System.out.println("time after send response ********************");
+		//		System.out.println(System.currentTimeMillis());
 		//		}
 
 	}
-	
+
 	private byte[] dynamicCompress(byte[] frameBytes, int quality, CompressFormat compressFormat){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		
+
 		Bitmap bm = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
 		ByteBuffer buffer = ByteBuffer.wrap(frameBytes);
 		bm.copyPixelsFromBuffer(buffer);
-		
-		bm.compress(compressFormat, quality, os);
-		
+
+		if(quality > 50){
+			bm.compress(compressFormat, quality, os);
+		}else{
+			Bitmap result = Bitmap.createScaledBitmap(bm, screenWidth/2, screenWidth/2, false);
+			result.compress(compressFormat, 100, os);
+		}
+
 		byte[] array = os.toByteArray();
 		System.out.println(array.length);
 		return array;
@@ -125,8 +130,8 @@ public class StreamHandler{
 
 	public byte[] getScreenBitmap() throws IOException {
 
-//		System.out.println(" ******************** time before bitmap create ********************");
-//		System.out.println(System.currentTimeMillis());
+		//		System.out.println(" ******************** time before bitmap create ********************");
+		//		System.out.println(System.currentTimeMillis());
 		RandomAccessFile raf = new RandomAccessFile(new File(FB0FILE1), "r");
 		FileChannel fc = raf.getChannel();
 
@@ -155,8 +160,8 @@ public class StreamHandler{
 		outputStream.close();
 		deflater.end();
 		byte[] output = outputStream.toByteArray();  
-//		System.out.println("Original: " + data.length);  
-//		System.out.println("Compressed: " + output.length);  
+		//		System.out.println("Original: " + data.length);  
+		//		System.out.println("Compressed: " + output.length);  
 		return output;  
 	} 
 

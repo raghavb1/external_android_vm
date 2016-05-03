@@ -397,7 +397,7 @@ public abstract class BaseServer implements Constants {
 	private void startFrameThread(){
 		sendFrameRunning = true;
 		startFrameThread(45,0,Bitmap.CompressFormat.JPEG);
-		startFrameThread(1000,50,Bitmap.CompressFormat.WEBP);
+		startFrameThread(1000,80,Bitmap.CompressFormat.JPEG);
 	}
 	
 	private void startFrameThread(int time, final int quality, final CompressFormat format){

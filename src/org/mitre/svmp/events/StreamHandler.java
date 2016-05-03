@@ -16,7 +16,16 @@ import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
 import com.google.protobuf.ByteString;
 
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.Bitmap.CompressFormat;
+import android.view.Display;
+
+import android.os.ServiceManager;
+import android.view.IWindowManager;
+import android.view.WindowManagerImpl;
+import android.hardware.display.DisplayManagerGlobal;
+
+import android.graphics.Point;
 
 public class StreamHandler{
 
@@ -31,8 +40,8 @@ public class StreamHandler{
 
 	final static String FB0FILE1 = "/dev/graphics/fb0";
 
-	static int screenWidth = 720;
-	static int screenHeight = 1280;
+	static int screenWidth = getScreenSize().x;
+	static int screenHeight = getScreenSize().y;
 	static int bytesPerPixel = 2;
 	static int totalPixels = screenHeight * screenWidth;
 	private static int bufferSize=totalPixels * bytesPerPixel;
@@ -41,7 +50,12 @@ public class StreamHandler{
 	//    static {
 	//    	System.loadLibrary("frame_buffer_jni");
 	//    }
-
+	private static Point getScreenSize(){
+		IWindowManager windowManager = IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
+		Display display = DisplayManagerGlobal.getInstance().getRealDisplay(Display.DEFAULT_DISPLAY);
+		Point screenSize = new Point();
+        display.getRealSize(screenSize);
+	}
 	public void handleShareScreenRequest(byte[] frameBytes, int quality, CompressFormat format) throws IOException{
 		//		while(inProcess){
 		//			System.out.println(" ******************** time before bitmap create ********************");

@@ -65,15 +65,15 @@ public class StreamHandler{
 		//
 		//			byte[] piex = getScreenBitmap();
 
-		//		System.out.println(" ******************** time before create response and after bitmap create ********************");
-		//		System.out.println(System.currentTimeMillis());
+		System.out.println(" ******************** time before create response and after bitmap create ********************");
+		System.out.println(System.currentTimeMillis());
 
 		//byte [] compressed = compress(frameBytes);
 
 		byte [] compressed = dynamicCompress(frameBytes, quality, format);
 		//		compressed = compress(compressed);
-		//		System.out.println(" ******************** time after compress ********************");
-		//		System.out.println(System.currentTimeMillis());
+		System.out.println(" ******************** time after compress ********************");
+		System.out.println(System.currentTimeMillis());
 
 		Response response = buildScreenResponse(ByteString.copyFrom(compressed), quality);
 

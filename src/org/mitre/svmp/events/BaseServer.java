@@ -193,7 +193,7 @@ public abstract class BaseServer implements Constants {
 					//						new Thread(new FrameSender()).start();
 					//					}
 					if(!sendFrameRunning){
-						startFrameThread();
+						startFrameThread(msg);
 					}
 
 					break;
@@ -370,10 +370,11 @@ public abstract class BaseServer implements Constants {
 	}
 
 
-	private void startFrameThread(){
+	private void startFrameThread(final Request request){
 		sendFrameRunning = true;
-		startFrameThread(50,5,Bitmap.CompressFormat.JPEG);
-		startFrameThread(1000,variableQuality,Bitmap.CompressFormat.JPEG);
+		variableQuality = request.getStream().getQuality();
+		startFrameThread(50,50,Bitmap.CompressFormat.JPEG);
+		startFrameThread(500,variableQuality,Bitmap.CompressFormat.JPEG);
 	}
 	
 	private void startFrameThread(int time, final int quality, final CompressFormat format){

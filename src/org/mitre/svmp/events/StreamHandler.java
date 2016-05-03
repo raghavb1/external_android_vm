@@ -98,8 +98,8 @@ public class StreamHandler{
 		if(quality > 50){
 			bm.compress(compressFormat, quality, os);
 		}else{
-			Bitmap result = Bitmap.createScaledBitmap(bm, screenWidth/4, screenWidth/4, false);
-			result.compress(compressFormat, 100, os);
+			Bitmap result = Bitmap.createScaledBitmap(bm, screenWidth/2, screenWidth/2, false);
+			result.compress(compressFormat, quality, os);
 		}
 
 		byte[] array = os.toByteArray();
@@ -111,7 +111,7 @@ public class StreamHandler{
 		try {
 			SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();
 			rtcBuilder.setFrameBytes(frameBytes);
-			rtcBuilder.setType(quality);
+			rtcBuilder.setQuality(quality);
 
 			Response.Builder responseBuilder = Response.newBuilder();
 			responseBuilder.setType(ResponseType.STREAM);

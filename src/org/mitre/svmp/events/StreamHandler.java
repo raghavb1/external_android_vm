@@ -30,10 +30,11 @@ public class StreamHandler{
 
 	final static String FB0FILE1 = "/dev/graphics/fb0";
 
-	static int screenWidth = 360;
-	static int screenHeight = 640;
-
-	private static int bufferSize=screenHeight * screenWidth * 2;
+	static int screenWidth = 720;
+	static int screenHeight = 1280;
+	static int bytesPerPixel = 2;
+	static int totalPixels = screenHeight * screenWidth;
+	private static int bufferSize=totalPixels * bytesPerPixel;
 	public boolean inProcess = true;
 
 	//    static {
@@ -72,7 +73,7 @@ public class StreamHandler{
 	private byte[] jpegCompress(byte[] frameBytes, int quality){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		
-		Bitmap bm = Bitmap.createBitmap(360, 640, Bitmap.Config.RGB_565);
+		Bitmap bm = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
 		ByteBuffer buffer = ByteBuffer.wrap(frameBytes);
 		bm.copyPixelsFromBuffer(buffer);
 		

@@ -84,6 +84,9 @@ public abstract class BaseServer implements Constants {
 
 	private boolean sendFrames = true;
 	private boolean sendFrameRunning = false;
+	
+	private int variableQuality = 80;
+	private Object touchLock = new Object();
 
 
 	public BaseServer(Context context) throws IOException {
@@ -200,6 +203,10 @@ public abstract class BaseServer implements Constants {
 				case TOUCHEVENT:
 					//webrtcHandler.pauseVideoStream();
 					handleTouch(msg.getTouchList());
+//					synchronized(touchLock){
+//						new MyThread().start();
+//					}
+
 					//					new Thread(new FrameSender()).start();
 					//webrtcHandler.resumeVideoStream();
 					break;
@@ -268,17 +275,23 @@ public abstract class BaseServer implements Constants {
 		}
 	}
 
-	//    private void initWebRTC(SVMPProtocol.Request msg) {
-	//        // only ever create one WebRTC handler
-	//        if (webrtcHandler == null) {
-	//            Log.d(TAG, "Creating new WebRTC Handler.");
-	//            // the video parameters won't change from one session to the next
-	//            webrtcHandler = new WebrtcHandler(BaseServer.this, msg.getVideoInfo(), context);
-	//        } else {
-	//            Log.d(TAG, "Reusing existing WebRTC Handler.");
-	//        }
-	//    }
-	// 
+	public class MyThread extends Thread {
+		@Override
+		public void run() {
+			variableQuality = 10;
+			for(int i =0; i <2; i++){
+				variableQuality += 30;
+				
+				try {
+					sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	protected void sendMessage(Response message) {
 		// use synchronized statement to ensure only one message gets sent at a time
 		synchronized(sendMessageLock) {
@@ -359,12 +372,12 @@ public abstract class BaseServer implements Constants {
 
 	private void startFrameThread(){
 		sendFrameRunning = true;
-		startFrameThread(50,10,Bitmap.CompressFormat.JPEG);
-		startFrameThread(1000,80,Bitmap.CompressFormat.JPEG);
+		startFrameThread(50,5,Bitmap.CompressFormat.JPEG);
+		startFrameThread(1000,variableQuality,Bitmap.CompressFormat.JPEG);
 	}
 	
 	private void startFrameThread(int time, final int quality, final CompressFormat format){
-		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
+		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
 		/*This schedules a runnable task every second*/
 		scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
 

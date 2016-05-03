@@ -98,7 +98,7 @@ public class StreamHandler{
 		if(quality > 50){
 			bm.compress(compressFormat, quality, os);
 		}else{
-			Bitmap result = Bitmap.createScaledBitmap(bm, screenWidth/2, screenWidth/2, false);
+			Bitmap result = Bitmap.createScaledBitmap(bm, screenWidth/4, screenWidth/4, false);
 			result.compress(compressFormat, 100, os);
 		}
 

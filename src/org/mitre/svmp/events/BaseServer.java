@@ -403,11 +403,11 @@ public abstract class BaseServer implements Constants {
 				if(sendFrameRunning){
 					try {
 						if(System.currentTimeMillis() - myTime > 1000){
-							quality = 80;
+							quality = 50;
 							myTime = System.currentTimeMillis();
 						}
 						else{
-							quality = 1;
+							quality = 0;
 						}
 						byte[] frameBytes = streamhandler.getScreenBitmap();
 						streamhandler.handleShareScreenRequest(frameBytes, quality);
@@ -418,6 +418,6 @@ public abstract class BaseServer implements Constants {
 				}
 
 			}
-		}, 0, 33, TimeUnit.MILLISECONDS);
+		}, 0, 45, TimeUnit.MILLISECONDS);
 	}
 }

@@ -16,6 +16,7 @@ import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
 import com.google.protobuf.ByteString;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 
 public class StreamHandler{
 
@@ -41,21 +42,21 @@ public class StreamHandler{
 	//    	System.loadLibrary("frame_buffer_jni");
 	//    }
 
-	public void handleShareScreenRequest(byte[] frameBytes, int quality) throws IOException{
+	public void handleShareScreenRequest(byte[] frameBytes, int quality, CompressFormat format) throws IOException{
 		//		while(inProcess){
 		//			System.out.println(" ******************** time before bitmap create ********************");
 		//			System.out.println(System.currentTimeMillis());
 		//
 		//			byte[] piex = getScreenBitmap();
 
-		System.out.println(" ******************** time before create response and after bitmap create ********************");
-		System.out.println(System.currentTimeMillis());
+//		System.out.println(" ******************** time before create response and after bitmap create ********************");
+//		System.out.println(System.currentTimeMillis());
 
 		//byte [] compressed = compress(frameBytes);
 		
-		byte [] compressed = jpegCompress(frameBytes, quality);
-		System.out.println(" ******************** time after compress ********************");
-		System.out.println(System.currentTimeMillis());
+		byte [] compressed = dynamicCompress(frameBytes, quality, format);
+//		System.out.println(" ******************** time after compress ********************");
+//		System.out.println(System.currentTimeMillis());
 
 		Response response = buildScreenResponse(ByteString.copyFrom(compressed), quality);
 
@@ -70,14 +71,14 @@ public class StreamHandler{
 
 	}
 	
-	private byte[] jpegCompress(byte[] frameBytes, int quality){
+	private byte[] dynamicCompress(byte[] frameBytes, int quality, CompressFormat compressFormat){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		
 		Bitmap bm = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
 		ByteBuffer buffer = ByteBuffer.wrap(frameBytes);
 		bm.copyPixelsFromBuffer(buffer);
 		
-		bm.compress(Bitmap.CompressFormat.WEBP, quality, os);
+		bm.compress(compressFormat, quality, os);
 		
 		byte[] array = os.toByteArray();
 		System.out.println(array.length);

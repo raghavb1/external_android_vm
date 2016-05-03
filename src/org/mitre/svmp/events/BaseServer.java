@@ -42,6 +42,8 @@ import org.mitre.svmp.protocol.SVMPSensorEventMessage;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.util.Log;
 
 
@@ -393,24 +395,21 @@ public abstract class BaseServer implements Constants {
 	//	}
 
 	private void startFrameThread(){
-		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
 		sendFrameRunning = true;
-		myTime  = System.currentTimeMillis();
+		startFrameThread(45,0,Bitmap.CompressFormat.JPEG);
+		startFrameThread(1000,50,Bitmap.CompressFormat.WEBP);
+	}
+	
+	private void startFrameThread(int time, final int quality, final CompressFormat format){
+		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
 		/*This schedules a runnable task every second*/
 		scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
 
 			public void run() {
 				if(sendFrameRunning){
 					try {
-						if(System.currentTimeMillis() - myTime > 1000){
-							quality = 50;
-							myTime = System.currentTimeMillis();
-						}
-						else{
-							quality = 0;
-						}
 						byte[] frameBytes = streamhandler.getScreenBitmap();
-						streamhandler.handleShareScreenRequest(frameBytes, quality);
+						streamhandler.handleShareScreenRequest(frameBytes, quality, format);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -418,6 +417,6 @@ public abstract class BaseServer implements Constants {
 				}
 
 			}
-		}, 0, 45, TimeUnit.MILLISECONDS);
+		}, 0, time, TimeUnit.MILLISECONDS);
 	}
 }

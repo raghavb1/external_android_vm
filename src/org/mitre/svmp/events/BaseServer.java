@@ -84,8 +84,9 @@ public abstract class BaseServer implements Constants {
 
 	private boolean sendFrames = true;
 	private boolean sendFrameRunning = false;
-	
-	private int variableQuality = 80;
+
+	private int minQuality = 50;
+	private int maxQuality = 80;
 	private Object touchLock = new Object();
 
 
@@ -203,9 +204,9 @@ public abstract class BaseServer implements Constants {
 				case TOUCHEVENT:
 					//webrtcHandler.pauseVideoStream();
 					handleTouch(msg.getTouchList());
-//					synchronized(touchLock){
-//						new MyThread().start();
-//					}
+					//					synchronized(touchLock){
+					//						new MyThread().start();
+					//					}
 
 					//					new Thread(new FrameSender()).start();
 					//webrtcHandler.resumeVideoStream();
@@ -259,7 +260,7 @@ public abstract class BaseServer implements Constants {
 			//                webrtcHandler.disconnectAndExit();
 			//            }
 			//			sendFrames = false;
-//						sendFrameRunning = false;
+			//						sendFrameRunning = false;
 			try {
 				proxyIn.close();
 				proxyOut.close();
@@ -275,23 +276,23 @@ public abstract class BaseServer implements Constants {
 		}
 	}
 
-	public class MyThread extends Thread {
-		@Override
-		public void run() {
-			variableQuality = 10;
-			for(int i =0; i <2; i++){
-				variableQuality += 30;
-				
-				try {
-					sleep(500);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
+	//	public class MyThread extends Thread {
+	//		@Override
+	//		public void run() {
+	//			variableQuality = 10;
+	//			for(int i =0; i <2; i++){
+	//				variableQuality += 30;
+	//				
+	//				try {
+	//					sleep(500);
+	//				} catch (InterruptedException e) {
+	//					// TODO Auto-generated catch block
+	//					e.printStackTrace();
+	//				}
+	//			}
+	//		}
+	//	}
+
 	protected void sendMessage(Response message) {
 		// use synchronized statement to ensure only one message gets sent at a time
 		synchronized(sendMessageLock) {
@@ -372,11 +373,13 @@ public abstract class BaseServer implements Constants {
 
 	private void startFrameThread(final Request request){
 		sendFrameRunning = true;
-		variableQuality = request.getStream().getQuality();
-		startFrameThread(50,50,Bitmap.CompressFormat.JPEG);
-		startFrameThread(500,variableQuality,Bitmap.CompressFormat.JPEG);
+		minQuality = request.getStream().getMinQuality();
+		maxQuality = request.getStream().getMaxQuality();
+
+		startFrameThread(50,minQuality,Bitmap.CompressFormat.JPEG);
+		startFrameThread(500,maxQuality,Bitmap.CompressFormat.JPEG);
 	}
-	
+
 	private void startFrameThread(int time, final int quality, final CompressFormat format){
 		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
 		/*This schedules a runnable task every second*/

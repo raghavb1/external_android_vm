@@ -6367,15 +6367,25 @@ public final class SVMPProtocol {
      */
     com.google.protobuf.ByteString getFrameBytes();
 
-    // optional int32 quality = 2;
+    // optional int32 minQuality = 2;
     /**
-     * <code>optional int32 quality = 2;</code>
+     * <code>optional int32 minQuality = 2;</code>
      */
-    boolean hasQuality();
+    boolean hasMinQuality();
     /**
-     * <code>optional int32 quality = 2;</code>
+     * <code>optional int32 minQuality = 2;</code>
      */
-    int getQuality();
+    int getMinQuality();
+
+    // optional int32 maxQuality = 3;
+    /**
+     * <code>optional int32 maxQuality = 3;</code>
+     */
+    boolean hasMaxQuality();
+    /**
+     * <code>optional int32 maxQuality = 3;</code>
+     */
+    int getMaxQuality();
   }
   /**
    * Protobuf type {@code svmp.RTCMessage}
@@ -6431,7 +6441,12 @@ public final class SVMPProtocol {
             }
             case 16: {
               bitField0_ |= 0x00000002;
-              quality_ = input.readInt32();
+              minQuality_ = input.readInt32();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              maxQuality_ = input.readInt32();
               break;
             }
           }
@@ -6477,25 +6492,42 @@ public final class SVMPProtocol {
       return frameBytes_;
     }
 
-    // optional int32 quality = 2;
-    public static final int QUALITY_FIELD_NUMBER = 2;
-    private int quality_;
+    // optional int32 minQuality = 2;
+    public static final int MINQUALITY_FIELD_NUMBER = 2;
+    private int minQuality_;
     /**
-     * <code>optional int32 quality = 2;</code>
+     * <code>optional int32 minQuality = 2;</code>
      */
-    public boolean hasQuality() {
+    public boolean hasMinQuality() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional int32 quality = 2;</code>
+     * <code>optional int32 minQuality = 2;</code>
      */
-    public int getQuality() {
-      return quality_;
+    public int getMinQuality() {
+      return minQuality_;
+    }
+
+    // optional int32 maxQuality = 3;
+    public static final int MAXQUALITY_FIELD_NUMBER = 3;
+    private int maxQuality_;
+    /**
+     * <code>optional int32 maxQuality = 3;</code>
+     */
+    public boolean hasMaxQuality() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional int32 maxQuality = 3;</code>
+     */
+    public int getMaxQuality() {
+      return maxQuality_;
     }
 
     private void initFields() {
       frameBytes_ = com.google.protobuf.ByteString.EMPTY;
-      quality_ = 0;
+      minQuality_ = 0;
+      maxQuality_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6513,7 +6545,10 @@ public final class SVMPProtocol {
         output.writeBytes(1, frameBytes_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, quality_);
+        output.writeInt32(2, minQuality_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, maxQuality_);
       }
     }
 
@@ -6529,7 +6564,11 @@ public final class SVMPProtocol {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, quality_);
+          .computeInt32Size(2, minQuality_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, maxQuality_);
       }
       memoizedSerializedSize = size;
       return size;
@@ -6628,8 +6667,10 @@ public final class SVMPProtocol {
         super.clear();
         frameBytes_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000001);
-        quality_ = 0;
+        minQuality_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
+        maxQuality_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -6660,7 +6701,11 @@ public final class SVMPProtocol {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.quality_ = quality_;
+        result.minQuality_ = minQuality_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.maxQuality_ = maxQuality_;
         result.bitField0_ = to_bitField0_;
         return result;
       }
@@ -6670,8 +6715,11 @@ public final class SVMPProtocol {
         if (other.hasFrameBytes()) {
           setFrameBytes(other.getFrameBytes());
         }
-        if (other.hasQuality()) {
-          setQuality(other.getQuality());
+        if (other.hasMinQuality()) {
+          setMinQuality(other.getMinQuality());
+        }
+        if (other.hasMaxQuality()) {
+          setMaxQuality(other.getMaxQuality());
         }
         return this;
       }
@@ -6735,35 +6783,68 @@ public final class SVMPProtocol {
         return this;
       }
 
-      // optional int32 quality = 2;
-      private int quality_ ;
+      // optional int32 minQuality = 2;
+      private int minQuality_ ;
       /**
-       * <code>optional int32 quality = 2;</code>
+       * <code>optional int32 minQuality = 2;</code>
        */
-      public boolean hasQuality() {
+      public boolean hasMinQuality() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional int32 quality = 2;</code>
+       * <code>optional int32 minQuality = 2;</code>
        */
-      public int getQuality() {
-        return quality_;
+      public int getMinQuality() {
+        return minQuality_;
       }
       /**
-       * <code>optional int32 quality = 2;</code>
+       * <code>optional int32 minQuality = 2;</code>
        */
-      public Builder setQuality(int value) {
+      public Builder setMinQuality(int value) {
         bitField0_ |= 0x00000002;
-        quality_ = value;
+        minQuality_ = value;
         
         return this;
       }
       /**
-       * <code>optional int32 quality = 2;</code>
+       * <code>optional int32 minQuality = 2;</code>
        */
-      public Builder clearQuality() {
+      public Builder clearMinQuality() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        quality_ = 0;
+        minQuality_ = 0;
+        
+        return this;
+      }
+
+      // optional int32 maxQuality = 3;
+      private int maxQuality_ ;
+      /**
+       * <code>optional int32 maxQuality = 3;</code>
+       */
+      public boolean hasMaxQuality() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional int32 maxQuality = 3;</code>
+       */
+      public int getMaxQuality() {
+        return maxQuality_;
+      }
+      /**
+       * <code>optional int32 maxQuality = 3;</code>
+       */
+      public Builder setMaxQuality(int value) {
+        bitField0_ |= 0x00000004;
+        maxQuality_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional int32 maxQuality = 3;</code>
+       */
+      public Builder clearMaxQuality() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        maxQuality_ = 0;
         
         return this;
       }

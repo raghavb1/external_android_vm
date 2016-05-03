@@ -111,7 +111,7 @@ public class StreamHandler{
 		try {
 			SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();
 			rtcBuilder.setFrameBytes(frameBytes);
-			rtcBuilder.setQuality(quality);
+			rtcBuilder.setMaxQuality(quality);
 
 			Response.Builder responseBuilder = Response.newBuilder();
 			responseBuilder.setType(ResponseType.STREAM);

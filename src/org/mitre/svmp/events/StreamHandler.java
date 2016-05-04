@@ -95,13 +95,10 @@ public class StreamHandler{
 		ByteBuffer buffer = ByteBuffer.wrap(frameBytes);
 		bm.copyPixelsFromBuffer(buffer);
 
-		if(!toScale){
-			bm.compress(compressFormat, quality, os);
-		}else{
-			Bitmap result = Bitmap.createScaledBitmap(bm, screenWidth/2, screenWidth/2, false);
-			result.compress(compressFormat, quality, os);
+		if(toScale){
+			bm = Bitmap.createScaledBitmap(bm, screenWidth/2, screenWidth/2, true);
 		}
-
+		bm.compress(compressFormat, quality, os);
 		byte[] array = os.toByteArray();
 		System.out.println(array.length);
 		return array;
@@ -146,6 +143,15 @@ public class StreamHandler{
 
 	}
 
+//	FileChannel fc = raf.getChannel();
+//	int start = 0;
+//	byte[] piex = new byte[bufferSize];
+//	ByteBuffer bb = ByteBuffer.allocate(bufferSize);
+//	for(int i=0;i<4; i++){
+//		start += bufferSize/4;
+//		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, start, bufferSize/4);
+//		bb.amem.asReadOnlyBuffer();
+//	}
 	public static byte[] compress(byte[] data) throws IOException {  
 		Deflater deflater = new Deflater();
 		deflater.setLevel(Deflater.BEST_SPEED);

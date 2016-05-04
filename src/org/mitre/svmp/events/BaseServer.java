@@ -385,7 +385,7 @@ public abstract class BaseServer implements Constants {
 		
 		if(!sendFrameRunning){
 			sendFrameRunning = true;
-			minThread = startFrameThread(50,minQuality,Bitmap.CompressFormat.JPEG,true);
+			minThread = startFrameThread(50,minQuality,Bitmap.CompressFormat.JPEG,false);
 			maxThread = startFrameThread(1000,maxQuality,Bitmap.CompressFormat.JPEG, false);
 		}
 	}

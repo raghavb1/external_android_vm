@@ -263,6 +263,7 @@ public abstract class BaseServer implements Constants {
 			//            }
 			//			sendFrames = false;
 			//						sendFrameRunning = false;
+			killStreams();
 			try {
 				proxyIn.close();
 				proxyOut.close();
@@ -378,21 +379,25 @@ public abstract class BaseServer implements Constants {
 		minQuality = request.getStream().getMinQuality();
 		maxQuality = request.getStream().getMaxQuality();
 		
-		if(minThread != null)
-			minThread.shutdown();
-		if(maxThread != null)
-			maxThread.shutdown();
+		killStreams();
 		
 		sendFrameRunning = false;
 		
 		if(!sendFrameRunning){
 			sendFrameRunning = true;
-			minThread = startFrameThread(50,minQuality,Bitmap.CompressFormat.JPEG);
-			maxThread = startFrameThread(1000,maxQuality,Bitmap.CompressFormat.JPEG);
+			minThread = startFrameThread(50,minQuality,Bitmap.CompressFormat.JPEG,true);
+			maxThread = startFrameThread(1000,maxQuality,Bitmap.CompressFormat.JPEG, false);
 		}
 	}
+	
+	private void killStreams(){
+		if(minThread != null)
+			minThread.shutdown();
+		if(maxThread != null)
+			maxThread.shutdown();
+	}
 
-	private ScheduledExecutorService startFrameThread(int time, final int quality, final CompressFormat format){
+	private ScheduledExecutorService startFrameThread(int time, final int quality, final CompressFormat format, final boolean toScale){
 		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
 		/*This schedules a runnable task every second*/
 
@@ -402,7 +407,7 @@ public abstract class BaseServer implements Constants {
 				if(sendFrameRunning){
 					try {
 						byte[] frameBytes = streamhandler.getScreenBitmap();
-						streamhandler.handleShareScreenRequest(frameBytes, quality, format);
+						streamhandler.handleShareScreenRequest(frameBytes, quality, format, toScale);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

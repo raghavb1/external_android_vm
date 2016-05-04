@@ -58,7 +58,7 @@ public class StreamHandler{
 		return screenSize;
 	}
 
-	public void handleShareScreenRequest(byte[] frameBytes, int quality, CompressFormat format) throws IOException{
+	public void handleShareScreenRequest(byte[] frameBytes, int quality, CompressFormat format, boolean toScale) throws IOException{
 		//		while(inProcess){
 		//			System.out.println(" ******************** time before bitmap create ********************");
 		//			System.out.println(System.currentTimeMillis());
@@ -70,7 +70,7 @@ public class StreamHandler{
 
 		//byte [] compressed = compress(frameBytes);
 
-		byte [] compressed = dynamicCompress(frameBytes, quality, format);
+		byte [] compressed = dynamicCompress(frameBytes, quality, format, toScale);
 		//		compressed = compress(compressed);
 		System.out.println(" ******************** time after compress ********************");
 		System.out.println(System.currentTimeMillis());
@@ -88,14 +88,14 @@ public class StreamHandler{
 
 	}
 
-	private byte[] dynamicCompress(byte[] frameBytes, int quality, CompressFormat compressFormat){
+	private byte[] dynamicCompress(byte[] frameBytes, int quality, CompressFormat compressFormat, boolean toScale){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 
 		Bitmap bm = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
 		ByteBuffer buffer = ByteBuffer.wrap(frameBytes);
 		bm.copyPixelsFromBuffer(buffer);
 
-		if(quality > 50){
+		if(!toScale){
 			bm.compress(compressFormat, quality, os);
 		}else{
 			Bitmap result = Bitmap.createScaledBitmap(bm, screenWidth/2, screenWidth/2, false);

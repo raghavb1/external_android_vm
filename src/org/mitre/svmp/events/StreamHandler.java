@@ -21,6 +21,11 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Point;
 import android.view.Display;
 
+import android.os.ServiceManager;
+import android.view.IWindowManager;
+import android.view.WindowManagerImpl;
+import android.hardware.display.DisplayManagerGlobal;
+
 public class StreamHandler{
 
 

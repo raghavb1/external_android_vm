@@ -6367,25 +6367,65 @@ public final class SVMPProtocol {
      */
     com.google.protobuf.ByteString getFrameBytes();
 
-    // optional int32 minQuality = 2;
+    // optional int32 quality = 2;
     /**
-     * <code>optional int32 minQuality = 2;</code>
+     * <code>optional int32 quality = 2;</code>
      */
-    boolean hasMinQuality();
+    boolean hasQuality();
     /**
-     * <code>optional int32 minQuality = 2;</code>
+     * <code>optional int32 quality = 2;</code>
      */
-    int getMinQuality();
+    int getQuality();
 
-    // optional int32 maxQuality = 3;
+    // optional int32 period = 3;
     /**
-     * <code>optional int32 maxQuality = 3;</code>
+     * <code>optional int32 period = 3;</code>
      */
-    boolean hasMaxQuality();
+    boolean hasPeriod();
     /**
-     * <code>optional int32 maxQuality = 3;</code>
+     * <code>optional int32 period = 3;</code>
      */
-    int getMaxQuality();
+    int getPeriod();
+
+    // optional string format = 4;
+    /**
+     * <code>optional string format = 4;</code>
+     */
+    boolean hasFormat();
+    /**
+     * <code>optional string format = 4;</code>
+     */
+    java.lang.String getFormat();
+    /**
+     * <code>optional string format = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getFormatBytes();
+
+    // optional bool toScale = 5;
+    /**
+     * <code>optional bool toScale = 5;</code>
+     */
+    boolean hasToScale();
+    /**
+     * <code>optional bool toScale = 5;</code>
+     */
+    boolean getToScale();
+
+    // optional string tag = 6;
+    /**
+     * <code>optional string tag = 6;</code>
+     */
+    boolean hasTag();
+    /**
+     * <code>optional string tag = 6;</code>
+     */
+    java.lang.String getTag();
+    /**
+     * <code>optional string tag = 6;</code>
+     */
+    com.google.protobuf.ByteString
+        getTagBytes();
   }
   /**
    * Protobuf type {@code svmp.RTCMessage}
@@ -6441,12 +6481,27 @@ public final class SVMPProtocol {
             }
             case 16: {
               bitField0_ |= 0x00000002;
-              minQuality_ = input.readInt32();
+              quality_ = input.readInt32();
               break;
             }
             case 24: {
               bitField0_ |= 0x00000004;
-              maxQuality_ = input.readInt32();
+              period_ = input.readInt32();
+              break;
+            }
+            case 34: {
+              bitField0_ |= 0x00000008;
+              format_ = input.readBytes();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              toScale_ = input.readBool();
+              break;
+            }
+            case 50: {
+              bitField0_ |= 0x00000020;
+              tag_ = input.readBytes();
               break;
             }
           }
@@ -6492,42 +6547,147 @@ public final class SVMPProtocol {
       return frameBytes_;
     }
 
-    // optional int32 minQuality = 2;
-    public static final int MINQUALITY_FIELD_NUMBER = 2;
-    private int minQuality_;
+    // optional int32 quality = 2;
+    public static final int QUALITY_FIELD_NUMBER = 2;
+    private int quality_;
     /**
-     * <code>optional int32 minQuality = 2;</code>
+     * <code>optional int32 quality = 2;</code>
      */
-    public boolean hasMinQuality() {
+    public boolean hasQuality() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional int32 minQuality = 2;</code>
+     * <code>optional int32 quality = 2;</code>
      */
-    public int getMinQuality() {
-      return minQuality_;
+    public int getQuality() {
+      return quality_;
     }
 
-    // optional int32 maxQuality = 3;
-    public static final int MAXQUALITY_FIELD_NUMBER = 3;
-    private int maxQuality_;
+    // optional int32 period = 3;
+    public static final int PERIOD_FIELD_NUMBER = 3;
+    private int period_;
     /**
-     * <code>optional int32 maxQuality = 3;</code>
+     * <code>optional int32 period = 3;</code>
      */
-    public boolean hasMaxQuality() {
+    public boolean hasPeriod() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional int32 maxQuality = 3;</code>
+     * <code>optional int32 period = 3;</code>
      */
-    public int getMaxQuality() {
-      return maxQuality_;
+    public int getPeriod() {
+      return period_;
+    }
+
+    // optional string format = 4;
+    public static final int FORMAT_FIELD_NUMBER = 4;
+    private java.lang.Object format_;
+    /**
+     * <code>optional string format = 4;</code>
+     */
+    public boolean hasFormat() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional string format = 4;</code>
+     */
+    public java.lang.String getFormat() {
+      java.lang.Object ref = format_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          format_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string format = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getFormatBytes() {
+      java.lang.Object ref = format_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        format_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional bool toScale = 5;
+    public static final int TOSCALE_FIELD_NUMBER = 5;
+    private boolean toScale_;
+    /**
+     * <code>optional bool toScale = 5;</code>
+     */
+    public boolean hasToScale() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional bool toScale = 5;</code>
+     */
+    public boolean getToScale() {
+      return toScale_;
+    }
+
+    // optional string tag = 6;
+    public static final int TAG_FIELD_NUMBER = 6;
+    private java.lang.Object tag_;
+    /**
+     * <code>optional string tag = 6;</code>
+     */
+    public boolean hasTag() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional string tag = 6;</code>
+     */
+    public java.lang.String getTag() {
+      java.lang.Object ref = tag_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          tag_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string tag = 6;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTagBytes() {
+      java.lang.Object ref = tag_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        tag_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     private void initFields() {
       frameBytes_ = com.google.protobuf.ByteString.EMPTY;
-      minQuality_ = 0;
-      maxQuality_ = 0;
+      quality_ = 0;
+      period_ = 0;
+      format_ = "";
+      toScale_ = false;
+      tag_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6545,10 +6705,19 @@ public final class SVMPProtocol {
         output.writeBytes(1, frameBytes_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, minQuality_);
+        output.writeInt32(2, quality_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, maxQuality_);
+        output.writeInt32(3, period_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, getFormatBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBool(5, toScale_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(6, getTagBytes());
       }
     }
 
@@ -6564,11 +6733,23 @@ public final class SVMPProtocol {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, minQuality_);
+          .computeInt32Size(2, quality_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, maxQuality_);
+          .computeInt32Size(3, period_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(4, getFormatBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(5, toScale_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(6, getTagBytes());
       }
       memoizedSerializedSize = size;
       return size;
@@ -6667,10 +6848,16 @@ public final class SVMPProtocol {
         super.clear();
         frameBytes_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000001);
-        minQuality_ = 0;
+        quality_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
-        maxQuality_ = 0;
+        period_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
+        format_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
+        toScale_ = false;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        tag_ = "";
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -6701,11 +6888,23 @@ public final class SVMPProtocol {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.minQuality_ = minQuality_;
+        result.quality_ = quality_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.maxQuality_ = maxQuality_;
+        result.period_ = period_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.format_ = format_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.toScale_ = toScale_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.tag_ = tag_;
         result.bitField0_ = to_bitField0_;
         return result;
       }
@@ -6715,11 +6914,24 @@ public final class SVMPProtocol {
         if (other.hasFrameBytes()) {
           setFrameBytes(other.getFrameBytes());
         }
-        if (other.hasMinQuality()) {
-          setMinQuality(other.getMinQuality());
+        if (other.hasQuality()) {
+          setQuality(other.getQuality());
         }
-        if (other.hasMaxQuality()) {
-          setMaxQuality(other.getMaxQuality());
+        if (other.hasPeriod()) {
+          setPeriod(other.getPeriod());
+        }
+        if (other.hasFormat()) {
+          bitField0_ |= 0x00000008;
+          format_ = other.format_;
+          
+        }
+        if (other.hasToScale()) {
+          setToScale(other.getToScale());
+        }
+        if (other.hasTag()) {
+          bitField0_ |= 0x00000020;
+          tag_ = other.tag_;
+          
         }
         return this;
       }
@@ -6783,68 +6995,249 @@ public final class SVMPProtocol {
         return this;
       }
 
-      // optional int32 minQuality = 2;
-      private int minQuality_ ;
+      // optional int32 quality = 2;
+      private int quality_ ;
       /**
-       * <code>optional int32 minQuality = 2;</code>
+       * <code>optional int32 quality = 2;</code>
        */
-      public boolean hasMinQuality() {
+      public boolean hasQuality() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional int32 minQuality = 2;</code>
+       * <code>optional int32 quality = 2;</code>
        */
-      public int getMinQuality() {
-        return minQuality_;
+      public int getQuality() {
+        return quality_;
       }
       /**
-       * <code>optional int32 minQuality = 2;</code>
+       * <code>optional int32 quality = 2;</code>
        */
-      public Builder setMinQuality(int value) {
+      public Builder setQuality(int value) {
         bitField0_ |= 0x00000002;
-        minQuality_ = value;
+        quality_ = value;
         
         return this;
       }
       /**
-       * <code>optional int32 minQuality = 2;</code>
+       * <code>optional int32 quality = 2;</code>
        */
-      public Builder clearMinQuality() {
+      public Builder clearQuality() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        minQuality_ = 0;
+        quality_ = 0;
         
         return this;
       }
 
-      // optional int32 maxQuality = 3;
-      private int maxQuality_ ;
+      // optional int32 period = 3;
+      private int period_ ;
       /**
-       * <code>optional int32 maxQuality = 3;</code>
+       * <code>optional int32 period = 3;</code>
        */
-      public boolean hasMaxQuality() {
+      public boolean hasPeriod() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>optional int32 maxQuality = 3;</code>
+       * <code>optional int32 period = 3;</code>
        */
-      public int getMaxQuality() {
-        return maxQuality_;
+      public int getPeriod() {
+        return period_;
       }
       /**
-       * <code>optional int32 maxQuality = 3;</code>
+       * <code>optional int32 period = 3;</code>
        */
-      public Builder setMaxQuality(int value) {
+      public Builder setPeriod(int value) {
         bitField0_ |= 0x00000004;
-        maxQuality_ = value;
+        period_ = value;
         
         return this;
       }
       /**
-       * <code>optional int32 maxQuality = 3;</code>
+       * <code>optional int32 period = 3;</code>
        */
-      public Builder clearMaxQuality() {
+      public Builder clearPeriod() {
         bitField0_ = (bitField0_ & ~0x00000004);
-        maxQuality_ = 0;
+        period_ = 0;
+        
+        return this;
+      }
+
+      // optional string format = 4;
+      private java.lang.Object format_ = "";
+      /**
+       * <code>optional string format = 4;</code>
+       */
+      public boolean hasFormat() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional string format = 4;</code>
+       */
+      public java.lang.String getFormat() {
+        java.lang.Object ref = format_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          format_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string format = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getFormatBytes() {
+        java.lang.Object ref = format_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          format_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string format = 4;</code>
+       */
+      public Builder setFormat(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        format_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional string format = 4;</code>
+       */
+      public Builder clearFormat() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        format_ = getDefaultInstance().getFormat();
+        
+        return this;
+      }
+      /**
+       * <code>optional string format = 4;</code>
+       */
+      public Builder setFormatBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        format_ = value;
+        
+        return this;
+      }
+
+      // optional bool toScale = 5;
+      private boolean toScale_ ;
+      /**
+       * <code>optional bool toScale = 5;</code>
+       */
+      public boolean hasToScale() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional bool toScale = 5;</code>
+       */
+      public boolean getToScale() {
+        return toScale_;
+      }
+      /**
+       * <code>optional bool toScale = 5;</code>
+       */
+      public Builder setToScale(boolean value) {
+        bitField0_ |= 0x00000010;
+        toScale_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional bool toScale = 5;</code>
+       */
+      public Builder clearToScale() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        toScale_ = false;
+        
+        return this;
+      }
+
+      // optional string tag = 6;
+      private java.lang.Object tag_ = "";
+      /**
+       * <code>optional string tag = 6;</code>
+       */
+      public boolean hasTag() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional string tag = 6;</code>
+       */
+      public java.lang.String getTag() {
+        java.lang.Object ref = tag_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          tag_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string tag = 6;</code>
+       */
+      public com.google.protobuf.ByteString
+          getTagBytes() {
+        java.lang.Object ref = tag_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          tag_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string tag = 6;</code>
+       */
+      public Builder setTag(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        tag_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional string tag = 6;</code>
+       */
+      public Builder clearTag() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        tag_ = getDefaultInstance().getTag();
+        
+        return this;
+      }
+      /**
+       * <code>optional string tag = 6;</code>
+       */
+      public Builder setTagBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        tag_ = value;
         
         return this;
       }

@@ -10,22 +10,16 @@ import java.util.zip.Deflater;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.mitre.svmp.protocol.SVMPProtocol;
+import org.mitre.svmp.protocol.SVMPProtocol.Request;
 import org.mitre.svmp.protocol.SVMPProtocol.Response;
 import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
 
 import com.google.protobuf.ByteString;
 
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.graphics.Bitmap.CompressFormat;
-import android.view.Display;
-
-import android.os.ServiceManager;
-import android.view.IWindowManager;
-import android.view.WindowManagerImpl;
-import android.hardware.display.DisplayManagerGlobal;
-
 import android.graphics.Point;
+import android.view.Display;
 
 public class StreamHandler{
 
@@ -58,57 +52,45 @@ public class StreamHandler{
 		return screenSize;
 	}
 
-	public void handleShareScreenRequest(byte[] frameBytes, int quality, CompressFormat format, boolean toScale) throws IOException{
-		//		while(inProcess){
-		//			System.out.println(" ******************** time before bitmap create ********************");
-		//			System.out.println(System.currentTimeMillis());
-		//
-		//			byte[] piex = getScreenBitmap();
+	public void handleShareScreenRequest(Request request) throws IOException{
 
-		System.out.println(" ******************** time before create response and after bitmap create ********************");
+		System.out.println(" ******************** time before bitmap create ********************");
 		System.out.println(System.currentTimeMillis());
 
-		//byte [] compressed = compress(frameBytes);
+		byte [] compressed = dynamicCompress(request, getScreenBitmap());
 
-		byte [] compressed = dynamicCompress(frameBytes, quality, format, toScale);
-		//		compressed = compress(compressed);
-		System.out.println(" ******************** time after compress ********************");
-		System.out.println(System.currentTimeMillis());
-
-		Response response = buildScreenResponse(ByteString.copyFrom(compressed), quality);
-
-		//		System.out.println("  ********************time after create response ********************");
-		//		System.out.println(System.currentTimeMillis());
+		Response response = buildScreenResponse(ByteString.copyFrom(compressed), request.getStream().getTag());
 
 		base.sendMessage(response);
 
-		//		System.out.println("time after send response ********************");
-		//		System.out.println(System.currentTimeMillis());
-		//		}
+		System.out.println("time after send response ********************");
+		System.out.println(System.currentTimeMillis());
+
 
 	}
 
-	private byte[] dynamicCompress(byte[] frameBytes, int quality, CompressFormat compressFormat, boolean toScale){
+	private byte[] dynamicCompress(Request request, byte[] frameBytes){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 
 		Bitmap bm = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
 		ByteBuffer buffer = ByteBuffer.wrap(frameBytes);
 		bm.copyPixelsFromBuffer(buffer);
 
-		if(toScale){
+		if(request.getStream().getToScale()){
 			bm = Bitmap.createScaledBitmap(bm, screenWidth/2, screenWidth/2, true);
 		}
-		bm.compress(compressFormat, quality, os);
+
+		bm.compress(Bitmap.CompressFormat.valueOf(request.getStream().getFormat()), request.getStream().getQuality(), os);
 		byte[] array = os.toByteArray();
 		System.out.println(array.length);
 		return array;
 	}
-	public Response buildScreenResponse(ByteString frameBytes, int quality) {
+	public Response buildScreenResponse(ByteString frameBytes, String tag) {
 
 		try {
 			SVMPProtocol.RTCMessage.Builder rtcBuilder = SVMPProtocol.RTCMessage.newBuilder();
 			rtcBuilder.setFrameBytes(frameBytes);
-			rtcBuilder.setMaxQuality(quality);
+			rtcBuilder.setTag(tag);
 
 			Response.Builder responseBuilder = Response.newBuilder();
 			responseBuilder.setType(ResponseType.STREAM);
@@ -143,15 +125,15 @@ public class StreamHandler{
 
 	}
 
-//	FileChannel fc = raf.getChannel();
-//	int start = 0;
-//	byte[] piex = new byte[bufferSize];
-//	ByteBuffer bb = ByteBuffer.allocate(bufferSize);
-//	for(int i=0;i<4; i++){
-//		start += bufferSize/4;
-//		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, start, bufferSize/4);
-//		bb.amem.asReadOnlyBuffer();
-//	}
+	//	FileChannel fc = raf.getChannel();
+	//	int start = 0;
+	//	byte[] piex = new byte[bufferSize];
+	//	ByteBuffer bb = ByteBuffer.allocate(bufferSize);
+	//	for(int i=0;i<4; i++){
+	//		start += bufferSize/4;
+	//		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, start, bufferSize/4);
+	//		bb.amem.asReadOnlyBuffer();
+	//	}
 	public static byte[] compress(byte[] data) throws IOException {  
 		Deflater deflater = new Deflater();
 		deflater.setLevel(Deflater.BEST_SPEED);

@@ -20,7 +20,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -85,12 +87,11 @@ public abstract class BaseServer implements Constants {
 	private boolean sendFrames = true;
 	private boolean sendFrameRunning = false;
 
-	private int minQuality = 50;
-	private int maxQuality = 80;
 	private Object touchLock = new Object();
 	
 	ScheduledExecutorService minThread;
 	ScheduledExecutorService maxThread;
+	Map<String, ScheduledExecutorService> threadMap = new HashMap<>();
 
 
 	public BaseServer(Context context) throws IOException {
@@ -375,29 +376,26 @@ public abstract class BaseServer implements Constants {
 
 
 	private void startFrameThread(final Request request){
-
-		minQuality = request.getStream().getMinQuality();
-		maxQuality = request.getStream().getMaxQuality();
 		
-		killStreams();
-		
-		sendFrameRunning = false;
-		
-		if(!sendFrameRunning){
-			sendFrameRunning = true;
-			minThread = startFrameThread(50,minQuality,Bitmap.CompressFormat.JPEG,false);
-			maxThread = startFrameThread(1000,maxQuality,Bitmap.CompressFormat.JPEG, false);
+		killStream(request.getStream().getTag());
+		threadMap.put(request.getStream().getTag(), startFrameThreadInternal(request));
+	}
+	
+	private void killStream(String tag){
+		if(threadMap.get(tag) != null){
+			threadMap.get(tag).shutdown();
+			threadMap.remove(tag);
 		}
 	}
 	
 	private void killStreams(){
-		if(minThread != null)
-			minThread.shutdown();
-		if(maxThread != null)
-			maxThread.shutdown();
+		for (Map.Entry<String, ScheduledExecutorService> entry : threadMap.entrySet()){
+			entry.getValue().shutdown();
+		}
+		threadMap.clear();
 	}
 
-	private ScheduledExecutorService startFrameThread(int time, final int quality, final CompressFormat format, final boolean toScale){
+	private ScheduledExecutorService startFrameThreadInternal(final Request request){
 		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
 		/*This schedules a runnable task every second*/
 
@@ -406,8 +404,7 @@ public abstract class BaseServer implements Constants {
 			public void run() {
 				if(sendFrameRunning){
 					try {
-						byte[] frameBytes = streamhandler.getScreenBitmap();
-						streamhandler.handleShareScreenRequest(frameBytes, quality, format, toScale);
+						streamhandler.handleShareScreenRequest(request);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -415,7 +412,7 @@ public abstract class BaseServer implements Constants {
 				}
 
 			}
-		}, 0, time, TimeUnit.MILLISECONDS);
+		}, 0, request.getStream().getPeriod(), TimeUnit.MILLISECONDS);
 		
 		return scheduleTaskExecutor;
 	}

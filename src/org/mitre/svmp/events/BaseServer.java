@@ -91,7 +91,7 @@ public abstract class BaseServer implements Constants {
 	
 	ScheduledExecutorService minThread;
 	ScheduledExecutorService maxThread;
-	Map<String, ScheduledExecutorService> threadMap = new HashMap<>();
+	Map<String, ScheduledExecutorService> threadMap = new HashMap<String, ScheduledExecutorService>();
 
 
 	public BaseServer(Context context) throws IOException {

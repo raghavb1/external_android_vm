@@ -88,6 +88,9 @@ public abstract class BaseServer implements Constants {
 	private int minQuality = 50;
 	private int maxQuality = 80;
 	private Object touchLock = new Object();
+	
+	ScheduledExecutorService minThread;
+	ScheduledExecutorService maxThread;
 
 
 	public BaseServer(Context context) throws IOException {
@@ -193,9 +196,8 @@ public abstract class BaseServer implements Constants {
 					//					if(!sendFrameRunning){
 					//						new Thread(new FrameSender()).start();
 					//					}
-					if(!sendFrameRunning){
-						startFrameThread(msg);
-					}
+
+					startFrameThread(msg);
 
 					break;
 				case SCREENINFO:
@@ -372,17 +374,28 @@ public abstract class BaseServer implements Constants {
 
 
 	private void startFrameThread(final Request request){
-		sendFrameRunning = true;
+
 		minQuality = request.getStream().getMinQuality();
 		maxQuality = request.getStream().getMaxQuality();
-
-		startFrameThread(50,minQuality,Bitmap.CompressFormat.JPEG);
-		startFrameThread(500,maxQuality,Bitmap.CompressFormat.JPEG);
+		
+		if(minThread != null)
+			minThread.shutdown();
+		if(maxThread != null)
+			maxThread.shutdown();
+		
+		sendFrameRunning = false;
+		
+		if(!sendFrameRunning){
+			sendFrameRunning = true;
+			minThread = startFrameThread(50,minQuality,Bitmap.CompressFormat.JPEG);
+			maxThread = startFrameThread(1000,maxQuality,Bitmap.CompressFormat.JPEG);
+		}
 	}
 
-	private void startFrameThread(int time, final int quality, final CompressFormat format){
+	private ScheduledExecutorService startFrameThread(int time, final int quality, final CompressFormat format){
 		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
 		/*This schedules a runnable task every second*/
+
 		scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
 
 			public void run() {
@@ -398,5 +411,7 @@ public abstract class BaseServer implements Constants {
 
 			}
 		}, 0, time, TimeUnit.MILLISECONDS);
+		
+		return scheduleTaskExecutor;
 	}
 }

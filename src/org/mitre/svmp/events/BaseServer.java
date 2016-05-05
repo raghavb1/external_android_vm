@@ -88,7 +88,7 @@ public abstract class BaseServer implements Constants {
 	private boolean sendFrameRunning = false;
 
 	private Object touchLock = new Object();
-	
+
 	ScheduledExecutorService minThread;
 	ScheduledExecutorService maxThread;
 	Map<String, ScheduledExecutorService> threadMap = new HashMap<String, ScheduledExecutorService>();
@@ -376,18 +376,18 @@ public abstract class BaseServer implements Constants {
 
 
 	private void startFrameThread(final Request request){
-		
+
 		killStream(request.getStream().getTag());
 		threadMap.put(request.getStream().getTag(), startFrameThreadInternal(request));
 	}
-	
+
 	private void killStream(String tag){
 		if(threadMap.get(tag) != null){
 			threadMap.get(tag).shutdown();
 			threadMap.remove(tag);
 		}
 	}
-	
+
 	private void killStreams(){
 		for (Map.Entry<String, ScheduledExecutorService> entry : threadMap.entrySet()){
 			entry.getValue().shutdown();
@@ -402,18 +402,16 @@ public abstract class BaseServer implements Constants {
 		scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
 
 			public void run() {
-				if(sendFrameRunning){
-					try {
-						streamhandler.handleShareScreenRequest(request);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				try {
+					streamhandler.handleShareScreenRequest(request);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 			}
 		}, 0, request.getStream().getPeriod(), TimeUnit.MILLISECONDS);
-		
+
 		return scheduleTaskExecutor;
 	}
 }

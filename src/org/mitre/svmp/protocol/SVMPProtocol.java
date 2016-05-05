@@ -20797,6 +20797,33 @@ public final class SVMPProtocol {
      */
     com.google.protobuf.ByteString
         getPkgNameBytes();
+
+    // optional string apkPath = 5;
+    /**
+     * <code>optional string apkPath = 5;</code>
+     *
+     * <pre>
+     * what app to launch, if any
+     * </pre>
+     */
+    boolean hasApkPath();
+    /**
+     * <code>optional string apkPath = 5;</code>
+     *
+     * <pre>
+     * what app to launch, if any
+     * </pre>
+     */
+    java.lang.String getApkPath();
+    /**
+     * <code>optional string apkPath = 5;</code>
+     *
+     * <pre>
+     * what app to launch, if any
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getApkPathBytes();
   }
   /**
    * Protobuf type {@code svmp.AppsRequest}
@@ -20870,6 +20897,11 @@ public final class SVMPProtocol {
             case 34: {
               bitField0_ |= 0x00000004;
               pkgName_ = input.readBytes();
+              break;
+            }
+            case 42: {
+              bitField0_ |= 0x00000008;
+              apkPath_ = input.readBytes();
               break;
             }
           }
@@ -21109,11 +21141,67 @@ public final class SVMPProtocol {
       }
     }
 
+    // optional string apkPath = 5;
+    public static final int APKPATH_FIELD_NUMBER = 5;
+    private java.lang.Object apkPath_;
+    /**
+     * <code>optional string apkPath = 5;</code>
+     *
+     * <pre>
+     * what app to launch, if any
+     * </pre>
+     */
+    public boolean hasApkPath() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional string apkPath = 5;</code>
+     *
+     * <pre>
+     * what app to launch, if any
+     * </pre>
+     */
+    public java.lang.String getApkPath() {
+      java.lang.Object ref = apkPath_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          apkPath_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string apkPath = 5;</code>
+     *
+     * <pre>
+     * what app to launch, if any
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getApkPathBytes() {
+      java.lang.Object ref = apkPath_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        apkPath_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       type_ = org.mitre.svmp.protocol.SVMPProtocol.AppsRequest.AppsRequestType.REFRESH;
       current_ = java.util.Collections.emptyList();
       screenDensity_ = 0;
       pkgName_ = "";
+      apkPath_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -21149,6 +21237,9 @@ public final class SVMPProtocol {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(4, getPkgNameBytes());
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(5, getApkPathBytes());
+      }
     }
 
     private int memoizedSerializedSize = -1;
@@ -21172,6 +21263,10 @@ public final class SVMPProtocol {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(4, getPkgNameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, getApkPathBytes());
       }
       memoizedSerializedSize = size;
       return size;
@@ -21276,6 +21371,8 @@ public final class SVMPProtocol {
         bitField0_ = (bitField0_ & ~0x00000004);
         pkgName_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
+        apkPath_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -21316,6 +21413,10 @@ public final class SVMPProtocol {
           to_bitField0_ |= 0x00000004;
         }
         result.pkgName_ = pkgName_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.apkPath_ = apkPath_;
         result.bitField0_ = to_bitField0_;
         return result;
       }
@@ -21341,6 +21442,11 @@ public final class SVMPProtocol {
         if (other.hasPkgName()) {
           bitField0_ |= 0x00000008;
           pkgName_ = other.pkgName_;
+          
+        }
+        if (other.hasApkPath()) {
+          bitField0_ |= 0x00000010;
+          apkPath_ = other.apkPath_;
           
         }
         return this;
@@ -21731,6 +21837,104 @@ public final class SVMPProtocol {
   }
   bitField0_ |= 0x00000008;
         pkgName_ = value;
+        
+        return this;
+      }
+
+      // optional string apkPath = 5;
+      private java.lang.Object apkPath_ = "";
+      /**
+       * <code>optional string apkPath = 5;</code>
+       *
+       * <pre>
+       * what app to launch, if any
+       * </pre>
+       */
+      public boolean hasApkPath() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional string apkPath = 5;</code>
+       *
+       * <pre>
+       * what app to launch, if any
+       * </pre>
+       */
+      public java.lang.String getApkPath() {
+        java.lang.Object ref = apkPath_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          apkPath_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string apkPath = 5;</code>
+       *
+       * <pre>
+       * what app to launch, if any
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getApkPathBytes() {
+        java.lang.Object ref = apkPath_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          apkPath_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string apkPath = 5;</code>
+       *
+       * <pre>
+       * what app to launch, if any
+       * </pre>
+       */
+      public Builder setApkPath(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        apkPath_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional string apkPath = 5;</code>
+       *
+       * <pre>
+       * what app to launch, if any
+       * </pre>
+       */
+      public Builder clearApkPath() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        apkPath_ = getDefaultInstance().getApkPath();
+        
+        return this;
+      }
+      /**
+       * <code>optional string apkPath = 5;</code>
+       *
+       * <pre>
+       * what app to launch, if any
+       * </pre>
+       */
+      public Builder setApkPathBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        apkPath_ = value;
         
         return this;
       }

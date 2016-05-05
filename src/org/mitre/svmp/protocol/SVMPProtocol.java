@@ -22189,6 +22189,10 @@ public final class SVMPProtocol {
        * </pre>
        */
       EXIT(1, 2),
+      /**
+       * <code>LAUNCH = 3;</code>
+       */
+      LAUNCH(2, 3),
       ;
 
       /**
@@ -22207,6 +22211,10 @@ public final class SVMPProtocol {
        * </pre>
        */
       public static final int EXIT_VALUE = 2;
+      /**
+       * <code>LAUNCH = 3;</code>
+       */
+      public static final int LAUNCH_VALUE = 3;
 
 
       public final int getNumber() { return value; }
@@ -22215,6 +22223,7 @@ public final class SVMPProtocol {
         switch (value) {
           case 1: return REFRESH;
           case 2: return EXIT;
+          case 3: return LAUNCH;
           default: return null;
         }
       }

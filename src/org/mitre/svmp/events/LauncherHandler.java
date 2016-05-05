@@ -96,6 +96,7 @@ public class LauncherHandler extends BaseHandler {
 				if (intent != null) {
 					//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(intent);
+					sendMessage();
 				}
 			}
 		}
@@ -143,5 +144,17 @@ public class LauncherHandler extends BaseHandler {
 				return true;
 		}
 		return false;
+	}
+	
+	private void sendMessage(){
+		AppsResponse.Builder arBuilder = AppsResponse.newBuilder();
+		arBuilder.setType(AppsResponse.AppsResponseType.LAUNCH);
+		// build a Response
+		Response.Builder rBuilder = Response.newBuilder();
+		rBuilder.setType(Response.ResponseType.APPS);
+		// add the AppList to the Response
+		rBuilder.setApps(arBuilder);
+		// send the Response
+		sendMessage(rBuilder.build());
 	}
 }

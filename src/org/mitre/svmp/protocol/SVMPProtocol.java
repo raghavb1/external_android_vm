@@ -8329,6 +8329,26 @@ public final class SVMPProtocol {
        * <code>required float y = 3;</code>
        */
       float getY();
+
+      // required float pressure = 4;
+      /**
+       * <code>required float pressure = 4;</code>
+       */
+      boolean hasPressure();
+      /**
+       * <code>required float pressure = 4;</code>
+       */
+      float getPressure();
+
+      // required float size = 5;
+      /**
+       * <code>required float size = 5;</code>
+       */
+      boolean hasSize();
+      /**
+       * <code>required float size = 5;</code>
+       */
+      float getSize();
     }
     /**
      * Protobuf type {@code svmp.TouchEvent.PointerCoords}
@@ -8386,6 +8406,16 @@ public final class SVMPProtocol {
               case 29: {
                 bitField0_ |= 0x00000004;
                 y_ = input.readFloat();
+                break;
+              }
+              case 37: {
+                bitField0_ |= 0x00000008;
+                pressure_ = input.readFloat();
+                break;
+              }
+              case 45: {
+                bitField0_ |= 0x00000010;
+                size_ = input.readFloat();
                 break;
               }
             }
@@ -8463,10 +8493,44 @@ public final class SVMPProtocol {
         return y_;
       }
 
+      // required float pressure = 4;
+      public static final int PRESSURE_FIELD_NUMBER = 4;
+      private float pressure_;
+      /**
+       * <code>required float pressure = 4;</code>
+       */
+      public boolean hasPressure() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required float pressure = 4;</code>
+       */
+      public float getPressure() {
+        return pressure_;
+      }
+
+      // required float size = 5;
+      public static final int SIZE_FIELD_NUMBER = 5;
+      private float size_;
+      /**
+       * <code>required float size = 5;</code>
+       */
+      public boolean hasSize() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>required float size = 5;</code>
+       */
+      public float getSize() {
+        return size_;
+      }
+
       private void initFields() {
         id_ = 0;
         x_ = 0F;
         y_ = 0F;
+        pressure_ = 0F;
+        size_ = 0F;
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
@@ -8485,6 +8549,14 @@ public final class SVMPProtocol {
           memoizedIsInitialized = 0;
           return false;
         }
+        if (!hasPressure()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!hasSize()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
         memoizedIsInitialized = 1;
         return true;
       }
@@ -8500,6 +8572,12 @@ public final class SVMPProtocol {
         }
         if (((bitField0_ & 0x00000004) == 0x00000004)) {
           output.writeFloat(3, y_);
+        }
+        if (((bitField0_ & 0x00000008) == 0x00000008)) {
+          output.writeFloat(4, pressure_);
+        }
+        if (((bitField0_ & 0x00000010) == 0x00000010)) {
+          output.writeFloat(5, size_);
         }
       }
 
@@ -8520,6 +8598,14 @@ public final class SVMPProtocol {
         if (((bitField0_ & 0x00000004) == 0x00000004)) {
           size += com.google.protobuf.CodedOutputStream
             .computeFloatSize(3, y_);
+        }
+        if (((bitField0_ & 0x00000008) == 0x00000008)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeFloatSize(4, pressure_);
+        }
+        if (((bitField0_ & 0x00000010) == 0x00000010)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeFloatSize(5, size_);
         }
         memoizedSerializedSize = size;
         return size;
@@ -8618,6 +8704,10 @@ public final class SVMPProtocol {
           bitField0_ = (bitField0_ & ~0x00000002);
           y_ = 0F;
           bitField0_ = (bitField0_ & ~0x00000004);
+          pressure_ = 0F;
+          bitField0_ = (bitField0_ & ~0x00000008);
+          size_ = 0F;
+          bitField0_ = (bitField0_ & ~0x00000010);
           return this;
         }
 
@@ -8653,6 +8743,14 @@ public final class SVMPProtocol {
             to_bitField0_ |= 0x00000004;
           }
           result.y_ = y_;
+          if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+            to_bitField0_ |= 0x00000008;
+          }
+          result.pressure_ = pressure_;
+          if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+            to_bitField0_ |= 0x00000010;
+          }
+          result.size_ = size_;
           result.bitField0_ = to_bitField0_;
           return result;
         }
@@ -8668,6 +8766,12 @@ public final class SVMPProtocol {
           if (other.hasY()) {
             setY(other.getY());
           }
+          if (other.hasPressure()) {
+            setPressure(other.getPressure());
+          }
+          if (other.hasSize()) {
+            setSize(other.getSize());
+          }
           return this;
         }
 
@@ -8681,6 +8785,14 @@ public final class SVMPProtocol {
             return false;
           }
           if (!hasY()) {
+            
+            return false;
+          }
+          if (!hasPressure()) {
+            
+            return false;
+          }
+          if (!hasSize()) {
             
             return false;
           }
@@ -8801,6 +8913,72 @@ public final class SVMPProtocol {
         public Builder clearY() {
           bitField0_ = (bitField0_ & ~0x00000004);
           y_ = 0F;
+          
+          return this;
+        }
+
+        // required float pressure = 4;
+        private float pressure_ ;
+        /**
+         * <code>required float pressure = 4;</code>
+         */
+        public boolean hasPressure() {
+          return ((bitField0_ & 0x00000008) == 0x00000008);
+        }
+        /**
+         * <code>required float pressure = 4;</code>
+         */
+        public float getPressure() {
+          return pressure_;
+        }
+        /**
+         * <code>required float pressure = 4;</code>
+         */
+        public Builder setPressure(float value) {
+          bitField0_ |= 0x00000008;
+          pressure_ = value;
+          
+          return this;
+        }
+        /**
+         * <code>required float pressure = 4;</code>
+         */
+        public Builder clearPressure() {
+          bitField0_ = (bitField0_ & ~0x00000008);
+          pressure_ = 0F;
+          
+          return this;
+        }
+
+        // required float size = 5;
+        private float size_ ;
+        /**
+         * <code>required float size = 5;</code>
+         */
+        public boolean hasSize() {
+          return ((bitField0_ & 0x00000010) == 0x00000010);
+        }
+        /**
+         * <code>required float size = 5;</code>
+         */
+        public float getSize() {
+          return size_;
+        }
+        /**
+         * <code>required float size = 5;</code>
+         */
+        public Builder setSize(float value) {
+          bitField0_ |= 0x00000010;
+          size_ = value;
+          
+          return this;
+        }
+        /**
+         * <code>required float size = 5;</code>
+         */
+        public Builder clearSize() {
+          bitField0_ = (bitField0_ & ~0x00000010);
+          size_ = 0F;
           
           return this;
         }

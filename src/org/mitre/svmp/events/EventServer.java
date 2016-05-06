@@ -80,7 +80,7 @@ public class EventServer extends BaseServer {
         Log.d(TAG, "Sent screen info response: " + screenSize.x + "," + screenSize.y);
     }
 
-    private MotionEvent.PointerCoords translateCoords(float X, float Y) {
+    private MotionEvent.PointerCoords translateCoords(SVMPProtocol.TouchEvent.PointerCoords a) {
         MotionEvent.PointerCoords coords = new MotionEvent.PointerCoords();
 
         // Translate the client coordinates according to the screen orientation
@@ -90,38 +90,38 @@ public class EventServer extends BaseServer {
             rotation = windowManager.getRotation();
             switch (rotation) {
                 case Surface.ROTATION_0:
-                    coords.x = X;
-                    coords.y = Y;
+                    coords.x = a.getX();
+                    coords.y = a.getY();
                     break;
                 case Surface.ROTATION_180:
                     // screen turned left 180
                     // client origin is now in bottom right
                     // invert both
-                    coords.x = screenSize.x - X;
-                    coords.y = screenSize.y - Y;
+                    coords.x = screenSize.x - a.getX();
+                    coords.y = screenSize.y - a.getY();
                     break;
                 case Surface.ROTATION_90:
                     // screen turned left 90
                     // client origin is now in bottom left
                     // switch, invert client x
-                    coords.x = Y;
-                    coords.y = screenSize.x - X;
+                    coords.x = a.getY();
+                    coords.y = screenSize.x - a.getX();
                     break;
                 case Surface.ROTATION_270:
                     // screen turned right 90
                     // client origin is now in top right
                     // switch, invert client y
-                    coords.x = screenSize.y - Y;
-                    coords.y = X;
+                    coords.x = screenSize.y - a.getY();
+                    coords.y = a.getX();
                     break;
             }
         } catch (RemoteException re) {
             Log.e(TAG, "Cannot translate input coordinates. Error getting display size: " + re.getMessage());
-            coords.x = X;
-            coords.y = Y;
+            coords.x = a.getX();
+            coords.y = a.getY();
         } finally {
-            coords.pressure = 20f;
-            coords.size = 5f;
+            coords.pressure = a.getPressure();
+            coords.size = a.getSize();
         }
         return coords;
     }
@@ -191,7 +191,7 @@ public class EventServer extends BaseServer {
             props[i] = new MotionEvent.PointerProperties();
             props[i].id = event.getItems(i).getId();
             props[i].toolType = MotionEvent.TOOL_TYPE_FINGER;
-            coords[i] = translateCoords(event.getItems(i).getX(), event.getItems(i).getY());
+            coords[i] = translateCoords(event.getItems(i));
         }
 
         MotionEvent me = MotionEvent.obtain(lastDownTime, now, event.getAction(), pointerSize, props, coords,
@@ -241,7 +241,7 @@ public class EventServer extends BaseServer {
             props[i] = new MotionEvent.PointerProperties();
             props[i].id = event.getItems(i).getId();
             props[i].toolType = MotionEvent.TOOL_TYPE_FINGER;
-            coords[i] = translateCoords(event.getItems(i).getX(), event.getItems(i).getY());
+            coords[i] = translateCoords(event.getItems(i));
         }
 	//Log.e(TAG, "use client edgeFlags if present");
         // use client edgeFlags if present
@@ -273,7 +273,7 @@ public class EventServer extends BaseServer {
             int coordsSize = event.getHistorical(i).getCoordsCount();
             coords = new MotionEvent.PointerCoords[coordsSize];
             for (int j = 0; j < coordsSize; j++) {
-                coords[j] = translateCoords(h.getCoords(j).getX(), h.getCoords(j).getY());
+                coords[j] = translateCoords(h.getCoords(j));
             }
 
             me.addBatch(offsetEventTime(h.getEventTime()), coords, 0);

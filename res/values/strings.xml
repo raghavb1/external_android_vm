@@ -16,7 +16,7 @@
   -->
 <resources>
     <string name="app_name">android_external_svmp_eventserver</string>
-    <string name="layout_launcheractivity_textview_text">If you see this message, press the Back button to exit</string>
+    <string name="layout_launcheractivity_textview_text">Press the Back button to exit.</string>
     
     <string name="simple_ime">Simple IME</string>
     <string name="subtype_en_US">English (US)</string>

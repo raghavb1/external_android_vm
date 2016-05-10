@@ -6,6 +6,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Arrays;
 import java.util.zip.Deflater;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -17,14 +18,8 @@ import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
 import com.google.protobuf.ByteString;
 
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Point;
 import android.view.Display;
-
-import android.os.ServiceManager;
-import android.view.IWindowManager;
-import android.view.WindowManagerImpl;
-import android.hardware.display.DisplayManagerGlobal;
 
 public class StreamHandler{
 
@@ -45,6 +40,7 @@ public class StreamHandler{
 	static int totalPixels = screenHeight * screenWidth;
 	private static int bufferSize=totalPixels * bytesPerPixel;
 	public boolean inProcess = true;
+	private byte[] currentBytes;
 
 	//    static {
 	//    	System.loadLibrary("frame_buffer_jni");
@@ -63,13 +59,15 @@ public class StreamHandler{
 		System.out.println(System.currentTimeMillis());
 
 		byte [] compressed = dynamicCompress(request, getScreenBitmap());
+		if(!Arrays.equals(currentBytes, compressed)){
+			currentBytes = compressed;
+			Response response = buildScreenResponse(ByteString.copyFrom(compressed), request.getStream().getTag());
 
-		Response response = buildScreenResponse(ByteString.copyFrom(compressed), request.getStream().getTag());
+			base.sendMessage(response);
 
-		base.sendMessage(response);
-
-		System.out.println("time after send response ********************");
-		System.out.println(System.currentTimeMillis());
+			System.out.println("time after send response ********************");
+			System.out.println(System.currentTimeMillis());
+		}
 
 
 	}

@@ -17,6 +17,13 @@ import org.mitre.svmp.protocol.SVMPProtocol.Response.ResponseType;
 
 import com.google.protobuf.ByteString;
 
+import android.os.ServiceManager;
+
+import android.view.IWindowManager;
+
+import android.view.WindowManagerImpl;
+import android.hardware.display.DisplayManagerGlobal;
+
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.view.Display;

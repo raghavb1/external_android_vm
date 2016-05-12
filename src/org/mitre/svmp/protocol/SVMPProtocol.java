@@ -6412,17 +6412,27 @@ public final class SVMPProtocol {
      */
     boolean getToScale();
 
-    // optional string tag = 6;
+    // optional bool toDeflate = 6;
     /**
-     * <code>optional string tag = 6;</code>
+     * <code>optional bool toDeflate = 6;</code>
+     */
+    boolean hasToDeflate();
+    /**
+     * <code>optional bool toDeflate = 6;</code>
+     */
+    boolean getToDeflate();
+
+    // optional string tag = 7;
+    /**
+     * <code>optional string tag = 7;</code>
      */
     boolean hasTag();
     /**
-     * <code>optional string tag = 6;</code>
+     * <code>optional string tag = 7;</code>
      */
     java.lang.String getTag();
     /**
-     * <code>optional string tag = 6;</code>
+     * <code>optional string tag = 7;</code>
      */
     com.google.protobuf.ByteString
         getTagBytes();
@@ -6499,8 +6509,13 @@ public final class SVMPProtocol {
               toScale_ = input.readBool();
               break;
             }
-            case 50: {
+            case 48: {
               bitField0_ |= 0x00000020;
+              toDeflate_ = input.readBool();
+              break;
+            }
+            case 58: {
+              bitField0_ |= 0x00000040;
               tag_ = input.readBytes();
               break;
             }
@@ -6638,17 +6653,33 @@ public final class SVMPProtocol {
       return toScale_;
     }
 
-    // optional string tag = 6;
-    public static final int TAG_FIELD_NUMBER = 6;
-    private java.lang.Object tag_;
+    // optional bool toDeflate = 6;
+    public static final int TODEFLATE_FIELD_NUMBER = 6;
+    private boolean toDeflate_;
     /**
-     * <code>optional string tag = 6;</code>
+     * <code>optional bool toDeflate = 6;</code>
      */
-    public boolean hasTag() {
+    public boolean hasToDeflate() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>optional string tag = 6;</code>
+     * <code>optional bool toDeflate = 6;</code>
+     */
+    public boolean getToDeflate() {
+      return toDeflate_;
+    }
+
+    // optional string tag = 7;
+    public static final int TAG_FIELD_NUMBER = 7;
+    private java.lang.Object tag_;
+    /**
+     * <code>optional string tag = 7;</code>
+     */
+    public boolean hasTag() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional string tag = 7;</code>
      */
     public java.lang.String getTag() {
       java.lang.Object ref = tag_;
@@ -6665,7 +6696,7 @@ public final class SVMPProtocol {
       }
     }
     /**
-     * <code>optional string tag = 6;</code>
+     * <code>optional string tag = 7;</code>
      */
     public com.google.protobuf.ByteString
         getTagBytes() {
@@ -6687,6 +6718,7 @@ public final class SVMPProtocol {
       period_ = 0;
       format_ = "";
       toScale_ = false;
+      toDeflate_ = false;
       tag_ = "";
     }
     private byte memoizedIsInitialized = -1;
@@ -6717,7 +6749,10 @@ public final class SVMPProtocol {
         output.writeBool(5, toScale_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeBytes(6, getTagBytes());
+        output.writeBool(6, toDeflate_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeBytes(7, getTagBytes());
       }
     }
 
@@ -6749,7 +6784,11 @@ public final class SVMPProtocol {
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(6, getTagBytes());
+          .computeBoolSize(6, toDeflate_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(7, getTagBytes());
       }
       memoizedSerializedSize = size;
       return size;
@@ -6856,8 +6895,10 @@ public final class SVMPProtocol {
         bitField0_ = (bitField0_ & ~0x00000008);
         toScale_ = false;
         bitField0_ = (bitField0_ & ~0x00000010);
-        tag_ = "";
+        toDeflate_ = false;
         bitField0_ = (bitField0_ & ~0x00000020);
+        tag_ = "";
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -6904,6 +6945,10 @@ public final class SVMPProtocol {
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
+        result.toDeflate_ = toDeflate_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
         result.tag_ = tag_;
         result.bitField0_ = to_bitField0_;
         return result;
@@ -6928,8 +6973,11 @@ public final class SVMPProtocol {
         if (other.hasToScale()) {
           setToScale(other.getToScale());
         }
+        if (other.hasToDeflate()) {
+          setToDeflate(other.getToDeflate());
+        }
         if (other.hasTag()) {
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000040;
           tag_ = other.tag_;
           
         }
@@ -7168,16 +7216,49 @@ public final class SVMPProtocol {
         return this;
       }
 
-      // optional string tag = 6;
-      private java.lang.Object tag_ = "";
+      // optional bool toDeflate = 6;
+      private boolean toDeflate_ ;
       /**
-       * <code>optional string tag = 6;</code>
+       * <code>optional bool toDeflate = 6;</code>
        */
-      public boolean hasTag() {
+      public boolean hasToDeflate() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>optional string tag = 6;</code>
+       * <code>optional bool toDeflate = 6;</code>
+       */
+      public boolean getToDeflate() {
+        return toDeflate_;
+      }
+      /**
+       * <code>optional bool toDeflate = 6;</code>
+       */
+      public Builder setToDeflate(boolean value) {
+        bitField0_ |= 0x00000020;
+        toDeflate_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional bool toDeflate = 6;</code>
+       */
+      public Builder clearToDeflate() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        toDeflate_ = false;
+        
+        return this;
+      }
+
+      // optional string tag = 7;
+      private java.lang.Object tag_ = "";
+      /**
+       * <code>optional string tag = 7;</code>
+       */
+      public boolean hasTag() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional string tag = 7;</code>
        */
       public java.lang.String getTag() {
         java.lang.Object ref = tag_;
@@ -7191,7 +7272,7 @@ public final class SVMPProtocol {
         }
       }
       /**
-       * <code>optional string tag = 6;</code>
+       * <code>optional string tag = 7;</code>
        */
       public com.google.protobuf.ByteString
           getTagBytes() {
@@ -7207,36 +7288,36 @@ public final class SVMPProtocol {
         }
       }
       /**
-       * <code>optional string tag = 6;</code>
+       * <code>optional string tag = 7;</code>
        */
       public Builder setTag(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
+  bitField0_ |= 0x00000040;
         tag_ = value;
         
         return this;
       }
       /**
-       * <code>optional string tag = 6;</code>
+       * <code>optional string tag = 7;</code>
        */
       public Builder clearTag() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000040);
         tag_ = getDefaultInstance().getTag();
         
         return this;
       }
       /**
-       * <code>optional string tag = 6;</code>
+       * <code>optional string tag = 7;</code>
        */
       public Builder setTagBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
+  bitField0_ |= 0x00000040;
         tag_ = value;
         
         return this;

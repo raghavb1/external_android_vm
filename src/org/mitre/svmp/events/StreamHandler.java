@@ -62,17 +62,19 @@ public class StreamHandler{
 
 	public void handleShareScreenRequest(Request request) throws IOException{
 
-		System.out.println(" ******************** time before bitmap create ********************");
-		System.out.println(System.currentTimeMillis());
 
-		byte [] compressed = dynamicCompress(request, getScreenBitmap());
+		long myTime = System.currentTimeMillis();
+		byte [] compressed = compress(request);
 		if(!Arrays.equals(currentBytes, compressed)){
+			System.out.println(" ******************** time before bitmap create ********************");
+			System.out.println(myTime);
+			
 			currentBytes = compressed;
 			Response response = buildScreenResponse(ByteString.copyFrom(compressed), request.getStream().getTag());
 
 			base.sendMessage(response);
 
-			System.out.println("time after send response ********************");
+			System.out.println(" ******************** time after send response ********************");
 			System.out.println(System.currentTimeMillis());
 		}
 
@@ -144,7 +146,7 @@ public class StreamHandler{
 	//		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, start, bufferSize/4);
 	//		bb.amem.asReadOnlyBuffer();
 	//	}
-	public static byte[] compress(byte[] data) throws IOException {  
+	public static byte[] deflate(byte[] data) throws IOException {  
 		Deflater deflater = new Deflater();
 		deflater.setLevel(Deflater.BEST_SPEED);
 		deflater.setInput(data);
@@ -162,6 +164,16 @@ public class StreamHandler{
 		//		System.out.println("Compressed: " + output.length);  
 		return output;  
 	} 
+
+	private byte[] compress(Request request){
+		byte[] output;
+		if(request.getStream().getToDeflate()){
+			output = deflate(getScreenBitmap());
+		}else{
+			output = dynamicCompress(request, getScreenBitmap());
+		}
+		return output;
+	}
 
 }
 

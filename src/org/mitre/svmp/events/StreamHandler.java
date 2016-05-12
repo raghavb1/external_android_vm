@@ -165,16 +165,10 @@ public class StreamHandler{
 		return output;  
 	} 
 
-	private byte[] compress(Request request){
+	private byte[] compress(Request request) throws IOException{
 		byte[] output;
 		if(request.getStream().getToDeflate()){
-			try{
 			output = deflate(getScreenBitmap());
-			}catch(IOException e){
-				System.out.println("Exception while deflating");
-				e.printStackTrace();
-				output = dynamicCompress(request, getScreenBitmap());
-			}
 		}else{
 			output = dynamicCompress(request, getScreenBitmap());
 		}

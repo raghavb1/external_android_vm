@@ -96,8 +96,8 @@ public class LauncherHandler extends BaseHandler {
 				if (intent != null) {
 					//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(intent);
-					sendMessage();
 				}
+				sendMessage();
 			}
 		}
 		else {

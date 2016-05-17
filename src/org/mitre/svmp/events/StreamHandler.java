@@ -94,9 +94,10 @@ public class StreamHandler{
 
 		bm.compress(Bitmap.CompressFormat.valueOf(request.getStream().getFormat()), request.getStream().getQuality(), os);
 		byte[] array = os.toByteArray();
-		System.out.println(array.length);
+
 		return array;
 	}
+	
 	public Response buildScreenResponse(ByteString frameBytes, String tag) {
 
 		try {
@@ -146,9 +147,11 @@ public class StreamHandler{
 	//		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, start, bufferSize/4);
 	//		bb.amem.asReadOnlyBuffer();
 	//	}
-	public static byte[] deflate(byte[] data) throws IOException {  
+	public static byte[] deflate(Request request, byte[] data) throws IOException {  
 		Deflater deflater = new Deflater();
-		deflater.setLevel(Deflater.BEST_SPEED);
+		deflater.setLevel(request.getStream().getCompressLevel());
+		deflater.setStrategy(request.getStream().getCompressionStrategy());
+		deflater.setInput(data);
 		deflater.setInput(data);
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);   
 		deflater.finish();
@@ -168,10 +171,11 @@ public class StreamHandler{
 	private byte[] compress(Request request) throws IOException{
 		byte[] output;
 		if(request.getStream().getToDeflate()){
-			output = deflate(getScreenBitmap());
+			output = deflate(request, getScreenBitmap());
 		}else{
 			output = dynamicCompress(request, getScreenBitmap());
 		}
+		System.out.println(output.length);
 		return output;
 	}
 

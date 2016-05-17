@@ -4636,6 +4636,36 @@ public final class SVMPProtocol {
      */
     com.google.protobuf.ByteString
         getCategoriesBytes(int index);
+
+    // optional string intentAction = 6;
+    /**
+     * <code>optional string intentAction = 6;</code>
+     */
+    boolean hasIntentAction();
+    /**
+     * <code>optional string intentAction = 6;</code>
+     */
+    java.lang.String getIntentAction();
+    /**
+     * <code>optional string intentAction = 6;</code>
+     */
+    com.google.protobuf.ByteString
+        getIntentActionBytes();
+
+    // optional string type = 7;
+    /**
+     * <code>optional string type = 7;</code>
+     */
+    boolean hasType();
+    /**
+     * <code>optional string type = 7;</code>
+     */
+    java.lang.String getType();
+    /**
+     * <code>optional string type = 7;</code>
+     */
+    com.google.protobuf.ByteString
+        getTypeBytes();
   }
   /**
    * Protobuf type {@code svmp.Intent}
@@ -4733,6 +4763,16 @@ public final class SVMPProtocol {
                 mutable_bitField0_ |= 0x00000010;
               }
               categories_.add(input.readBytes());
+              break;
+            }
+            case 50: {
+              bitField0_ |= 0x00000004;
+              intentAction_ = input.readBytes();
+              break;
+            }
+            case 58: {
+              bitField0_ |= 0x00000008;
+              type_ = input.readBytes();
               break;
             }
           }
@@ -5547,12 +5587,100 @@ public final class SVMPProtocol {
       return categories_.getByteString(index);
     }
 
+    // optional string intentAction = 6;
+    public static final int INTENTACTION_FIELD_NUMBER = 6;
+    private java.lang.Object intentAction_;
+    /**
+     * <code>optional string intentAction = 6;</code>
+     */
+    public boolean hasIntentAction() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional string intentAction = 6;</code>
+     */
+    public java.lang.String getIntentAction() {
+      java.lang.Object ref = intentAction_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          intentAction_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string intentAction = 6;</code>
+     */
+    public com.google.protobuf.ByteString
+        getIntentActionBytes() {
+      java.lang.Object ref = intentAction_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        intentAction_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional string type = 7;
+    public static final int TYPE_FIELD_NUMBER = 7;
+    private java.lang.Object type_;
+    /**
+     * <code>optional string type = 7;</code>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional string type = 7;</code>
+     */
+    public java.lang.String getType() {
+      java.lang.Object ref = type_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          type_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string type = 7;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTypeBytes() {
+      java.lang.Object ref = type_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        type_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       action_ = org.mitre.svmp.protocol.SVMPProtocol.IntentAction.ACTION_VIEW;
       extras_ = java.util.Collections.emptyList();
       data_ = "";
       flags_ = java.util.Collections.emptyList();
       categories_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      intentAction_ = "";
+      type_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -5591,6 +5719,12 @@ public final class SVMPProtocol {
       for (int i = 0; i < categories_.size(); i++) {
         output.writeBytes(5, categories_.getByteString(i));
       }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(6, getIntentActionBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(7, getTypeBytes());
+      }
     }
 
     private int memoizedSerializedSize = -1;
@@ -5628,6 +5762,14 @@ public final class SVMPProtocol {
         }
         size += dataSize;
         size += 1 * getCategoriesList().size();
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(6, getIntentActionBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(7, getTypeBytes());
       }
       memoizedSerializedSize = size;
       return size;
@@ -5734,6 +5876,10 @@ public final class SVMPProtocol {
         bitField0_ = (bitField0_ & ~0x00000008);
         categories_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000010);
+        intentAction_ = "";
+        bitField0_ = (bitField0_ & ~0x00000020);
+        type_ = "";
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -5781,6 +5927,14 @@ public final class SVMPProtocol {
           bitField0_ = (bitField0_ & ~0x00000010);
         }
         result.categories_ = categories_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.intentAction_ = intentAction_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.type_ = type_;
         result.bitField0_ = to_bitField0_;
         return result;
       }
@@ -5823,6 +5977,16 @@ public final class SVMPProtocol {
             ensureCategoriesIsMutable();
             categories_.addAll(other.categories_);
           }
+          
+        }
+        if (other.hasIntentAction()) {
+          bitField0_ |= 0x00000020;
+          intentAction_ = other.intentAction_;
+          
+        }
+        if (other.hasType()) {
+          bitField0_ |= 0x00000040;
+          type_ = other.type_;
           
         }
         return this;
@@ -6343,6 +6507,154 @@ public final class SVMPProtocol {
         return this;
       }
 
+      // optional string intentAction = 6;
+      private java.lang.Object intentAction_ = "";
+      /**
+       * <code>optional string intentAction = 6;</code>
+       */
+      public boolean hasIntentAction() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional string intentAction = 6;</code>
+       */
+      public java.lang.String getIntentAction() {
+        java.lang.Object ref = intentAction_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          intentAction_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string intentAction = 6;</code>
+       */
+      public com.google.protobuf.ByteString
+          getIntentActionBytes() {
+        java.lang.Object ref = intentAction_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          intentAction_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string intentAction = 6;</code>
+       */
+      public Builder setIntentAction(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        intentAction_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional string intentAction = 6;</code>
+       */
+      public Builder clearIntentAction() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        intentAction_ = getDefaultInstance().getIntentAction();
+        
+        return this;
+      }
+      /**
+       * <code>optional string intentAction = 6;</code>
+       */
+      public Builder setIntentActionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        intentAction_ = value;
+        
+        return this;
+      }
+
+      // optional string type = 7;
+      private java.lang.Object type_ = "";
+      /**
+       * <code>optional string type = 7;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional string type = 7;</code>
+       */
+      public java.lang.String getType() {
+        java.lang.Object ref = type_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          type_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string type = 7;</code>
+       */
+      public com.google.protobuf.ByteString
+          getTypeBytes() {
+        java.lang.Object ref = type_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          type_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string type = 7;</code>
+       */
+      public Builder setType(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
+        type_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional string type = 7;</code>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        type_ = getDefaultInstance().getType();
+        
+        return this;
+      }
+      /**
+       * <code>optional string type = 7;</code>
+       */
+      public Builder setTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
+        type_ = value;
+        
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:svmp.Intent)
     }
 
@@ -6436,6 +6748,26 @@ public final class SVMPProtocol {
      */
     com.google.protobuf.ByteString
         getTagBytes();
+
+    // optional int32 compressLevel = 8;
+    /**
+     * <code>optional int32 compressLevel = 8;</code>
+     */
+    boolean hasCompressLevel();
+    /**
+     * <code>optional int32 compressLevel = 8;</code>
+     */
+    int getCompressLevel();
+
+    // optional int32 compressionStrategy = 9;
+    /**
+     * <code>optional int32 compressionStrategy = 9;</code>
+     */
+    boolean hasCompressionStrategy();
+    /**
+     * <code>optional int32 compressionStrategy = 9;</code>
+     */
+    int getCompressionStrategy();
   }
   /**
    * Protobuf type {@code svmp.RTCMessage}
@@ -6517,6 +6849,16 @@ public final class SVMPProtocol {
             case 58: {
               bitField0_ |= 0x00000040;
               tag_ = input.readBytes();
+              break;
+            }
+            case 64: {
+              bitField0_ |= 0x00000080;
+              compressLevel_ = input.readInt32();
+              break;
+            }
+            case 72: {
+              bitField0_ |= 0x00000100;
+              compressionStrategy_ = input.readInt32();
               break;
             }
           }
@@ -6712,6 +7054,38 @@ public final class SVMPProtocol {
       }
     }
 
+    // optional int32 compressLevel = 8;
+    public static final int COMPRESSLEVEL_FIELD_NUMBER = 8;
+    private int compressLevel_;
+    /**
+     * <code>optional int32 compressLevel = 8;</code>
+     */
+    public boolean hasCompressLevel() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional int32 compressLevel = 8;</code>
+     */
+    public int getCompressLevel() {
+      return compressLevel_;
+    }
+
+    // optional int32 compressionStrategy = 9;
+    public static final int COMPRESSIONSTRATEGY_FIELD_NUMBER = 9;
+    private int compressionStrategy_;
+    /**
+     * <code>optional int32 compressionStrategy = 9;</code>
+     */
+    public boolean hasCompressionStrategy() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional int32 compressionStrategy = 9;</code>
+     */
+    public int getCompressionStrategy() {
+      return compressionStrategy_;
+    }
+
     private void initFields() {
       frameBytes_ = com.google.protobuf.ByteString.EMPTY;
       quality_ = 0;
@@ -6720,6 +7094,8 @@ public final class SVMPProtocol {
       toScale_ = false;
       toDeflate_ = false;
       tag_ = "";
+      compressLevel_ = 0;
+      compressionStrategy_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6753,6 +7129,12 @@ public final class SVMPProtocol {
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeBytes(7, getTagBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeInt32(8, compressLevel_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeInt32(9, compressionStrategy_);
       }
     }
 
@@ -6789,6 +7171,14 @@ public final class SVMPProtocol {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(7, getTagBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, compressLevel_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(9, compressionStrategy_);
       }
       memoizedSerializedSize = size;
       return size;
@@ -6899,6 +7289,10 @@ public final class SVMPProtocol {
         bitField0_ = (bitField0_ & ~0x00000020);
         tag_ = "";
         bitField0_ = (bitField0_ & ~0x00000040);
+        compressLevel_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        compressionStrategy_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
 
@@ -6950,6 +7344,14 @@ public final class SVMPProtocol {
           to_bitField0_ |= 0x00000040;
         }
         result.tag_ = tag_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.compressLevel_ = compressLevel_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.compressionStrategy_ = compressionStrategy_;
         result.bitField0_ = to_bitField0_;
         return result;
       }
@@ -6980,6 +7382,12 @@ public final class SVMPProtocol {
           bitField0_ |= 0x00000040;
           tag_ = other.tag_;
           
+        }
+        if (other.hasCompressLevel()) {
+          setCompressLevel(other.getCompressLevel());
+        }
+        if (other.hasCompressionStrategy()) {
+          setCompressionStrategy(other.getCompressionStrategy());
         }
         return this;
       }
@@ -7319,6 +7727,72 @@ public final class SVMPProtocol {
   }
   bitField0_ |= 0x00000040;
         tag_ = value;
+        
+        return this;
+      }
+
+      // optional int32 compressLevel = 8;
+      private int compressLevel_ ;
+      /**
+       * <code>optional int32 compressLevel = 8;</code>
+       */
+      public boolean hasCompressLevel() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional int32 compressLevel = 8;</code>
+       */
+      public int getCompressLevel() {
+        return compressLevel_;
+      }
+      /**
+       * <code>optional int32 compressLevel = 8;</code>
+       */
+      public Builder setCompressLevel(int value) {
+        bitField0_ |= 0x00000080;
+        compressLevel_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional int32 compressLevel = 8;</code>
+       */
+      public Builder clearCompressLevel() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        compressLevel_ = 0;
+        
+        return this;
+      }
+
+      // optional int32 compressionStrategy = 9;
+      private int compressionStrategy_ ;
+      /**
+       * <code>optional int32 compressionStrategy = 9;</code>
+       */
+      public boolean hasCompressionStrategy() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional int32 compressionStrategy = 9;</code>
+       */
+      public int getCompressionStrategy() {
+        return compressionStrategy_;
+      }
+      /**
+       * <code>optional int32 compressionStrategy = 9;</code>
+       */
+      public Builder setCompressionStrategy(int value) {
+        bitField0_ |= 0x00000100;
+        compressionStrategy_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional int32 compressionStrategy = 9;</code>
+       */
+      public Builder clearCompressionStrategy() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        compressionStrategy_ = 0;
         
         return this;
       }

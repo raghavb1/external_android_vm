@@ -90,7 +90,7 @@ public class ImplicitIntentHandler extends Activity {
         setResult(Activity.RESULT_OK, (new Intent().setData(getImageUri(this, bitmap))) );
         finish();
     }
-
+s
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();

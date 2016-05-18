@@ -31,7 +31,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
 
     public void onReceive(Context context, Intent intent) {
         // we receive the BOOT_COMPLETED broadcast intent to start this service as soon as the phone boots up
-        if (intent.getAction() != null && intent.getAction().equals("android.intent.action.BOOT_COMPLETED") ) {
+        if (intent.getAction() != null && intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             Log.d(TAG, "Received system boot intent broadcast");
 
             // Enable our launcher component programmatically to prevent issues with receiving BOOT_COMPLETED
@@ -47,14 +47,14 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
             // Enable mock location providers (turned off by default on user builds)
             // Requires WRITE_SECURE_SETTINGS permission
             Settings.Secure.putInt(context.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION, 1);
-            
+
             //Settings.Secure.putString(context.getContentResolver(), Settings.Secure.ENABLED_INPUT_METHODS, "org.mitre.svmp.events/.org.mitre.svmp.events.SimpleIME");
 
-          //set your keyboard as the new default keyboard
+            //set your keyboard as the new default keyboard
             Settings.Secure.putString(context.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD, "org.mitre.svmp.events/.SimpleIME");
 
             // start the EventServer if it hasn't been started
-            context.startService( new Intent(context, BackgroundService.class) );
+            context.startService(new Intent(context, BackgroundService.class));
         }
     }
 }

@@ -91,6 +91,7 @@ public class ImplicitIntentHandler extends Activity {
         finish();
     }
 
+
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);

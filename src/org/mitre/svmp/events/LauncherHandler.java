@@ -97,8 +97,8 @@ public class LauncherHandler extends BaseHandler {
 					//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(intent);
 				}
-				sendMessage();
 			}
+			sendMessage();
 		}
 		else {
 			// the client wants to go to the normal Launcher "desktop"

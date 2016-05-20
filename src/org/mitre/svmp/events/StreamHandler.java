@@ -6,7 +6,12 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.zip.Deflater;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -68,7 +73,7 @@ public class StreamHandler{
 		if(!Arrays.equals(currentBytes, compressed)){
 			System.out.println(" ******************** time before bitmap create ********************");
 			System.out.println(myTime);
-			
+
 			currentBytes = compressed;
 			Response response = buildScreenResponse(ByteString.copyFrom(compressed), request.getStream().getTag());
 
@@ -97,7 +102,7 @@ public class StreamHandler{
 
 		return array;
 	}
-	
+
 	public Response buildScreenResponse(ByteString frameBytes, String tag) {
 
 		try {
@@ -177,6 +182,22 @@ public class StreamHandler{
 		}
 		System.out.println(output.length);
 		return output;
+	}
+
+	private ScheduledExecutorService startFrameThreadInternal(final Request request){
+		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
+
+		List<Future<?>> list = new ArrayList<Future<?>>();
+		
+		Future<?> future = scheduleTaskExecutor.submit(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				
+			}});
+		
+		list.add(future);
 	}
 
 }

@@ -184,21 +184,21 @@ public class StreamHandler{
 		return output;
 	}
 
-	private ScheduledExecutorService startFrameThreadInternal(final Request request){
-		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
-
-		List<Future<?>> list = new ArrayList<Future<?>>();
-		
-		Future<?> future = scheduleTaskExecutor.submit(new Runnable(){
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				
-			}});
-		
-		list.add(future);
-	}
+//	private ScheduledExecutorService startFrameThreadInternal(final Request request){
+//		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
+//
+//		List<Future<?>> list = new ArrayList<Future<?>>();
+//		
+//		Future<?> future = scheduleTaskExecutor.submit(new Runnable(){
+//
+//			@Override
+//			public void run() {
+//				// TODO Auto-generated method stub
+//				
+//			}});
+//		
+//		list.add(future);
+//	}
 
 }
 

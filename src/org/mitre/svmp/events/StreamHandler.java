@@ -189,11 +189,8 @@ public class StreamHandler{
 			output = deflate(request, getScreenBitmap());
 		}else{
 			//output = dynamicCompress(request, getScreenBitmap());
-			Bitmap bm = returnBitmapForFile(FB0FILE1);
-
-            ByteBuffer byteBuffer = ByteBuffer.allocate(bm.getRowBytes()*bm.getHeight());
-            bm.copyPixelsToBuffer(byteBuffer);
-            output = byteBuffer.array();
+			ByteArrayOutputStream fos = returnBitmapForFile(FB0FILE1);
+            output = fos.toByteArray();
 		}
 		System.out.println(output.length);
 		return output;
@@ -216,7 +213,7 @@ public class StreamHandler{
 //	}
 	
 
-	private Bitmap returnBitmapForFile(String filePath) throws IOException{
+	private ByteArrayOutputStream returnBitmapForFile(String filePath) throws IOException{
 		
 		RandomAccessFile raf = new RandomAccessFile(new File(filePath), "r");
 		FileChannel fc = raf.getChannel();
@@ -234,9 +231,8 @@ public class StreamHandler{
 		
 		ExecutorService taskExecutor = Executors.newFixedThreadPool(dividingFactor*dividingFactor);
 
-		Bitmap bmOverlay = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
-
-		final Canvas canvas = new Canvas(bmOverlay);
+		final ByteArrayOutputStream fos = new ByteArrayOutputStream();
+		
 		for(int i=0; i < dividingFactor ;i++){
 			for(int j=0; j < dividingFactor ;j++){
 				
@@ -260,9 +256,7 @@ public class StreamHandler{
 				        Bitmap bm = Bitmap.createBitmap(pixels, 0, screenWidth/dividingFactor, screenWidth/dividingFactor, screenHeight/dividingFactor, Bitmap.Config.RGB_565);//ARGB_8888 is a good quality configuration
 				        bm.compress(Bitmap.CompressFormat.WEBP, 10, bos);//100 is the best quality possibe
 				        byte[] square = bos.toByteArray();
-				        
-						Bitmap bm1 = BitmapFactory.decodeByteArray(square, 0, square.length);
-						canvas.drawBitmap(bm1, topLeftX,topLeftY, null);
+				        fos.write(square);
 
 					}
 				});
@@ -278,7 +272,7 @@ public class StreamHandler{
 
 			}
 		
-		return bmOverlay;
+		return fos;
 	}
 }
 

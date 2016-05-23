@@ -246,7 +246,7 @@ public class StreamHandler{
 						int bottomRightX = (screenWidth/dividingFactor)*(y+1);
 						int bottomRightY = (screenHeight/dividingFactor)*(x+1);
 						
-						java.io.ByteArrayOutputStream os1 = new ByteArrayOutputStream();
+						ByteArrayOutputStream os1 = new ByteArrayOutputStream();
 						System.out.println("********before deocde*****"+System.currentTimeMillis());
 						Bitmap region = decoder.decodeRegion(new Rect(topLeftX, topLeftY, bottomRightX, bottomRightY), null);
 						System.out.println("********after deocde*****"+System.currentTimeMillis());

@@ -1,5 +1,6 @@
 package org.mitre.svmp.events;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -220,12 +221,14 @@ public class StreamHandler{
 		RandomAccessFile raf = new RandomAccessFile(new File(filePath), "r");
 		FileChannel fc = raf.getChannel();
 
-		InputStream is = Channels.newInputStream(fc);
-		System.out.println(System.currentTimeMillis());
-		final BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(is, false);  
-
+		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, 0, bufferSize);
+		byte[] piex = new byte[bufferSize];
+		mem.get(piex);
 		fc.close();
 		raf.close();
+		
+		InputStream is = new ByteArrayInputStream(piex);
+		final BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(is, false);  
 		
 		ExecutorService taskExecutor = Executors.newFixedThreadPool(dividingFactor*dividingFactor);
 

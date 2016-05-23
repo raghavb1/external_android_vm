@@ -2,16 +2,20 @@ package org.mitre.svmp.events;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
+import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.Deflater;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -30,7 +34,11 @@ import android.view.WindowManagerImpl;
 import android.hardware.display.DisplayManagerGlobal;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapRegionDecoder;
+import android.graphics.Canvas;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.view.Display;
 
 public class StreamHandler{
@@ -49,6 +57,7 @@ public class StreamHandler{
 	static int screenWidth = getScreenSize().x;
 	static int screenHeight = getScreenSize().y;
 	static int bytesPerPixel = 2;
+	static int dividingFactor = 2;
 	static int totalPixels = screenHeight * screenWidth;
 	private static int bufferSize=totalPixels * bytesPerPixel;
 	public boolean inProcess = true;
@@ -178,27 +187,90 @@ public class StreamHandler{
 		if(request.getStream().getToDeflate()){
 			output = deflate(request, getScreenBitmap());
 		}else{
-			output = dynamicCompress(request, getScreenBitmap());
+			//output = dynamicCompress(request, getScreenBitmap());
+			Bitmap bm = returnBitmapForFile(FB0FILE1);
+
+            ByteBuffer byteBuffer = ByteBuffer.allocate(bm.getRowBytes()*bm.getHeight());
+            bm.copyPixelsToBuffer(byteBuffer);
+            output = byteBuffer.array();
 		}
 		System.out.println(output.length);
 		return output;
 	}
 
-//	private ScheduledExecutorService startFrameThreadInternal(final Request request){
-//		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
-//
-//		List<Future<?>> list = new ArrayList<Future<?>>();
-//		
-//		Future<?> future = scheduleTaskExecutor.submit(new Runnable(){
-//
-//			@Override
-//			public void run() {
-//				// TODO Auto-generated method stub
-//				
-//			}});
-//		
-//		list.add(future);
-//	}
+	private ScheduledExecutorService startFrameThreadInternal(final Request request){
+		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
 
+		List<Future<?>> list = new ArrayList<Future<?>>();
+		
+		Future<?> future = scheduleTaskExecutor.submit(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				
+			}});
+		
+		list.add(future);
+	}
+	
+
+	private Bitmap returnBitmapForFile(String filePath) throws IOException{
+		
+		RandomAccessFile raf = new RandomAccessFile(new File(filePath), "r");
+		FileChannel fc = raf.getChannel();
+
+		InputStream is = Channels.newInputStream(fc);
+		System.out.println(System.currentTimeMillis());
+		final BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(is, false);  
+
+		fc.close();
+		raf.close();
+		
+		ExecutorService taskExecutor = Executors.newFixedThreadPool(dividingFactor*dividingFactor);
+
+		Bitmap bmOverlay = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
+		final Canvas canvas = new Canvas(bmOverlay);
+		for(int i=0; i < dividingFactor ;i++){
+			for(int j=0; j < dividingFactor ;j++){
+				
+				final int x = i;
+				final int y = j;
+
+				taskExecutor.execute(new Runnable() {
+
+					public void run() {
+						
+						int topLeftX = y*(screenWidth/dividingFactor);
+						int topLeftY = x*(screenHeight/dividingFactor) ;
+						int bottomRightX = (screenWidth/dividingFactor)*(y+1);
+						int bottomRightY = (screenHeight/dividingFactor)*(x+1);
+						
+						java.io.ByteArrayOutputStream os1 = new ByteArrayOutputStream();
+						System.out.println("********before deocde*****"+System.currentTimeMillis());
+						Bitmap region = decoder.decodeRegion(new Rect(topLeftX, topLeftY, bottomRightX, bottomRightY), null);
+						System.out.println("********after deocde*****"+System.currentTimeMillis());
+						region.compress(Bitmap.CompressFormat.JPEG,10, os1);
+						System.out.println("********after compress*****"+System.currentTimeMillis());
+						byte[] thisByte = os1.toByteArray();
+						Bitmap bm1 = BitmapFactory.decodeByteArray(thisByte, 0, thisByte.length);
+						canvas.drawBitmap(bm1, topLeftX,topLeftY, null);
+
+					}
+				});
+
+			}
+		} 
+
+		taskExecutor.shutdown();
+		
+		try {
+			  taskExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+			} catch (InterruptedException e) {
+
+			}
+		
+		return bmOverlay;
+	}
 }
 

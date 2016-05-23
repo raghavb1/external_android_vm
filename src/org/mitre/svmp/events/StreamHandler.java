@@ -226,9 +226,8 @@ public class StreamHandler{
 		mem.get(piex);
 		fc.close();
 		raf.close();
-		
-		InputStream is = new ByteArrayInputStream(piex);
-		final BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(is, false);  
+
+		final BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(piex, 0, piex.length, false); 
 		
 		ExecutorService taskExecutor = Executors.newFixedThreadPool(dividingFactor*dividingFactor);
 

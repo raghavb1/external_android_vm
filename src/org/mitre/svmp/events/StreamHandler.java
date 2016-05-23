@@ -227,6 +227,14 @@ public class StreamHandler{
 		fc.close();
 		raf.close();
 
+		Bitmap bm = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
+		ByteBuffer buffer = ByteBuffer.wrap(piex);
+		bm.copyPixelsFromBuffer(buffer);
+		
+        ByteBuffer byteBuffer = ByteBuffer.allocate(bm.getRowBytes()*bm.getHeight());
+        bm.copyPixelsToBuffer(byteBuffer);
+        piex = byteBuffer.array();
+        
 		final BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(piex, 0, piex.length, false); 
 		
 		ExecutorService taskExecutor = Executors.newFixedThreadPool(dividingFactor*dividingFactor);

@@ -245,7 +245,11 @@ public class StreamHandler{
 				        Bitmap bm = Bitmap.createBitmap(pixels, 0, screenWidth/dividingFactor, screenWidth/dividingFactor, screenHeight/dividingFactor, Bitmap.Config.RGB_565);//ARGB_8888 is a good quality configuration
 				        bm.compress(Bitmap.CompressFormat.WEBP, 10, bos);//100 is the best quality possibe
 				        byte[] square = bos.toByteArray();
+						try {
 				        fos.write(square);
+						} catch( IOException e ) {
+							e.printStackTrace();
+						}
 
 					}
 				});

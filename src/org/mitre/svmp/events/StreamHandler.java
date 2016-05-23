@@ -1,25 +1,18 @@
 package org.mitre.svmp.events;
 
-import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
-import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.Deflater;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.mitre.svmp.protocol.SVMPProtocol;
 import org.mitre.svmp.protocol.SVMPProtocol.Request;
 import org.mitre.svmp.protocol.SVMPProtocol.Response;
@@ -35,11 +28,7 @@ import android.view.WindowManagerImpl;
 import android.hardware.display.DisplayManagerGlobal;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapRegionDecoder;
-import android.graphics.Canvas;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.view.Display;
 
 public class StreamHandler{

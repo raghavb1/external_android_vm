@@ -226,20 +226,16 @@ public class StreamHandler{
 		mem.get(piex);
 		fc.close();
 		raf.close();
-
-		Bitmap bm = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
-		ByteBuffer buffer = ByteBuffer.wrap(piex);
-		bm.copyPixelsFromBuffer(buffer);
 		
-        ByteBuffer byteBuffer = ByteBuffer.allocate(bm.getRowBytes()*bm.getHeight());
-        bm.copyPixelsToBuffer(byteBuffer);
-        piex = byteBuffer.array();
-        
-		final BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(piex, 0, piex.length, false); 
+		final Bitmap bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
+		ByteBuffer buffer = ByteBuffer.wrap(piex);
+		bitmap.copyPixelsFromBuffer(buffer);
+
 		
 		ExecutorService taskExecutor = Executors.newFixedThreadPool(dividingFactor*dividingFactor);
 
 		Bitmap bmOverlay = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
+
 		final Canvas canvas = new Canvas(bmOverlay);
 		for(int i=0; i < dividingFactor ;i++){
 			for(int j=0; j < dividingFactor ;j++){
@@ -256,14 +252,16 @@ public class StreamHandler{
 						int bottomRightX = (screenWidth/dividingFactor)*(y+1);
 						int bottomRightY = (screenHeight/dividingFactor)*(x+1);
 						
-						ByteArrayOutputStream os1 = new ByteArrayOutputStream();
-						System.out.println("********before deocde*****"+System.currentTimeMillis());
-						Bitmap region = decoder.decodeRegion(new Rect(topLeftX, topLeftY, bottomRightX, bottomRightY), null);
-						System.out.println("********after deocde*****"+System.currentTimeMillis());
-						region.compress(Bitmap.CompressFormat.JPEG,10, os1);
-						System.out.println("********after compress*****"+System.currentTimeMillis());
-						byte[] thisByte = os1.toByteArray();
-						Bitmap bm1 = BitmapFactory.decodeByteArray(thisByte, 0, thisByte.length);
+						int[] pixels = new int[(screenWidth/dividingFactor)*(screenHeight/dividingFactor)];//the size of the array is the dimensions of the sub-photo
+				        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				        
+				        bitmap.getPixels(pixels, 0, screenWidth/dividingFactor, topLeftX, topLeftY, screenWidth/dividingFactor, screenHeight/dividingFactor);
+				        
+				        Bitmap bm = Bitmap.createBitmap(pixels, 0, screenWidth/dividingFactor, screenWidth/dividingFactor, screenHeight/dividingFactor, Bitmap.Config.RGB_565);//ARGB_8888 is a good quality configuration
+				        bm.compress(Bitmap.CompressFormat.WEBP, 10, bos);//100 is the best quality possibe
+				        byte[] square = bos.toByteArray();
+				        
+						Bitmap bm1 = BitmapFactory.decodeByteArray(square, 0, square.length);
 						canvas.drawBitmap(bm1, topLeftX,topLeftY, null);
 
 					}

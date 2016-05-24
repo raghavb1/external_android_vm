@@ -88,12 +88,11 @@ public class StreamHandler{
 
 	}
 
-	private byte[] dynamicCompress(Request request, byte[] frameBytes){
+	private byte[] dynamicCompress(Request request, MappedByteBuffer frameBytes){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-		Bitmap bm = Bitmap.createBitmap(screenWidth/2, screenHeight/2, Bitmap.Config.RGB_565);
-		ByteBuffer buffer = ByteBuffer.wrap(frameBytes);
-		bm.copyPixelsFromBuffer(buffer);
+		Bitmap bm = Bitmap.createBitmap(screenWidth, screenHeight/2, Bitmap.Config.RGB_565);
+		bm.copyPixelsFromBuffer(frameBytes);
 
 		if(request.getStream().getToScale()){
 			bm = Bitmap.createScaledBitmap(bm, screenWidth/2, screenWidth/2, true);
@@ -127,7 +126,7 @@ public class StreamHandler{
 
 
 
-	public byte[] getScreenBitmap() throws IOException {
+	public MappedByteBuffer getScreenBitmap(Request request) throws IOException {
 
 		//		System.out.println(" ******************** time before bitmap create ********************");
 		//		System.out.println(System.currentTimeMillis());
@@ -135,13 +134,11 @@ public class StreamHandler{
 		FileChannel fc = raf.getChannel();
 
 
-		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, 0, bufferSize/4);
-		byte[] piex = new byte[bufferSize/4];
-		mem.get(piex);
+		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, 0, bufferSize/2);
 		fc.close();
 		raf.close();
 
-		return piex;
+		return mem;
 
 	}
 
@@ -177,36 +174,33 @@ public class StreamHandler{
 
 	private byte[] compress(Request request) throws IOException{
 		byte[] output;
-		if(request.getStream().getToDeflate()){
-			output = deflate(request, getScreenBitmap());
-		}else{
-			output = dynamicCompress(request, getScreenBitmap());
-//			ByteArrayOutputStream fos = returnBitmapForFile(FB0FILE1);
-//            output = fos.toByteArray();
-		}
+
+		output = dynamicCompress(request, getScreenBitmap(request));
+		//			ByteArrayOutputStream fos = returnBitmapForFile(FB0FILE1);
+		//            output = fos.toByteArray();
 		System.out.println(output.length);
 		return output;
 	}
 
-//	private ScheduledExecutorService startFrameThreadInternal(final Request request){
-//		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
-//
-//		List<Future<?>> list = new ArrayList<Future<?>>();
-//		
-//		Future<?> future = scheduleTaskExecutor.submit(new Runnable(){
-//
-//			@Override
-//			public void run() {
-//				// TODO Auto-generated method stub
-//				
-//			}});
-//		
-//		list.add(future);
-//	}
-	
+	//	private ScheduledExecutorService startFrameThreadInternal(final Request request){
+	//		ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
+	//
+	//		List<Future<?>> list = new ArrayList<Future<?>>();
+	//		
+	//		Future<?> future = scheduleTaskExecutor.submit(new Runnable(){
+	//
+	//			@Override
+	//			public void run() {
+	//				// TODO Auto-generated method stub
+	//				
+	//			}});
+	//		
+	//		list.add(future);
+	//	}
+
 
 	private ByteArrayOutputStream returnBitmapForFile(String filePath) throws IOException{
-		
+
 		RandomAccessFile raf = new RandomAccessFile(new File(filePath), "r");
 		FileChannel fc = raf.getChannel();
 
@@ -215,45 +209,45 @@ public class StreamHandler{
 		mem.get(piex);
 		fc.close();
 		raf.close();
-		
+
 		final Bitmap bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
 		ByteBuffer buffer = ByteBuffer.wrap(piex);
 		bitmap.copyPixelsFromBuffer(buffer);
 
-		
+
 		ExecutorService taskExecutor = Executors.newFixedThreadPool(dividingFactor*dividingFactor);
 
 		final ByteArrayOutputStream fos = new ByteArrayOutputStream();
-		
+
 		for(int i=0; i < dividingFactor ;i++){
 			for(int j=0; j < dividingFactor ;j++){
-				
+
 				final int x = i;
 				final int y = j;
 
 				taskExecutor.execute(new Runnable() {
 
 					public void run() {
-						
+
 						int topLeftX = y*(screenWidth/dividingFactor);
 						int topLeftY = x*(screenHeight/dividingFactor) ;
 						int bottomRightX = (screenWidth/dividingFactor)*(y+1);
 						int bottomRightY = (screenHeight/dividingFactor)*(x+1);
-						
+
 						int[] pixels = new int[(screenWidth/dividingFactor)*(screenHeight/dividingFactor)];//the size of the array is the dimensions of the sub-photo
-				        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				        
-				        bitmap.getPixels(pixels, 0, screenWidth/dividingFactor, topLeftX, topLeftY, screenWidth/dividingFactor, screenHeight/dividingFactor);
-				        
-				        Bitmap bm = Bitmap.createBitmap(pixels, 0, screenWidth/dividingFactor, screenWidth/dividingFactor, screenHeight/dividingFactor, Bitmap.Config.RGB_565);//ARGB_8888 is a good quality configuration
-				        bm.compress(Bitmap.CompressFormat.WEBP, 10, bos);//100 is the best quality possibe
-				        byte[] square = bos.toByteArray();
-						
-//						try {
-//				        fos.write(square, offset, square.length);
-//						} catch( IOException e ) {
-//							e.printStackTrace();
-//						}
+						ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+						bitmap.getPixels(pixels, 0, screenWidth/dividingFactor, topLeftX, topLeftY, screenWidth/dividingFactor, screenHeight/dividingFactor);
+
+						Bitmap bm = Bitmap.createBitmap(pixels, 0, screenWidth/dividingFactor, screenWidth/dividingFactor, screenHeight/dividingFactor, Bitmap.Config.RGB_565);//ARGB_8888 is a good quality configuration
+						bm.compress(Bitmap.CompressFormat.WEBP, 10, bos);//100 is the best quality possibe
+						byte[] square = bos.toByteArray();
+
+						//						try {
+						//				        fos.write(square, offset, square.length);
+						//						} catch( IOException e ) {
+						//							e.printStackTrace();
+						//						}
 
 					}
 				});
@@ -262,13 +256,13 @@ public class StreamHandler{
 		} 
 
 		taskExecutor.shutdown();
-		
-		try {
-			  taskExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-			} catch (InterruptedException e) {
 
-			}
-		
+		try {
+			taskExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		} catch (InterruptedException e) {
+
+		}
+
 		return fos;
 	}
 }

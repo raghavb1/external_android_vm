@@ -134,7 +134,6 @@ public class StreamHandler{
 		FileChannel fc = raf.getChannel();
 		
 		int offset = (request.getStream().getRequiredSection()*bufferSize)/request.getStream().getDividingFactor();
-		
 		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, offset, bufferSize/request.getStream().getDividingFactor());
 		fc.close();
 		raf.close();

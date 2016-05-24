@@ -91,7 +91,7 @@ public class StreamHandler{
 	private byte[] dynamicCompress(Request request, MappedByteBuffer frameBytes){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-		Bitmap bm = Bitmap.createBitmap(screenWidth, screenHeight/2, Bitmap.Config.RGB_565);
+		Bitmap bm = Bitmap.createBitmap(screenWidth, screenHeight/request.getStream().getDividingFactor(), Bitmap.Config.RGB_565);
 		bm.copyPixelsFromBuffer(frameBytes);
 
 		if(request.getStream().getToScale()){
@@ -132,9 +132,10 @@ public class StreamHandler{
 		//		System.out.println(System.currentTimeMillis());
 		RandomAccessFile raf = new RandomAccessFile(new File(FB0FILE1), "r");
 		FileChannel fc = raf.getChannel();
-
-
-		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, 0, bufferSize/2);
+		
+		int offset = (request.getStream().getRequiredSection()*bufferSize)/request.getStream().getDividingFactor();
+		
+		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, offset, bufferSize/request.getStream().getDividingFactor());
 		fc.close();
 		raf.close();
 

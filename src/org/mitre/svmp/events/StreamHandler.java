@@ -249,11 +249,11 @@ public class StreamHandler{
 				        bm.compress(Bitmap.CompressFormat.WEBP, 10, bos);//100 is the best quality possibe
 				        byte[] square = bos.toByteArray();
 						
-						try {
-				        fos.write(square, offset, square.length);
-						} catch( IOException e ) {
-							e.printStackTrace();
-						}
+//						try {
+//				        fos.write(square, offset, square.length);
+//						} catch( IOException e ) {
+//							e.printStackTrace();
+//						}
 
 					}
 				});

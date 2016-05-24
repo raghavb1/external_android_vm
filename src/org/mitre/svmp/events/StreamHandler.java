@@ -28,6 +28,7 @@ import android.view.WindowManagerImpl;
 import android.hardware.display.DisplayManagerGlobal;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.view.Display;
 
@@ -68,9 +69,11 @@ public class StreamHandler{
 
 
 		long myTime = System.currentTimeMillis();
+		System.out.println(" ******************** time before bitmap create ********************");
+		System.out.println(myTime);
 		byte [] compressed = compress(request);
 		if(!Arrays.equals(currentBytes, compressed)){
-			System.out.println(" ******************** time before bitmap create ********************");
+			System.out.println(" ******************** time after compress ********************");
 			System.out.println(myTime);
 
 			currentBytes = compressed;
@@ -88,7 +91,7 @@ public class StreamHandler{
 	private byte[] dynamicCompress(Request request, byte[] frameBytes){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-		Bitmap bm = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
+		Bitmap bm = Bitmap.createBitmap(screenWidth/2, screenHeight/2, Bitmap.Config.RGB_565);
 		ByteBuffer buffer = ByteBuffer.wrap(frameBytes);
 		bm.copyPixelsFromBuffer(buffer);
 
@@ -132,8 +135,8 @@ public class StreamHandler{
 		FileChannel fc = raf.getChannel();
 
 
-		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, 0, bufferSize);
-		byte[] piex = new byte[bufferSize];
+		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, 0, bufferSize/4);
+		byte[] piex = new byte[bufferSize/4];
 		mem.get(piex);
 		fc.close();
 		raf.close();
@@ -177,9 +180,9 @@ public class StreamHandler{
 		if(request.getStream().getToDeflate()){
 			output = deflate(request, getScreenBitmap());
 		}else{
-			//output = dynamicCompress(request, getScreenBitmap());
-			ByteArrayOutputStream fos = returnBitmapForFile(FB0FILE1);
-            output = fos.toByteArray();
+			output = dynamicCompress(request, getScreenBitmap());
+//			ByteArrayOutputStream fos = returnBitmapForFile(FB0FILE1);
+//            output = fos.toByteArray();
 		}
 		System.out.println(output.length);
 		return output;
@@ -245,8 +248,9 @@ public class StreamHandler{
 				        Bitmap bm = Bitmap.createBitmap(pixels, 0, screenWidth/dividingFactor, screenWidth/dividingFactor, screenHeight/dividingFactor, Bitmap.Config.RGB_565);//ARGB_8888 is a good quality configuration
 				        bm.compress(Bitmap.CompressFormat.WEBP, 10, bos);//100 is the best quality possibe
 				        byte[] square = bos.toByteArray();
+						
 						try {
-				        fos.write(square);
+				        fos.write(square, offset, square.length);
 						} catch( IOException e ) {
 							e.printStackTrace();
 						}

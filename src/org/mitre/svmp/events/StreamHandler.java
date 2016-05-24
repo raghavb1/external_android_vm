@@ -69,21 +69,10 @@ public class StreamHandler{
 
 
 		long myTime = System.currentTimeMillis();
-		System.out.println(" ******************** time before bitmap create ********************");
-		System.out.println(myTime);
 		byte [] compressed = compress(request);
-		if(!Arrays.equals(currentBytes, compressed)){
-			System.out.println(" ******************** time after compress ********************");
-			System.out.println(myTime);
-
-			currentBytes = compressed;
-			Response response = buildScreenResponse(ByteString.copyFrom(compressed), request.getStream().getTag());
-
-			base.sendMessage(response);
-
-			System.out.println(" ******************** time after send response ********************");
-			System.out.println(System.currentTimeMillis());
-		}
+		currentBytes = compressed;
+		Response response = buildScreenResponse(ByteString.copyFrom(compressed), request.getStream().getTag());
+		base.sendMessage(response);
 
 
 	}
@@ -132,7 +121,7 @@ public class StreamHandler{
 		//		System.out.println(System.currentTimeMillis());
 		RandomAccessFile raf = new RandomAccessFile(new File(FB0FILE1), "r");
 		FileChannel fc = raf.getChannel();
-		
+
 		int offset = (request.getStream().getRequiredSection()*bufferSize)/request.getStream().getDividingFactor();
 		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, offset, bufferSize/request.getStream().getDividingFactor());
 		fc.close();
@@ -151,26 +140,26 @@ public class StreamHandler{
 	//		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, start, bufferSize/4);
 	//		bb.amem.asReadOnlyBuffer();
 	//	}
-	public static byte[] deflate(Request request, byte[] data) throws IOException {  
-		Deflater deflater = new Deflater();
-		deflater.setLevel(request.getStream().getCompressLevel());
-		deflater.setStrategy(request.getStream().getCompressionStrategy());
-		deflater.setInput(data);
-		deflater.setInput(data);
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);   
-		deflater.finish();
-		byte[] buffer = new byte[1024];   
-		while (!deflater.finished()) {  
-			int count = deflater.deflate(buffer); // returns the generated code... index  
-			outputStream.write(buffer, 0, count);   
-		}  
-		outputStream.close();
-		deflater.end();
-		byte[] output = outputStream.toByteArray();  
-		//		System.out.println("Original: " + data.length);  
-		//		System.out.println("Compressed: " + output.length);  
-		return output;  
-	} 
+	//	public static byte[] deflate(Request request, byte[] data) throws IOException {  
+	//		Deflater deflater = new Deflater();
+	//		deflater.setLevel(request.getStream().getCompressLevel());
+	//		deflater.setStrategy(request.getStream().getCompressionStrategy());
+	//		deflater.setInput(data);
+	//		deflater.setInput(data);
+	//		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);   
+	//		deflater.finish();
+	//		byte[] buffer = new byte[1024];   
+	//		while (!deflater.finished()) {  
+	//			int count = deflater.deflate(buffer); // returns the generated code... index  
+	//			outputStream.write(buffer, 0, count);   
+	//		}  
+	//		outputStream.close();
+	//		deflater.end();
+	//		byte[] output = outputStream.toByteArray();  
+	//		//		System.out.println("Original: " + data.length);  
+	//		//		System.out.println("Compressed: " + output.length);  
+	//		return output;  
+	//	} 
 
 	private byte[] compress(Request request) throws IOException{
 		byte[] output;
@@ -199,71 +188,71 @@ public class StreamHandler{
 	//	}
 
 
-	private ByteArrayOutputStream returnBitmapForFile(String filePath) throws IOException{
-
-		RandomAccessFile raf = new RandomAccessFile(new File(filePath), "r");
-		FileChannel fc = raf.getChannel();
-
-		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, 0, bufferSize);
-		byte[] piex = new byte[bufferSize];
-		mem.get(piex);
-		fc.close();
-		raf.close();
-
-		final Bitmap bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
-		ByteBuffer buffer = ByteBuffer.wrap(piex);
-		bitmap.copyPixelsFromBuffer(buffer);
-
-
-		ExecutorService taskExecutor = Executors.newFixedThreadPool(dividingFactor*dividingFactor);
-
-		final ByteArrayOutputStream fos = new ByteArrayOutputStream();
-
-		for(int i=0; i < dividingFactor ;i++){
-			for(int j=0; j < dividingFactor ;j++){
-
-				final int x = i;
-				final int y = j;
-
-				taskExecutor.execute(new Runnable() {
-
-					public void run() {
-
-						int topLeftX = y*(screenWidth/dividingFactor);
-						int topLeftY = x*(screenHeight/dividingFactor) ;
-						int bottomRightX = (screenWidth/dividingFactor)*(y+1);
-						int bottomRightY = (screenHeight/dividingFactor)*(x+1);
-
-						int[] pixels = new int[(screenWidth/dividingFactor)*(screenHeight/dividingFactor)];//the size of the array is the dimensions of the sub-photo
-						ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-						bitmap.getPixels(pixels, 0, screenWidth/dividingFactor, topLeftX, topLeftY, screenWidth/dividingFactor, screenHeight/dividingFactor);
-
-						Bitmap bm = Bitmap.createBitmap(pixels, 0, screenWidth/dividingFactor, screenWidth/dividingFactor, screenHeight/dividingFactor, Bitmap.Config.RGB_565);//ARGB_8888 is a good quality configuration
-						bm.compress(Bitmap.CompressFormat.WEBP, 10, bos);//100 is the best quality possibe
-						byte[] square = bos.toByteArray();
-
-						//						try {
-						//				        fos.write(square, offset, square.length);
-						//						} catch( IOException e ) {
-						//							e.printStackTrace();
-						//						}
-
-					}
-				});
-
-			}
-		} 
-
-		taskExecutor.shutdown();
-
-		try {
-			taskExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-		} catch (InterruptedException e) {
-
-		}
-
-		return fos;
-	}
+	//	private ByteArrayOutputStream returnBitmapForFile(String filePath) throws IOException{
+	//
+	//		RandomAccessFile raf = new RandomAccessFile(new File(filePath), "r");
+	//		FileChannel fc = raf.getChannel();
+	//
+	//		MappedByteBuffer mem = fc.map(FileChannel.MapMode.READ_ONLY, 0, bufferSize);
+	//		byte[] piex = new byte[bufferSize];
+	//		mem.get(piex);
+	//		fc.close();
+	//		raf.close();
+	//
+	//		final Bitmap bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565);
+	//		ByteBuffer buffer = ByteBuffer.wrap(piex);
+	//		bitmap.copyPixelsFromBuffer(buffer);
+	//
+	//
+	//		ExecutorService taskExecutor = Executors.newFixedThreadPool(dividingFactor*dividingFactor);
+	//
+	//		final ByteArrayOutputStream fos = new ByteArrayOutputStream();
+	//
+	//		for(int i=0; i < dividingFactor ;i++){
+	//			for(int j=0; j < dividingFactor ;j++){
+	//
+	//				final int x = i;
+	//				final int y = j;
+	//
+	//				taskExecutor.execute(new Runnable() {
+	//
+	//					public void run() {
+	//
+	//						int topLeftX = y*(screenWidth/dividingFactor);
+	//						int topLeftY = x*(screenHeight/dividingFactor) ;
+	//						int bottomRightX = (screenWidth/dividingFactor)*(y+1);
+	//						int bottomRightY = (screenHeight/dividingFactor)*(x+1);
+	//
+	//						int[] pixels = new int[(screenWidth/dividingFactor)*(screenHeight/dividingFactor)];//the size of the array is the dimensions of the sub-photo
+	//						ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	//
+	//						bitmap.getPixels(pixels, 0, screenWidth/dividingFactor, topLeftX, topLeftY, screenWidth/dividingFactor, screenHeight/dividingFactor);
+	//
+	//						Bitmap bm = Bitmap.createBitmap(pixels, 0, screenWidth/dividingFactor, screenWidth/dividingFactor, screenHeight/dividingFactor, Bitmap.Config.RGB_565);//ARGB_8888 is a good quality configuration
+	//						bm.compress(Bitmap.CompressFormat.WEBP, 10, bos);//100 is the best quality possibe
+	//						byte[] square = bos.toByteArray();
+	//
+	//						//						try {
+	//						//				        fos.write(square, offset, square.length);
+	//						//						} catch( IOException e ) {
+	//						//							e.printStackTrace();
+	//						//						}
+	//
+	//					}
+	//				});
+	//
+	//			}
+	//		} 
+	//
+	//		taskExecutor.shutdown();
+	//
+	//		try {
+	//			taskExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+	//		} catch (InterruptedException e) {
+	//
+	//		}
+	//
+	//		return fos;
+	//	}
 }
 

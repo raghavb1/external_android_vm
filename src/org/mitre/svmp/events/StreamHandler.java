@@ -70,9 +70,11 @@ public class StreamHandler{
 
 		long myTime = System.currentTimeMillis();
 		byte [] compressed = compress(request);
-		currentBytes = compressed;
-		Response response = buildScreenResponse(ByteString.copyFrom(compressed), request.getStream().getTag());
-		base.sendMessage(response);
+		if(!Arrays.equals(compressed, currentBytes)){
+			currentBytes = compressed;
+			Response response = buildScreenResponse(ByteString.copyFrom(compressed), request.getStream().getTag());
+			base.sendMessage(response);
+		}
 
 
 	}

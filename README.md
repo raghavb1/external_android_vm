@@ -1,8 +1,8 @@
-SVMP Event Server
+Puck Event Server
 =================
 
 Receives incoming sensor and touch screen update events from the client
-and reinjects them into the SVMP virtual machine's Android framework.
+and reinjects them into the Puck virtual machine's Android framework.
 
 License
 =======
